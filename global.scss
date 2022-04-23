@@ -1,0 +1,180 @@
+/*
+ * App Global CSS
+ * ----------------------------------------------------------------------------
+ * Put style rules here that you want to apply globally. These styles are for
+ * the entire app and not just one component. Additionally, this file can be
+ * used as an entry point to import other CSS/Sass files to be included in the
+ * output CSS.
+ * For more information on global stylesheets, visit the documentation:
+ * https://ionicframework.com/docs/layout/global-stylesheets
+ */
+
+/* Core CSS required for Ionic components to work properly */
+@import "~@ionic/angular/css/core.css";
+
+/* Basic CSS for apps built with Ionic */
+@import "~@ionic/angular/css/normalize.css";
+@import "~@ionic/angular/css/structure.css";
+@import "~@ionic/angular/css/typography.css";
+@import '~@ionic/angular/css/display.css';
+
+/* Optional CSS utils that can be commented out */
+@import "~@ionic/angular/css/padding.css";
+@import "~@ionic/angular/css/float-elements.css";
+@import "~@ionic/angular/css/text-alignment.css";
+@import "~@ionic/angular/css/text-transformation.css";
+@import "~@ionic/angular/css/flex-utils.css";
+
+:root {
+    .dark_theme {
+        // Text
+        --normal_text_color: rgb(220, 220, 220);
+        --bold_text_color: rgb(255, 255, 255);
+
+        // Body
+        --background_color: #3C415C;
+        --foreground_color: rgb(52, 52, 52);
+        --border_color: rgb(42, 42, 42);
+
+        // Buttons
+        --ion-color-primary: #B4A5A5;
+
+        --toggle_background: #151515;
+        --toggle_background_checked: #B4A5A5;
+    }
+
+    .light_theme {
+        // Text
+        --normal_text_color: rgb(46, 46, 46);
+        --bold_text_color: rgb(20, 20, 20);
+        --primary_select_color: #a5aeb4;
+
+        // Body
+        --background_color: #6190af;
+        --foreground_color: #fafafa;
+        --border_color: rgb(230, 230, 230);
+
+        // Buttons
+        --ion-color-primary: #6190af;
+
+        --toggle_background: #a5aeb4;
+        --toggle_background_checked: #6995b3;
+    }
+}
+
+.divider {
+    margin: 0 auto;
+    width: 95%;
+    height: 1px;
+    background: var(--border_color);
+}
+
+
+ion-header {
+    ion-title {
+        padding-bottom: 10px;
+    }
+    ion-toolbar {
+        --background: var(--foreground_color);
+        color: var(--bold_text_color);
+    }
+}
+
+
+ion-content {
+    border-radius: 25px;
+    --background: var(--background_color);
+    --ion-text-color: var(--normal_text_color);
+
+    ion-radio {
+        margin: 0px;
+    }
+
+    ion-item {
+        color: var(--normal_text_color);
+        --ion-background-color: var(--foreground_color);
+        --min-height: 16px;
+    }
+
+    ion-label {
+        padding-left: 10px;
+        color: var(--normal_text_color);
+    }
+
+    ion-list {
+        --ion-background-color: var(--foreground_color);
+        --ion-text-color: var(--normal_text_color);
+        margin: 10px;
+        border-radius: 15px;
+
+        ion-text {
+            padding-left: 10px
+        }
+    }
+
+    ion-icon {
+        font-size: 35px;
+    }
+
+    ion-toggle {
+        --handle-spacing: 0px;
+        --background: var(--toggle_background);
+        --background-checked: var(--toggle_background_checked);
+        --handle-background: rgb(255, 255, 255);
+        --handle-background-checked: rgb(255, 255, 255);
+    }
+
+    ion-card {
+
+        --background: var(--foreground_color);
+        margin: 0px;
+        border-radius: 15px;
+
+        ion-card-title {
+            font-size: 16px;
+            padding-top: 8px;
+            padding-left: 10px;
+            color: var(--bold_text_color);
+        }
+
+        ion-card-content {
+            color: var(--normal_text_color);
+        }
+    }
+}
+
+
+ion-tab-bar {
+    --background: var(--foreground_color);
+    --color: var(--normal_text_color);
+}
+
+
+ion-alert {
+
+    //background color
+    .alert-wrapper.sc-ion-alert-md {
+        background-color: var(--foreground_color);
+        border-radius: 25px;
+    }
+
+    // Header Text
+    .alert-title.sc-ion-alert-md {
+        color: var(--bold_text_color);
+    }
+
+    // wrap the text
+    .alert-radio-label.sc-ion-alert-md {
+        color: var(--normal_text_color);
+    }
+
+    // Checked text color
+    [aria-checked="true"].sc-ion-alert-md .alert-radio-label.sc-ion-alert-md {
+        color: var(--bold_text_color);
+    }
+
+    // Button color
+    .alert-button-inner.sc-ion-alert-md {
+        color: var(--normal_text_color);
+    }
+}

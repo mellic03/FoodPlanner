@@ -1,0 +1,100 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title>Settings</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-title>Appearance</ion-card-title>
+          <ion-item>
+            <ion-label>{{current_theme}}</ion-label>
+            <ion-toggle slot="end" (ionChange)="toggleTheme()"></ion-toggle>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-label>Setting 2</ion-label>
+            <ion-toggle slot="end" ></ion-toggle>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-title>Other options</ion-card-title>
+          <ion-item>
+            <ion-label>Setting 1</ion-label>
+            <ion-toggle slot="end" ></ion-toggle>
+          </ion-item>
+          <ion-item>
+            <ion-label>Setting 2</ion-label>
+            <ion-toggle slot="end" ></ion-toggle>
+          </ion-item>
+          <ion-item>
+            <ion-label>Setting 2</ion-label>
+            <ion-toggle slot="end" ></ion-toggle>
+          </ion-item>
+          <ion-item>
+            <ion-label>Setting 2</ion-label>
+            <ion-toggle slot="end" ></ion-toggle>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-label>Setting 2</ion-label>
+            <ion-toggle slot="end" ></ion-toggle>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-title>Other options</ion-card-title>
+          <ion-item>
+            <ion-label>Setting 1</ion-label>
+            <ion-toggle slot="end" ></ion-toggle>
+          </ion-item>
+          <ion-item lines="none">
+            <ion-label>Setting 2</ion-label>
+            <ion-toggle slot="end" ></ion-toggle>
+          </ion-item>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-card>
+          <ion-card-title>Version</ion-card-title>
+          <ion-label style="padding-left: 10px;">1.0.0</ion-label>
+
+          <div class="divider"></div>
+
+          <ion-buttons style="padding-bottom: 10px; padding-top: 10px;">
+            <ion-button href="https://github.com/mellic03">
+              <ion-icon name="logo-github"></ion-icon>
+            </ion-button>
+            <ion-button href="https://play.google.com">
+              <ion-icon name="logo-google-playstore"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-card>
+      </ion-col>
+    </ion-row>
+
+    <ion-row>
+      <ion-col>
+        <ion-button (click)="clearData()">Clear Data</ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+</ion-content>

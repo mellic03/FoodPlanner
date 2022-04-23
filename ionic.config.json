@@ -1,5 +1,7 @@
 {
   "name": "FoodPlanner",
-  "integrations": {},
+  "integrations": {
+    "capacitor": {}
+  },
   "type": "angular"
 }

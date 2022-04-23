@@ -24,3 +24,29 @@
 @import "~@ionic/angular/css/text-alignment.css";
 @import "~@ionic/angular/css/text-transformation.css";
 @import "~@ionic/angular/css/flex-utils.css";
+
+:root {
+    .dark_theme {
+        --background-color: rgb(42, 42, 42);
+
+        --divider-color: rgb(20, 20, 20);
+    }
+
+    .light_theme {
+        --background-color: rgb(255, 255, 255);
+
+        --divider-color: rgb(210, 210, 210);
+    }
+}
+
+.divider {
+    width: 95%;
+    height: 1px;
+    background-color: var(--divider-color);
+    margin: auto;
+}
+
+ion-content {
+    --background: var(--background-color);
+
+}

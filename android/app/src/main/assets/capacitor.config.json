@@ -1,0 +1,6 @@
+{
+	"appId": "io.ionic.starter",
+	"appName": "FoodPlanner",
+	"webDir": "www",
+	"bundledWebRuntime": false
+}
