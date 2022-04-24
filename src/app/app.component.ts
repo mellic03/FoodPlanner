@@ -9,9 +9,10 @@ import { Component } from '@angular/core';
 export class AppComponent {
 
   public appPages = [
-    { title: 'Shopping List', url: '/shopping-list', icon: 'mail' },
-    { title: 'Recipes', url: '/recipes', icon: 'list' },
+    { title: 'Shopping List', url: '/shopping-list', icon: 'list' },
+    { title: 'Recipes', url: '/recipes', icon: 'restaurant' },
     { title: 'Settings', url: '/settings', icon: 'settings' },
+    { title: 'Statistics', url: '/statistics', icon: 'stats-chart' },
   ];
 
   public labels = ['Family', 'Friends', 'Notes', 'Work', 'Travel', 'Reminders'];

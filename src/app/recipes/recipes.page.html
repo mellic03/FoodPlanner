@@ -17,12 +17,19 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content (click)="logStorage()">
+<ion-content>
 
-  <ion-list *ngFor="let recipe of persistentRecipes; index as i">
-    <ion-item>
-      <ion-label>{{persistentRecipes?.[i]?.name}}</ion-label>
+  <ion-list *ngFor="let recipe of recipes_uncooked; index as i">
+    <ion-item (click)="markRecipeAsCooked(i)">
+      <ion-label>{{recipes_uncooked?.[i]?.name}} --UNCOOKED</ion-label>
     </ion-item>
   </ion-list>
+
+  <ion-list *ngFor="let recipe of recipes_cooked; index as i">
+    <ion-item (click)="markRecipeAsUncooked(i)">
+      <ion-label>{{recipes_cooked?.[i]?.name}} --COOKED</ion-label>
+    </ion-item>
+  </ion-list>
+  
 </ion-content>
 

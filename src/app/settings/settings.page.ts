@@ -27,7 +27,7 @@ export class SettingsPage implements OnInit {
   }
 
   clearData() {
-    this.storage.set("recipes", []);
+    this.storage.set("recipes_uncooked", []);
+    this.storage.set("recipes_cooked", []);
   }
-
 }

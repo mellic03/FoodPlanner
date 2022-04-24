@@ -17,16 +17,13 @@ export class RecipeModalPage implements OnInit {
   ngOnInit() {}
 
   ionViewDidEnter() {
-    // loads the stored recipes
-    this.storage.get("recipes").then( res => {
-      if(res === undefined) {return}
-      this.persistentRecipes = res;
-    });
+    // load the stored recipes
+    this.storage.get("recipes_uncooked").then( val => {this.persistentRecipes = val;});
   }
 
   closeModal(submit:boolean) {
     if (submit) {
-      this.modalController.dismiss(/*data to submit goes here*/);
+      this.modalController.dismiss(this.persistentRecipes);
     }
     else if (!submit) {
       this.modalController.dismiss();
@@ -38,7 +35,7 @@ export class RecipeModalPage implements OnInit {
     this.ingredient_units[index] = unit;
   }
   
-  // combines the data from the ingredient_name, _quantities and _units
+  // combines the data from the ingredient_names, _quantities and _units
   // arrays to create a javascript object which will be added to the persistent recipes object
   createRecipe(name:string, ingredients_array:Array<string>, quantities_array:Array<number>, units_array:Array<string>) {
     
@@ -63,7 +60,7 @@ export class RecipeModalPage implements OnInit {
       }
     }
     this.persistentRecipes.push(working_object);
-    this.storage.set("recipes", this.persistentRecipes);
+    this.storage.set("recipes_uncooked", this.persistentRecipes);
     this.closeModal(true);
   }
 
