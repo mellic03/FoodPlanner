@@ -18,18 +18,28 @@
 </ion-header>
 
 <ion-content>
+  <ion-grid>
 
-  <ion-list *ngFor="let recipe of recipes_uncooked; index as i">
-    <ion-item (click)="markRecipeAsCooked(i)">
-      <ion-label>{{recipes_uncooked?.[i]?.name}} --UNCOOKED</ion-label>
-    </ion-item>
-  </ion-list>
+    <ion-row>
+      <ion-col>
+        <ion-list>
+          <ion-item *ngFor="let recipe of recipes_uncooked; index as i">
+            <ion-label>{{recipes_uncooked?.[i]?.name}}</ion-label>
 
-  <ion-list *ngFor="let recipe of recipes_cooked; index as i">
-    <ion-item (click)="markRecipeAsUncooked(i)">
-      <ion-label>{{recipes_cooked?.[i]?.name}} --COOKED</ion-label>
-    </ion-item>
-  </ion-list>
-  
+            <ion-buttons slot="end">
+              <ion-button (click)="presentModal(i, true)">
+                <ion-icon name="pencil-outline"></ion-icon>
+              </ion-button>
+              <ion-button (click)="deleteRecipe(i)">
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+
+          </ion-item>
+        </ion-list>
+      </ion-col>
+    </ion-row>
+
+  </ion-grid>
 </ion-content>
 

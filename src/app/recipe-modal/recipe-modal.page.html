@@ -5,37 +5,38 @@
         <ion-icon size="large" name="close-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>New Recipe</ion-title>
+    <ion-title *ngIf="editing == false">New Recipe</ion-title>
+    <ion-title *ngIf="editing == true">Edit Recipe</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="createRecipe(recipe_name, ingredient_names, ingredient_quantities, ingredient_units)">
-        <ion-icon size="large" name="add-outline"></ion-icon>
+        Done
       </ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
-  <ion-list>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <ion-list>
 
-    <ion-item>
-      <ion-input [(ngModel)]="recipe_name" clearInput="true" placeholder="Recipe Name"></ion-input>
-    </ion-item>
-
-
-    <ion-item *ngFor="let ingredient of ingredient_names; index as i">
-
-      <ion-input [(ngModel)]="ingredient_names[i+1]" clearInput="true" placeholder="Ingredient {{i+1}}"></ion-input>
+          <ion-item>
+            <ion-input [(ngModel)]="recipe_name" clearInput="true" placeholder="Recipe Name"></ion-input>
+          </ion-item>
       
-      <ion-input [(ngModel)]="ingredient_quantities[i+1]" type="number" clearInput="true" placeholder="Quantity"></ion-input>
+          <ion-item *ngFor="let ingredient of ingredient_names; index as i">
+            <ion-input [(ngModel)]="ingredient_names[i+1]" clearInput="true" placeholder="Ingredient {{i+1}}"></ion-input>
+            <ion-input [(ngModel)]="ingredient_quantities[i+1]" type="number" clearInput="true" placeholder="Quantity"></ion-input>
+            <ion-select [(ngModel)]="ingredient_units[i+1]" #C (ionChange)="setUnit(C.value, i+1)">
+              <ion-select-option value="gram">grams</ion-select-option>
+              <ion-select-option value="kilogram">kilograms</ion-select-option>
+            </ion-select>
+          </ion-item>
       
-      
-      <ion-select #C (ionChange)="setUnit(C.value, i+1)">
-        <ion-select-option value="gram">grams</ion-select-option>
-        <ion-select-option value="kilogram">kilograms</ion-select-option>
-      </ion-select>
+        </ion-list>
 
-    </ion-item>
-
-  </ion-list>
-
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

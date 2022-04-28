@@ -15,12 +15,26 @@ export class RecipesPage implements OnInit {
 
   constructor(private modalController:ModalController, platform:Platform, private storage:StorageService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    // load the stored recipes
+    this.storage.get("recipes_uncooked").then( val => {
+      this.recipes_uncooked = val;
+    });
+    this.storage.get("recipes_cooked").then( val => {
+      this.recipes_cooked = val;
+    });
+  }
 
-  async presentModal() {
+  ngOnDestroy() {
+    // Update persistent storage with the local array
+    this.refreshStorage();
+  }
+
+  async presentModal(index:number = 0, editing:boolean = false) {
   
     const modal = await this.modalController.create({
       component: RecipeModalPage,
+      componentProps: {recipe: this.recipes_uncooked[index], editing: editing, index: index}
     });
 
     modal.onDidDismiss().then(() => {
@@ -30,17 +44,6 @@ export class RecipesPage implements OnInit {
     });
     
     return (modal.present());
-  }
-
-  ionViewDidEnter() {
-    // load the stored recipes
-    this.storage.get("recipes_uncooked").then( val => {
-      this.recipes_uncooked = val;
-    });
-    this.storage.get("recipes_cooked").then( val => {
-      this.recipes_cooked = val;
-    });
-
   }
 
   // Set recipes in storage to recipes on current page, then load the stored recipes.
@@ -62,7 +65,14 @@ export class RecipesPage implements OnInit {
     this.recipes_cooked.splice(index, 1); // Remove recipe from recipes_cooked.
     this.refreshStorage(); // Refresh storage.
   }
-  
+
+  deleteRecipe(i:number) {
+    // Remove the recipe from the local array
+    this.recipes_uncooked.splice(i, 1);
+    this.storage.set("recipes_uncooked", this.recipes_uncooked);
+    this.storage.set("recipes_cooked", this.recipes_cooked);
+  }
+
   recipes_uncooked:Array<any>; // recipes the user has not marked as "cooked".
   recipes_cooked:Array<any>; // recipes the user has marked as "cooked".
 }

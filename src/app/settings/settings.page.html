@@ -16,11 +16,16 @@
           <ion-card-title>Appearance</ion-card-title>
           <ion-item>
             <ion-label>{{current_theme}}</ion-label>
-            <ion-toggle slot="end" (ionChange)="toggleTheme()"></ion-toggle>
+            <ion-toggle slot="end" checked="dark_theme_on" (ionChange)="toggleTheme()"></ion-toggle>
           </ion-item>
           <ion-item lines="none">
-            <ion-label>Setting 2</ion-label>
-            <ion-toggle slot="end" ></ion-toggle>
+            <ion-label>Accent color</ion-label>
+            <ion-select>
+              <ion-select-option>Blue</ion-select-option>
+              <ion-select-option>Purple</ion-select-option>
+              <ion-select-option>Green</ion-select-option>
+              <ion-select-option>Red</ion-select-option>
+            </ion-select>
           </ion-item>
         </ion-card>
       </ion-col>
@@ -29,26 +34,18 @@
     <ion-row>
       <ion-col>
         <ion-card>
-          <ion-card-title>Other options</ion-card-title>
+          <ion-card-title>Account</ion-card-title>
           <ion-item>
-            <ion-label>Setting 1</ion-label>
-            <ion-toggle slot="end" ></ion-toggle>
+            <ion-label>Profile Name</ion-label>
+            <ion-input style="text-align: end;" slot="end" placeholder="Michael"></ion-input>
           </ion-item>
           <ion-item>
-            <ion-label>Setting 2</ion-label>
-            <ion-toggle slot="end" ></ion-toggle>
+            <ion-label>Profile Picture</ion-label>
+            <ion-icon name="image-outline"></ion-icon>
           </ion-item>
           <ion-item>
-            <ion-label>Setting 2</ion-label>
-            <ion-toggle slot="end" ></ion-toggle>
-          </ion-item>
-          <ion-item>
-            <ion-label>Setting 2</ion-label>
-            <ion-toggle slot="end" ></ion-toggle>
-          </ion-item>
-          <ion-item lines="none">
-            <ion-label>Setting 2</ion-label>
-            <ion-toggle slot="end" ></ion-toggle>
+            <ion-label>Delete Profile</ion-label>
+            <ion-button color="danger">Delete Profile</ion-button>
           </ion-item>
         </ion-card>
       </ion-col>
@@ -57,14 +54,14 @@
     <ion-row>
       <ion-col>
         <ion-card>
-          <ion-card-title>Other options</ion-card-title>
+          <ion-card-title>System</ion-card-title>
           <ion-item>
-            <ion-label>Setting 1</ion-label>
-            <ion-toggle slot="end" ></ion-toggle>
+            <ion-label>Clear all data</ion-label>
+            <ion-button color="danger" (click)="clearData()">Clear Data</ion-button>
           </ion-item>
-          <ion-item lines="none">
-            <ion-label>Setting 2</ion-label>
-            <ion-toggle slot="end" ></ion-toggle>
+          <ion-item>
+            <ion-label>Populate data</ion-label>
+            <ion-button (click)="populateData()">Populate Data</ion-button>
           </ion-item>
         </ion-card>
       </ion-col>
@@ -90,11 +87,6 @@
       </ion-col>
     </ion-row>
 
-    <ion-row>
-      <ion-col>
-        <ion-button (click)="clearData()">Clear Data</ion-button>
-      </ion-col>
-    </ion-row>
   </ion-grid>
 
 </ion-content>

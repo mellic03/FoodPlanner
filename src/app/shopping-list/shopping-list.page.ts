@@ -12,13 +12,14 @@ export class ShoppingListPage implements OnInit {
   }
 
   ngOnInit() {
-  }
-
-  ionViewDidEnter() {
     // loads the stored recipes
     this.storage.get("recipes_uncooked").then( val => {
       this.shopping_list = this.storage.getNamesQuantities(val);
     });
+  }
+
+  ionViewWillLeave() {
+    this.shopping_list = [];
   }
 
   shopping_list = [];

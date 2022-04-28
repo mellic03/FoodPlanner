@@ -1,0 +1,33 @@
+
+.top {
+    border-radius: 15px 15px 0 0;
+}
+
+.bottom {
+    border-radius: 0 0 15px 15px;
+}
+
+ion-grid {
+    min-height: 100%;
+    flex-direction: column;
+    display: flex;
+    width: 90%;
+    ion-input {
+        --background: white;
+    }
+}
+
+ion-row {
+    flex: 1;
+}
+
+ion-button {
+    width: 100%;
+    --border-radius: 15px;
+    font-size: 18px;
+}
+
+ion-text {
+    font-size: 32px;
+    color: rgb(255, 255, 255);
+}

@@ -14,7 +14,13 @@
       <ion-col>
         <ion-list>
           <ion-item *ngFor="let ingredient of shopping_list; index as i">
-            <ion-label>{{shopping_list[i][0]}}: {{shopping_list[i][1]}} grams</ion-label>
+            <ion-label>{{shopping_list[i][0]}}</ion-label>
+            <ion-label>{{shopping_list[i][1]}} grams</ion-label>
+            <ion-buttons>
+              <ion-button>
+                <ion-icon name="enter-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
           </ion-item>
         </ion-list>
       </ion-col>
