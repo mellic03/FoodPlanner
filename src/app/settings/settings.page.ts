@@ -11,41 +11,25 @@ export class SettingsPage implements OnInit {
 
   constructor(private appComponent:AppComponent, private storage:StorageService) {
     // Get theme info from storage.
-    this.storage.get("dark_theme_on").then( val => {
-      this.dark_theme_on = val;
+    this.storage.get("current_theme").then( val => {
+      this.current_theme = val;
     });
-
-    if (this.dark_theme_on) {
-      this.current_theme = 'Dark theme'; 
-    }
-    else if (!this.dark_theme_on) {
-      this.current_theme = 'Light theme';
-    }
   }
 
   ngOnInit() {
   }
-  
-  toggleTheme() {
-    // Switch theme in appComponent so the change applies immediately.
-    this.appComponent.toggleTheme();
 
-    // Change this.current_theme and update storage.
-    if (this.current_theme == 'Light theme') {
-      this.current_theme = 'Dark theme';
-    }
-    else if (this.current_theme == 'Dark theme') {
-      this.current_theme = 'Light theme';
-    }
+  setTheme(theme_name:string) {
+    this.current_theme = theme_name;
+    this.appComponent.setTheme(theme_name);
   }
 
   clearData() {
-    this.storage.set("recipes_uncooked", []);
-    this.storage.set("recipes_cooked", []);
+    this.storage.set("persistent_recipes", []);
   }
 
   populateData() {
-    this.storage.set("recipes_uncooked", [
+    this.storage.set("persistent_recipes", [
       {
         "name": "Bolognese",
         "ingredients": [
@@ -62,7 +46,7 @@ export class SettingsPage implements OnInit {
           {
             "name": "pasta sauce",
             "quantity": 1,
-            "unit": "gram"
+            "unit": "jar"
           }
         ]
       },
@@ -76,13 +60,13 @@ export class SettingsPage implements OnInit {
           },
           {
             "name": "buns",
-            "quantity": 100,
-            "unit": "gram"
+            "quantity": 4,
+            "unit": "unit"
           },
           {
             "name": "cheese",
-            "quantity": 100,
-            "unit": "gram"
+            "quantity": 1,
+            "unit": "cup"
           }
         ]
       }

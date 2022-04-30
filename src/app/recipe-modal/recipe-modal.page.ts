@@ -16,7 +16,7 @@ export class RecipeModalPage implements OnInit {
 
   ngOnInit() {
     // load the stored recipes
-    this.storage.get("recipes_uncooked").then( val => {this.persistentRecipes = val;});
+    this.storage.get("persistent_recipes").then( val => {this.persistentRecipes = val;});
 
     // If in editing mode, get relevant recipe information.
     this.editing = this.navParams.get('editing');
@@ -24,20 +24,23 @@ export class RecipeModalPage implements OnInit {
       this.index = this.navParams.get('index')
       let recipe = this.navParams.get('recipe');
 
-      // Get recipe name
+      // Get recipe name.
       this.recipe_name = this.navParams.get('recipe').name;
 
-      // Get ingredient names
+      // Get ingredient names.
       this.ingredient_names = this.storage.getIngredientNames(recipe);
       this.ingredient_names.unshift("[]"); // An empty array has to be present at index position 0
 
-      // Get ingredient quantities
+      // Get ingredient quantities.
       this.ingredient_quantities = this.storage.getIngredientQuantities(recipe);
       this.ingredient_quantities.unshift("[]"); // An empty array has to be present at index position 0
 
-      // Get ingredient units
+      // Get ingredient units.
       this.ingredient_units = this.storage.getIngredientUnits(recipe);
       this.ingredient_units.unshift("[]"); // An empty array has to be present at index position 0
+
+      // Get all recipe information.
+      this.recipe = this.storage.getNamesQuantitiesUnits(recipe);
     }
   }
 
@@ -46,8 +49,12 @@ export class RecipeModalPage implements OnInit {
     this.ingredient_units[index] = unit;
   }
   
+  closeModal() {
+    this.modalController.dismiss();
+  }
+
   // combines the data from the ingredient_names, _quantities and _units
-  // arrays to create a javascript object which is added to the persistent recipes object.
+  // arrays to create a javascript object which is added to the persistent_recipes object.
   // The persistent_recipes object then replaces "recipes" in ionic storage.
   createRecipe(name:string, ingredients_array:Array<string>, quantities_array:Array<number>, units_array:Array<string>) {
 
@@ -92,7 +99,7 @@ export class RecipeModalPage implements OnInit {
       this.persistentRecipes.push(working_object);
     }
 
-    this.storage.set("recipes_uncooked", this.persistentRecipes);
+    this.storage.set("persistent_recipes", this.persistentRecipes);
     this.modalController.dismiss();
   }
 
@@ -103,6 +110,10 @@ export class RecipeModalPage implements OnInit {
   ingredient_quantities = []; // values added using [(ngModel)]
   ingredient_units = [] // values added using this.setUnit()
   persistentRecipes:any; // Persistent recipes
+
+  recipe:any = [];
+
+  units:Array<string> = ["gram", "kilogram", "cup"];
 
   // Used to perform different actions depending on whether a new recipe is being
   // created or an existing one is being edited.

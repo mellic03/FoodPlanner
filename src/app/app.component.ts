@@ -28,24 +28,16 @@ export class AppComponent {
   ngOnInit() {
   }
 
-  toggleTheme() {
-
-    if (this.current_theme == 'light_theme') {
-      this.current_theme = 'dark_theme';
-      this.storage.set("dark_theme_on", true);
-    }
-    else if (this.current_theme == 'dark_theme') {
-      this.current_theme = 'light_theme';
-      this.storage.set("dark_theme_on", false);
-    }
-
-    // store current theme in storage
-    this.storage.set("current_theme", this.current_theme);
+  setTheme(theme_name:string) {
+    this.current_theme = theme_name;
+    this.storage.set("current_theme", theme_name);
   }
 
   logout() {
     this.menuController.close();
   }
+
+  current_user:string = "Michael Ellicott";
 
   current_theme:string;
 }

@@ -23,8 +23,8 @@
     <ion-row>
       <ion-col>
         <ion-list>
-          <ion-item *ngFor="let recipe of recipes_uncooked; index as i">
-            <ion-label>{{recipes_uncooked?.[i]?.name}}</ion-label>
+          <ion-item *ngFor="let recipe of persistent_recipes; index as i">
+            <ion-label>{{persistent_recipes?.[i]?.name}}</ion-label>
 
             <ion-buttons slot="end">
               <ion-button (click)="presentModal(i, true)">

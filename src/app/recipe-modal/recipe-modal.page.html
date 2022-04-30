@@ -1,7 +1,7 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="closeModal(false)">
+      <ion-button (click)="closeModal()">
         <ion-icon size="large" name="close-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
@@ -28,10 +28,13 @@
           <ion-item *ngFor="let ingredient of ingredient_names; index as i">
             <ion-input [(ngModel)]="ingredient_names[i+1]" clearInput="true" placeholder="Ingredient {{i+1}}"></ion-input>
             <ion-input [(ngModel)]="ingredient_quantities[i+1]" type="number" clearInput="true" placeholder="Quantity"></ion-input>
+            
             <ion-select [(ngModel)]="ingredient_units[i+1]" #C (ionChange)="setUnit(C.value, i+1)">
-              <ion-select-option value="gram">grams</ion-select-option>
-              <ion-select-option value="kilogram">kilograms</ion-select-option>
+
+              <ion-select-option *ngFor="let unit of units; index as i;" value="{{units[i]}}">{{unit}}</ion-select-option>
+            
             </ion-select>
+
           </ion-item>
       
         </ion-list>

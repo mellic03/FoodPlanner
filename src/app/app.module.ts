@@ -9,7 +9,6 @@ import { AppRoutingModule } from './app-routing.module';
 import { RecipeModalPageModule } from './recipe-modal/recipe-modal.module';
 import { IonicStorageModule } from '@ionic/storage-angular';
 
-
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],

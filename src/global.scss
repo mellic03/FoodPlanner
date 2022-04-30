@@ -30,7 +30,10 @@
         --background_color: #3C415C;
         --foreground_color: rgb(52, 52, 52);
         --foreground_color_secondary: #6e76a7;
+
         --text_color: rgb(220, 220, 220);
+        --bold_text_color: rgb(255, 255, 255);
+
         --divider-color: rgb(42, 42, 42);
     }
 
@@ -38,7 +41,10 @@
         --background_color: #6190af;
         --foreground_color: rgb(255, 255, 255);
         --foreground_color_secondary: rgb(133, 201, 247);
-        --text_color: rgb(0, 0, 0);
+
+        --text_color: rgb(20, 20, 20);
+        --bold_text_color: rgb(0, 0, 0);
+
         --divider-color: rgb(210, 210, 210);
     }
 }
@@ -50,6 +56,10 @@
     margin: auto;
 }
 
+ion-split-pane {
+    --ion-background-color: var(--foreground_color);
+}
+
 ion-header {
     ion-toolbar {
         color: var(--text_color);
@@ -59,34 +69,29 @@ ion-header {
 
 ion-content {
     --background: var(--background_color);
-
-    ion-list {
-        --background: var(--foreground_color);
-        border-radius: 5px;
-    }
-    
-    ion-card {
-        border-radius: 5px;
-        ion-card-title {
-            padding-left: 10px;
-            background-color: var(--foreground_color_secondary);
-            color: var(--text_color);
-        }
-    }
-
-    ion-item {
-        color: var(--text_color);
-        --background: var(--foreground_color);
-    }
-
-    ion-card {
-        --background: var(--foreground_color);
-    }
-
-    ion-grid {
-        ion-row {
-            --ion-background-color: var(--foreground_color);
-        }
-    }
-
 }
+
+ion-list {
+    --background: var(--foreground_color);
+    border-radius: 5px;
+}
+
+ion-card {
+    border-radius: 5px;
+    
+    ion-card-title {
+        color: var(--bold_text_color);
+    }
+}
+
+ion-item {
+    color: var(--text_color);
+    --background: var(--foreground_color);
+}
+
+ion-grid {
+    ion-row {
+        --ion-background-color: var(--foreground_color);
+    }
+}
+

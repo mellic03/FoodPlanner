@@ -13,13 +13,17 @@ export class ShoppingListPage implements OnInit {
 
   ngOnInit() {
     // loads the stored recipes
-    this.storage.get("recipes_uncooked").then( val => {
-      this.shopping_list = this.storage.getNamesQuantities(val);
+    this.storage.get("persistent_recipes").then( val => {
+      this.shopping_list = this.storage.getNamesQuantitiesUnits(val);
     });
   }
 
   ionViewWillLeave() {
     this.shopping_list = [];
+  }
+
+  foo() {
+    
   }
 
   shopping_list = [];
