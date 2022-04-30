@@ -113,7 +113,7 @@ export class RecipeModalPage implements OnInit {
 
   recipe:any = [];
 
-  units:Array<string> = ["gram", "kilogram", "cup"];
+  units:Array<string> = ["gram", "kilogram", "cup", ""];
 
   // Used to perform different actions depending on whether a new recipe is being
   // created or an existing one is being edited.
