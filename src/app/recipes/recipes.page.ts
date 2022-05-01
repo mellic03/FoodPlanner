@@ -27,11 +27,12 @@ export class RecipesPage implements OnInit {
     this.refreshStorage();
   }
 
-  async presentModal(index:number = 0, editing:boolean = false) {
+  async presentModal(i:number = 0, editing:boolean = false) {
   
     const modal = await this.modalController.create({
       component: RecipeModalPage,
-      componentProps: {recipe: this.persistent_recipes[index], editing: editing, index: index}
+      // Passes the recipe at index i, the index i and the editing boolean.
+      componentProps: {recipe: this.persistent_recipes[i], index: i, editing: editing}
     });
 
     modal.onDidDismiss().then(() => {

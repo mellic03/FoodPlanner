@@ -58,12 +58,13 @@ export class RecipeModalPage implements OnInit {
   // The persistent_recipes object then replaces "recipes" in ionic storage.
   createRecipe(name:string, ingredients_array:Array<string>, quantities_array:Array<number>, units_array:Array<string>) {
 
-    // If in editing mode, remove the [] placed by the modal.
+    // If in editing mode, remove the [] in each array placed by the modal.
     if (this.editing) {
       for (let i = 0; i < this.ingredient_names.length; i++) {
         if (this.ingredient_names[i] == '[]') {
           this.ingredient_names.splice(i, 1);
           this.ingredient_quantities.splice(i, 1);
+          this.ingredient_units.splice(i, 1);
         }
       }
     }
@@ -104,7 +105,7 @@ export class RecipeModalPage implements OnInit {
   }
 
   // These three arrays hold ingredients, quantities of those ingredients and the units of measurement.
-  // The arrays are then merged into a javascript object and sent to persistent storage.
+  // The values stored in each array are entered by the user and are pushed to persisten storage when they are done.
   recipe_name:string = ''; // Recipe name
   ingredient_names = ['']; // values added using [(ngModel)]
   ingredient_quantities = []; // values added using [(ngModel)]
@@ -113,7 +114,8 @@ export class RecipeModalPage implements OnInit {
 
   recipe:any = [];
 
-  units:Array<string> = ["gram", "kilogram", "cup", ""];
+  // All valid units of measurement used by the app.
+  units:Array<string> = ["gram", "kilogram", "cup"];
 
   // Used to perform different actions depending on whether a new recipe is being
   // created or an existing one is being edited.
