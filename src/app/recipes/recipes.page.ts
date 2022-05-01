@@ -28,10 +28,9 @@ export class RecipesPage implements OnInit {
   }
 
   async presentModal(i:number = 0, editing:boolean = false) {
-  
     const modal = await this.modalController.create({
       component: RecipeModalPage,
-      // Passes the recipe at index i, the index i and the editing boolean.
+      // Passes the recipe object at index i, the index i and the editing boolean.
       componentProps: {recipe: this.persistent_recipes[i], index: i, editing: editing}
     });
 
