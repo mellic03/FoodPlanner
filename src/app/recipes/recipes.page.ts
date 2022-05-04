@@ -2,8 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RecipeModalPage } from '../recipe-modal/recipe-modal.page';
 import { ModalController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
-import { StorageService } from '../storage.service';
-import { Observable } from 'rxjs';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-recipes',

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
-import { StorageService } from '../storage.service';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-recipe-modal',
@@ -15,31 +15,29 @@ export class RecipeModalPage implements OnInit {
   constructor(private navParams:NavParams, private modalController:ModalController, platform:Platform, private storage:StorageService) {}
 
   ngOnInit() {
-
     // Load all recipes from persistent storage.
     this.storage.get("persistent_recipes").then( val => {this.persistent_recipes = val;});
 
     // If in editing mode, get relevant recipe information.
     this.editing = this.navParams.get('editing');
-
     if (this.editing) {
-
       // Get index.
       this.index = this.navParams.get('index')
 
       // Get recipe name.
       let recipe_object = this.navParams.get('recipe');
       this.recipe_name = recipe_object.name;
+      
+      this.current_recipe[0] = this.storage.getNames(recipe_object);
+      this.current_recipe[0].unshift([]);
+      this.current_recipe[1] = this.storage.getQuantities(recipe_object);
+      this.current_recipe[1].unshift([]);
+      this.current_recipe[2] = this.storage.getUnits(recipe_object);
+      this.current_recipe[2].unshift([]);
+    }
 
-      this.current_recipe.push(this.storage.getNames(recipe_object));
-      this.current_recipe[0].unshift("[]");
-
-      this.current_recipe.push(this.storage.getQuantities(recipe_object));
-      this.current_recipe[1].unshift("[]");
-
-      this.current_recipe.push(this.storage.getUnits(recipe_object));
-      this.current_recipe[2].unshift("[]");
-
+    else {
+      this.current_recipe = [[null], [null], [null], [null]];
     }
   }
 
@@ -52,25 +50,17 @@ export class RecipeModalPage implements OnInit {
     this.modalController.dismiss();
   }
 
-  // combines the data from the ingredient_names, _quantities and _units
-  // arrays to create a javascript object which is added to the persistent_recipes object.
-  // The persistent_recipes object then replaces "recipes" in ionic storage.
+  // Combines the information in the current_recipe array and adds it to persistent_recipes.
   createRecipe(name:string, ingredients_array:Array<string>, quantities_array:Array<number>, units_array:Array<string>) {
 
     // If in editing mode, remove the [] in each array placed by the modal.
-    if (this.editing) {
-      for (let i = 0; i < this.current_recipe[0].length; i++) {
-        if (this.current_recipe[0][i] == '[]') {
-          this.current_recipe[0].splice(i, 1);
-          this.current_recipe[1].splice(i, 1);
-          this.current_recipe[2].splice(i, 1);
-        }
-      }
-    }
+      this.current_recipe[0].splice(0, 1);
+      this.current_recipe[1].splice(0, 1);
+      this.current_recipe[2].splice(0, 1);
 
     // "blank" object, where "recipe" is the recipe name
     let temp_object = {
-      "name": "recipe",
+      "name": "placeholder",
       "ingredients": []
     };
 
@@ -84,7 +74,8 @@ export class RecipeModalPage implements OnInit {
         temp_object["ingredients"][i] = {
           name: ingredients_array[i],
           quantity: quantities_array[i],
-          unit: units_array[i]
+          unit: units_array[i],
+          checked: false
         };
       }
     }
@@ -103,10 +94,9 @@ export class RecipeModalPage implements OnInit {
     this.modalController.dismiss();
   }
 
-  // These three arrays hold ingredients, quantities of those ingredients and the units of measurement.
-  // The values stored in each array are entered by the user and are pushed to persisten storage when they are done.
+
   recipe_name:string = ''; // Recipe name
-  current_recipe = [];
+  current_recipe = [[], [], [], []]; // Array of recipe information.
   persistent_recipes:any; // Persistent recipes
 
   // All valid units of measurement used by the app.

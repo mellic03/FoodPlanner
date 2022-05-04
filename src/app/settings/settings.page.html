@@ -9,98 +9,71 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Appearance</ion-card-title>
-          </ion-card-header>
-          <ion-radio-group [(ngModel)]="current_theme" #radio (ionChange)="setTheme(radio.value)">
-              <ion-item>
-                <ion-label>Light Theme</ion-label>
-                <ion-radio slot="end" value="light_theme"></ion-radio>
-              </ion-item>
-              <ion-item>
-                <ion-label>Dark Theme</ion-label>
-                <ion-radio slot="end" value="dark_theme"></ion-radio>
-              </ion-item>
-            </ion-radio-group>
-          <ion-item lines="none">
-            <ion-label>Accent color</ion-label>
-            <ion-select>
-              <ion-select-option>Blue</ion-select-option>
-              <ion-select-option>Purple</ion-select-option>
-              <ion-select-option>Green</ion-select-option>
-              <ion-select-option>Red</ion-select-option>
-            </ion-select>
-          </ion-item>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+  <ion-list>
 
-    <ion-row>
-      <ion-col>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Account</ion-card-title>
-          </ion-card-header>
-          <ion-item>
-            <ion-label>Profile Name</ion-label>
-            <ion-input style="text-align: end;" slot="end" placeholder="Michael"></ion-input>
-          </ion-item>
-          <ion-item>
-            <ion-label>Profile Picture</ion-label>
-            <ion-buttons>
-              <ion-button>
-                <ion-icon name="image-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-          </ion-item>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+    <ion-card-header>
+      <ion-card-title>Appearance</ion-card-title>
+    </ion-card-header>
 
-    <ion-row>
-      <ion-col>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>System</ion-card-title>
-          </ion-card-header>
-          <ion-item>
-            <ion-label>Clear recipe data</ion-label>
-            <ion-button color="danger" (click)="clearData()">Delete</ion-button>
-          </ion-item>
-          <ion-item>
-            <ion-label>Populate recipe data</ion-label>
-            <ion-button (click)="populateData()">Populate</ion-button>
-          </ion-item>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+    <ion-radio-group [(ngModel)]="current_theme" #radio (ionChange)="setTheme(radio.value)">
+        <ion-item>
+          <ion-label>Light Theme</ion-label>
+          <ion-radio slot="end" value="light_theme"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Dark Theme</ion-label>
+          <ion-radio slot="end" value="dark_theme"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    <ion-item lines="none">
+      <ion-label>Accent color</ion-label>
+      <ion-select>
+        <ion-select-option>Blue</ion-select-option>
+        <ion-select-option>Purple</ion-select-option>
+        <ion-select-option>Green</ion-select-option>
+        <ion-select-option>Red</ion-select-option>
+      </ion-select>
+    </ion-item>
 
-    <ion-row>
-      <ion-col>
-        <ion-card>
-          <ion-card-header>
-            <ion-card-title>Version</ion-card-title>
-          </ion-card-header>
-          <ion-label style="padding-left: 10px;">1.0.0</ion-label>
+  </ion-list>
 
-          <div class="divider"></div>
+  <ion-list>
+    <ion-card-header>
+      <ion-card-title>Account</ion-card-title>
+    </ion-card-header>
+    <ion-item>
+      <ion-label>Profile Name</ion-label>
+      <ion-input style="text-align: end;" slot="end" placeholder="Michael"></ion-input>
+    </ion-item>
+    
+    <ion-item>
+      <ion-label>Profile Picture</ion-label>
+      <ion-buttons>
+        <ion-button (click)="take_photo()">
+          <ion-icon name="enter-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
 
-          <ion-buttons style="padding-bottom: 10px; padding-top: 10px;">
-            <ion-button href="https://github.com/mellic03/FoodPlanner">
-              <ion-icon name="logo-github"></ion-icon>
-            </ion-button>
-            <ion-button href="https://play.google.com">
-              <ion-icon name="logo-google-playstore"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-card>
-      </ion-col>
-    </ion-row>
+  </ion-list>
 
-  </ion-grid>
+  <ion-list>
+    <ion-card-header>
+      <ion-card-title>System</ion-card-title>
+    </ion-card-header>
+    <ion-item>
+      <ion-label>Clear recipe data</ion-label>
+      <ion-button color="danger" (click)="presentAlertConfirm()">Delete</ion-button>
+    </ion-item>
+    <ion-item>
+      <ion-label>Populate recipe data</ion-label>
+      <ion-button (click)="populateData()">Populate</ion-button>
+    </ion-item>
+  </ion-list>
+
+  <ion-list>
+    <version></version>
+  </ion-list>
+
 
 </ion-content>

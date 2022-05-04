@@ -1,8 +1,8 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
-  appName: 'FoodPlanner',
+  appId: 'com.mellic03.foodplanner',
+  appName: 'Food Planner',
   webDir: 'www',
   bundledWebRuntime: false
 };

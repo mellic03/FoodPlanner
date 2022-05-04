@@ -1,0 +1,27 @@
+.container {
+    padding: 0 0 0 20px;
+}
+
+.title {
+    padding: 0 0 0 0;
+    font-size: 22px;
+}
+
+.version-number {
+    padding: 0 0 0 3px;    
+    font-weight: bold;
+}
+
+.info {
+    display: flex;
+    align-items: center;
+}
+
+.links {
+    color: grey;
+}
+
+ion-icon {
+    font-size: 40px;
+    padding-right: 20px;
+}

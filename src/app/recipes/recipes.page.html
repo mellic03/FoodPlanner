@@ -18,28 +18,20 @@
 </ion-header>
 
 <ion-content>
-  <ion-grid>
 
-    <ion-row>
-      <ion-col>
-        <ion-list>
-          <ion-item *ngFor="let recipe of persistent_recipes; index as i">
-            <ion-label>{{persistent_recipes?.[i]?.name}}</ion-label>
+  <ion-list>
+    <ion-item *ngFor="let recipe of persistent_recipes; index as i">
+      <ion-label>{{persistent_recipes?.[i]?.name}}</ion-label>
+      <ion-buttons slot="end">
+        <ion-button (click)="presentModal(i, true)">
+          <ion-icon name="pencil-outline"></ion-icon>
+        </ion-button>
+        <ion-button (click)="deleteRecipe(i)">
+          <ion-icon name="trash-outline"></ion-icon>
+        </ion-button>
+      </ion-buttons>
+    </ion-item>
+  </ion-list>
 
-            <ion-buttons slot="end">
-              <ion-button (click)="presentModal(i, true)">
-                <ion-icon name="pencil-outline"></ion-icon>
-              </ion-button>
-              <ion-button (click)="deleteRecipe(i)">
-                <ion-icon name="trash-outline"></ion-icon>
-              </ion-button>
-            </ion-buttons>
-
-          </ion-item>
-        </ion-list>
-      </ion-col>
-    </ion-row>
-
-  </ion-grid>
 </ion-content>
 

@@ -1,0 +1,51 @@
+@import '../../global.scss';
+
+ion-datetime {
+    width: 100vw;
+    height: 40vh;
+    --background: var(--foreground_color_primary);
+    color: var(--bold_text_color);
+}
+
+ion-grid {
+    border-radius: var(--border_radius_size);
+    margin: 10px;
+    padding: 0px;
+    background: var(--foreground_color_primary);
+
+    ion-row {
+        ion-col {
+            padding: 0px;
+        }
+    }
+
+    ion-button {
+        padding: 0px; margin-left: 20px; margin-right: -10px;
+    }
+}
+
+ion-row {
+    flex: 1;
+}
+
+ion-slides {
+    border-radius: 25px;
+    ion-slide {
+        border-radius:  0px;
+    }
+}
+
+ion-slide {
+    width: 100vw;
+    ion-list {
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+}
+
+p {
+    padding-top: 0px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+}

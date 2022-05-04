@@ -14,13 +14,13 @@
  
     <ion-row>
       <ion-col>
-          <ion-input class="top" placeholder="Username" clearInput="true"></ion-input>
-          <ion-input class="bottom" placeholder="Password" clearInput="true"></ion-input>
+          <ion-input [(ngModel)]="username" class="top" placeholder="Username" clearInput="true"></ion-input>
+          <ion-input [(ngModel)]="password" class="bottom" placeholder="Password" clearInput="true"></ion-input>
       </ion-col>
     </ion-row>
     <ion-row>
       <ion-col>
-        <ion-button>LOGIN</ion-button>
+        <ion-button (click)="login(username, password)">LOGIN</ion-button>
       </ion-col>
     </ion-row>
  

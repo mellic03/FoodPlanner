@@ -26,72 +26,156 @@
 @import "~@ionic/angular/css/flex-utils.css";
 
 :root {
-    .dark_theme {
-        --background_color: #3C415C;
-        --foreground_color: rgb(52, 52, 52);
-        --foreground_color_secondary: #6e76a7;
+  .dark_theme {
+    --background_color_primary: #3C415C;
+    --background_color_secondary: #212536;
+    --background_color: linear-gradient(to bottom, var(--background_color_primary), var(--background_color_secondary));
 
-        --text_color: rgb(220, 220, 220);
-        --bold_text_color: rgb(255, 255, 255);
+    --foreground_color_primary: rgb(52, 52, 52);
+    --foreground_color_secondary: rgb(42, 42, 42);
+    --foreground_color: linear-gradient(to bottom, var(--foreground_color_primary), var(--foreground_color_secondary));;
 
-        --divider-color: rgb(42, 42, 42);
-    }
+    --text_color: rgb(220, 220, 220);
+    --bold_text_color: rgb(255, 255, 255);
 
-    .light_theme {
-        --background_color: #6190af;
-        --foreground_color: rgb(255, 255, 255);
-        --foreground_color_secondary: rgb(133, 201, 247);
+    --border_color: rgb(42, 42, 42);
 
-        --text_color: rgb(20, 20, 20);
-        --bold_text_color: rgb(0, 0, 0);
+    --ion-color-primary: rgb(119, 63, 141);
 
-        --divider-color: rgb(210, 210, 210);
-    }
+    --select_color: rgb(42, 42, 42);
+    --border_radius_size: 20px;
+  }
+
+  .light_theme {
+    --background_color_primary: #eeeeee;
+    --background_color_secondary: #dbe8f0;
+    --background_color: linear-gradient(to bottom, var(--background_color_primary), var(--background_color_secondary));
+
+    --foreground_color_primary: rgb(255, 255, 255);
+    --foreground_color_secondary: rgb(235, 235, 235);
+    --foreground_color: linear-gradient(to bottom, var(--foreground_color_primary), var(--foreground_color_secondary));;
+
+
+    --text_color: rgb(20, 20, 20);
+    --bold_text_color: rgb(0, 0, 0);
+
+    --border_color: rgb(210, 210, 210);
+
+    --ion-color-primary: rgb(52, 140, 161);
+
+    --select_color: rgb(200, 200, 200);
+    --border_radius_size: 20px;
+  }
 }
 
 .divider {
-    width: 95%;
-    height: 1px;
-    background-color: var(--divider-color);
-    margin: auto;
+  width: 98%;
+  height: 1px;
+  margin: auto;
+  background-color: var(--border_color);
 }
 
 ion-split-pane {
-    --ion-background-color: var(--foreground_color);
+  --ion-background-color: var(--background_color);
 }
 
 ion-header {
-    ion-toolbar {
-        color: var(--text_color);
-        --background: var(--foreground_color);
-    }
+  ion-toolbar {
+    color: var(--text_color);
+    --background: var(--foreground_color_primary);
+  }
 }
 
 ion-content {
-    --background: var(--background_color);
+  --background: var(--background_color);
 }
 
 ion-list {
-    --background: var(--foreground_color);
-    border-radius: 5px;
+  --ion-background-color: var(--foreground_color_primary);
+  border-radius: var(--border_radius_size);
+  margin: 10px;
+  ion-item {
+    --background: transparent;
+  }
 }
 
 ion-card {
-    border-radius: 5px;
-    
-    ion-card-title {
-        color: var(--bold_text_color);
-    }
+  border-radius: var(--border_radius_size);
+}
+
+ion-card-title {
+  color: var(--bold_text_color);
 }
 
 ion-item {
-    color: var(--text_color);
-    --background: var(--foreground_color);
+  color: var(--text_color);
+  --background: var(--foreground_color_primary);
+  --color-activated: var(--text_color);
+  --ripple-color: transparent;
+  --background-activated: transparent;
+  --background-activated-opacity:transparent;
+  --background-focused: transparent;
+  --background-focused-opacity:transparent;
+  --background-hover  : transparent;
+  --background-hover-opacity  :transparent;
+}
+
+ion-checkbox {
+  --border-color: var(--border_color);
+}
+
+.checkedItem {
+  --background: var(--select_color) !important;
+}
+
+ion-label {
+  --color: var(--text_color);
 }
 
 ion-grid {
-    ion-row {
-        --ion-background-color: var(--foreground_color);
-    }
+  ion-row {
+    --ion-background-color: var(--foreground_color_primary);
+  }
 }
 
+ion-alert {
+  //background color
+  .alert-wrapper.sc-ion-alert-md {
+    background-color: var(--foreground_color_primary);
+  }
+
+  // Header Text
+  .alert-title.sc-ion-alert-md {
+    color: var(--text_color);
+  }
+
+  // checkbox border color
+  [aria-checked="true"].sc-ion-alert-md .alert-radio-icon.sc-ion-alert-md {
+    border-color: #00000080;
+  }
+
+  // checkbox or radio button color
+  .alert-radio-inner.sc-ion-alert-md {
+    background-color: #00000080 !important;
+  }
+
+  // wrap the text
+  .alert-radio-label.sc-ion-alert-md {
+    color: var(--text_color);
+  }
+
+  // Height of text
+  .alert-tappable.sc-ion-alert-md {
+    height: 77px !important;
+  }
+
+  // Checked text color
+  [aria-checked="true"].sc-ion-alert-md .alert-radio-label.sc-ion-alert-md {
+    color: var(--ion-color-step-850, #262626);
+  }
+
+  // Button color
+  .alert-button-inner.sc-ion-alert-md {
+    color: var(--text_color);
+  }
+}

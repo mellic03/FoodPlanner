@@ -1,0 +1,22 @@
+@import '../../global.scss';
+
+ion-card-title {
+    text-align: center;
+}
+
+img {
+    width: 100%;
+}
+
+ion-progress-bar {
+    border-radius: 15px;
+    height: 25px;
+    width: 90%;
+    margin: auto;
+    margin-bottom: 10px;
+}
+
+ion-label {
+    margin-left: 20px;
+    color: var(--text_color);
+}

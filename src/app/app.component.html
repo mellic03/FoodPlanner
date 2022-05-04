@@ -1,17 +1,17 @@
 <ion-app class="{{current_theme}}">
+
   <ion-split-pane contentId="main-content">
-    <ion-menu contentId="main-content" type="overlay">
+    <ion-menu max-edge-start="50" *ngIf="user_logged_in == true" contentId="main-content" type="overlay">
       <ion-content>
 
         <ion-item>
           <ion-avatar slot="start">
-            <img src="https://ichef.bbci.co.uk/news/976/cpsprodpb/13278/production/_112565487_floyd.png">
+            <ion-img [src]="photoService.profile_picture?.webviewPath"></ion-img>
           </ion-avatar>
           <ion-label>{{current_user}}</ion-label>
         </ion-item>
 
         <ion-list id="inbox-list">
-
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
             <ion-item routerDirection="root" [routerLink]="[p.url]" lines="none" detail="false" routerLinkActive="selected">
               <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon>
@@ -20,9 +20,11 @@
           </ion-menu-toggle>
         </ion-list>
 
+        <div class="divider"></div>
+        
         <ion-menu-toggle>
           <ion-buttons>
-            <ion-button routerLink="/login">Log Out</ion-button>
+            <ion-button (click)="presentAlertConfirm()">Log Out</ion-button>
           </ion-buttons>
         </ion-menu-toggle>
 
