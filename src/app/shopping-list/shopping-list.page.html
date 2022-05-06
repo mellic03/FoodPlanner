@@ -9,7 +9,7 @@
 
 <ion-content>
 
-  <ion-list>
+  <ion-list class="shadow">
     <ion-item *ngFor="let ingredient of shopping_list; index as i" [ngClass]="{checkedItem: shopping_list[i][3] == true}">
       <ion-label>{{shopping_list[i][0]}}</ion-label>
       <ion-label *ngIf="shopping_list[i][1] == 1;">{{shopping_list[i][1]}} {{shopping_list[i][2]}}</ion-label>

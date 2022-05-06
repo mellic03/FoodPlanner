@@ -63,20 +63,21 @@ export class StorageService {
   /* ALL RECPIES */
 
   // Returns an array of all ingredients in a recipe in the form of [[name, quantity, unit]].
-  public getAllInfo(all_recipes:Array<Object>) {
+  // TODO: sum quantities of like-units of measurement.
+  public getAllInfo(recipe_object_array:Array<Object>) {
 
     let combined_array = [];
 
     // Populates combined_array with [name, quantity, unit, checked] arrays.
     // Does not remove duplicates or sum ingredient quantities.
-    for (let i = 0; i < all_recipes.length; i++) {
-      for (let j = 0; j < all_recipes[i]["ingredients"].length; j++) {
-        if (all_recipes[i]["ingredients"][j]?.["name"] && all_recipes[i]["ingredients"][j]?.["quantity"]) {
+    for (let i = 0; i < recipe_object_array.length; i++) {
+      for (let j = 0; j < recipe_object_array[i]["ingredients"].length; j++) {
+        if (recipe_object_array[i]["ingredients"][j]?.["name"] && recipe_object_array[i]["ingredients"][j]?.["quantity"]) {
           combined_array.push([
-            all_recipes[i]["ingredients"][j]["name"],
-            all_recipes[i]["ingredients"][j]["quantity"],
-            all_recipes[i]["ingredients"][j]["unit"],
-            all_recipes[i]["ingredients"][j]["checked"]
+            recipe_object_array[i]["ingredients"][j]["name"],
+            recipe_object_array[i]["ingredients"][j]["quantity"],
+            recipe_object_array[i]["ingredients"][j]["unit"],
+            recipe_object_array[i]["ingredients"][j]["checked"]
           ]);
         }
       }
@@ -100,16 +101,13 @@ export class StorageService {
     return(combined_array);
   }
 
-  // Returns an array of all recipe names
-  public getRecipeNames() {
+  // Returns an array of all recipe names.
+  public getRecipeNames(recipe_object_array:Array<Object>) {
     let recipe_names:Array<string> = [];
 
-    this.storage.get("persistent_recipes").then((val) => {
-      let all_recipes = val
-      for (let recipe of all_recipes) {
-        recipe_names.push(recipe.name);
-      }
-    });
+    for (let recipe of recipe_object_array) {
+      recipe_names.push(recipe["name"]);
+    }
 
     return(recipe_names);
   }
@@ -150,5 +148,205 @@ export class StorageService {
   public logRecipes() {
     console.log(this.storage.get("persistent_recipes"))
   }
+
+
+  // Populates recipes object. Exists for testing purposes.
+  public populateData() {
+    this.storage.set("persistent_recipes", [
+      {
+        "name": "Bolognese",
+        "ingredients": [
+          {
+            "name": "mince",
+            "quantity": 250,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "pasta",
+            "quantity": 100,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "pasta sauce",
+            "quantity": 1,
+            "unit": "jar",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "name": "Burgers",
+        "ingredients": [
+          {
+            "name": "mince",
+            "quantity": 500,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "buns",
+            "quantity": 4,
+            "unit": "unit",
+            "checked": false
+          },
+          {
+            "name": "cheese",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "name": "Alfredo",
+        "ingredients": [
+          {
+            "name": "fettuccine",
+            "quantity": 200,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "cream",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "garlic",
+            "quantity": 4,
+            "unit": "unit",
+            "checked": false
+          },
+          {
+            "name": "parsley",
+            "quantity": 1,
+            "unit": "unit",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "name": "Pizza",
+        "ingredients": [
+          {
+            "name": "flour",
+            "quantity": 2,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "passata",
+            "quantity": 1,
+            "unit": "jar",
+            "checked": false
+          },
+          {
+            "name": "cheese",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "pepperoni",
+            "quantity": 1,
+            "unit": "unit",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "name": "Daal",
+        "ingredients": [
+          {
+            "name": "red lentils",
+            "quantity": 2,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "spices",
+            "quantity": 50,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "rice",
+            "quantity": 2,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "coconut milk",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "name": "Chicken Schitzel",
+        "ingredients": [
+          {
+            "name": "chicken",
+            "quantity": 250,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "breadcrumbs",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "egg",
+            "quantity": 2,
+            "unit": "unit",
+            "checked": false
+          },
+          {
+            "name": "flour",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "name": "Potato salad",
+        "ingredients": [
+          {
+            "name": "potato",
+            "quantity": 4,
+            "unit": "unit",
+            "checked": false
+          },
+          {
+            "name": "mayonnaise",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "vinegar",
+            "quantity": 20,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "pepper",
+            "quantity": 1,
+            "unit": "unit",
+            "checked": false
+          }
+        ]
+      }
+    ]);
+    console.log("Populated")
+  }
+  
 
 }

@@ -44,8 +44,10 @@
 
     --select_color: rgb(42, 42, 42);
     --border_radius_size: 20px;
-  }
 
+    --border_shadow: rgba(0, 0, 0, 0.2) 0px 8px 24px;
+
+  }
   
   .light_theme {
     --background_color_primary: #eeeeee;
@@ -66,6 +68,7 @@
 
     --select_color: rgb(200, 200, 200);
     --border_radius_size: 20px;
+    --border_shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
   }
 }
 
@@ -95,9 +98,10 @@ ion-list {
   --ion-background-color: var(--foreground_color_primary);
   border-radius: var(--border_radius_size);
   margin: 10px;
-  ion-item {
-    --background: transparent;
-  }
+}
+
+ion-list.shadow {
+  box-shadow: var(--border_shadow);
 }
 
 ion-card {

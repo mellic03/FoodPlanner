@@ -13,14 +13,19 @@ export class LoginPage implements OnInit {
   constructor(private appComponent:AppComponent, private router:Router, private storage:StorageService) { }
 
   ngOnInit() {
+    // If already logged in, go to shopping list.
+    if (this.appComponent.user_logged_in) {
+      this.router.navigateByUrl("/shopping-list");
+    }
   }
 
+  // If username/password is valid, switches user_logged_in to true and navigates to the shopping list page.
   login(user:string, passwd:string) {
 
-    if (user == "Michael" && passwd == "pass") {
+    if (user == "username" && passwd == "password") {
       this.appComponent.user_logged_in = true;
-      this.router.navigateByUrl("/shopping-list")
       this.storage.set("user_logged_in", true);
+      this.router.navigateByUrl("/shopping-list");
     }
   }
 

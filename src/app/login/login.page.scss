@@ -9,7 +9,7 @@
 }
 
 ion-grid {
-    min-height: 100%;
+    min-height: 100vh;
     flex-direction: column;
     display: flex;
     width: 90%;
@@ -28,7 +28,7 @@ ion-button {
     font-size: 18px;
 }
 
-ion-text {
+ion-label {
     font-size: 32px;
-    color: rgb(255, 255, 255);
+    color: var(--bold_text_color);
 }

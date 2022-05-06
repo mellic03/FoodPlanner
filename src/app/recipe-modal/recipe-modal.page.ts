@@ -46,17 +46,19 @@ export class RecipeModalPage implements OnInit {
     this.current_recipe[2][index] = unit;
   }
   
+  // Dismisses the modal page.
   closeModal() {
     this.modalController.dismiss();
   }
 
   // Combines the information in the current_recipe array and adds it to persistent_recipes.
+  // Then replaces persistent_recipes in ionic storage with the local persistent_recipes.
   createRecipe(name:string, ingredients_array:Array<string>, quantities_array:Array<number>, units_array:Array<string>) {
 
-    // If in editing mode, remove the [] in each array placed by the modal.
-      this.current_recipe[0].splice(0, 1);
-      this.current_recipe[1].splice(0, 1);
-      this.current_recipe[2].splice(0, 1);
+    // Remove the [] in each array placed by the modal.
+    this.current_recipe[0].splice(0, 1);
+    this.current_recipe[1].splice(0, 1);
+    this.current_recipe[2].splice(0, 1);
 
     // "blank" object, where "recipe" is the recipe name
     let temp_object = {
@@ -106,4 +108,7 @@ export class RecipeModalPage implements OnInit {
   // created or an existing one is being edited.
   editing:boolean = false;
   index:number;
+
+  minn:number = 1;
+  maxx:number = 1;
 }

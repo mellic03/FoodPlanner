@@ -14,10 +14,6 @@ ion-avatar {
   }
 }
 
-ion-menu ion-content {
-  --background: linear-gradient(to bottom, var(--background_color_primary), var(--background_color_secondary));
-}
-
 ion-menu::part(container) {
   border-radius: 0 35px 35px 0;
 }

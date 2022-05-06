@@ -22,10 +22,11 @@ export class RecipesPage implements OnInit {
   }
 
   ngOnDestroy() {
-    // Update persistent storage with the local array
-    this.refreshStorage();
+    // Update persistent storage with the local array.
+    this.storage.set("persistent_recipes", this.persistent_recipes);
   }
 
+  // Presents the add/edit recipe modal. If editing the index i of a recipe is passed and editing is set to true.
   async presentModal(i:number = 0, editing:boolean = false) {
     const modal = await this.modalController.create({
       component: RecipeModalPage,
@@ -42,15 +43,11 @@ export class RecipesPage implements OnInit {
     return (modal.present());
   }
 
-  // Set recipes in storage to recipes on current page, then load the stored recipes.
-  refreshStorage() {
-    this.storage.set("persistent_recipes", this.persistent_recipes);
-    this.storage.get("persistent_recipes").then( val => {this.persistent_recipes = val;});
-  }
-
+  // Remove a recipe from the recipe list.
   deleteRecipe(i:number) {
     // Remove the recipe from the local array
     this.persistent_recipes.splice(i, 1);
+    // Replace the persistent object.
     this.storage.set("persistent_recipes", this.persistent_recipes);
   }
 

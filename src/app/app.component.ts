@@ -24,18 +24,21 @@ export class AppComponent {
 
   constructor(public router:Router, public menuController:MenuController, private storage:StorageService, public photoService:PhotoService, public alertController: AlertController) {
     
-    // Retrieves theme preference from storage and sets this.current_theme accordingly.
+    // Check if the theme has been set, if not, then the app hasn't been used yet.
     this.storage.get("current_theme").then( val => {
-      // First, check if the theme has been set
-      if (val != undefined) {
-        this.current_theme = val;
-      }
-      // If not, default to light theme.
-      else {
+      // If app has not been used before:
+      if (val == undefined) {
         this.current_theme = "light_theme";
+        this.storage.set("current_theme", "light_theme"); // Create value in storage for current_theme.
+        this.storage.populateData(); // Create array of recipe data. This is temporary.
+      }
+      // If app has been used before:
+      else {
+        this.current_theme = val;
       }
     });
 
+    // Check if the user is logged in.
     this.storage.get("user_logged_in").then( val => {
       this.user_logged_in = val;
     })
@@ -44,7 +47,7 @@ export class AppComponent {
     this.photoService.loadSaved();
   }
 
-  // Confirmation popup before logging out
+  // Confirmation popup before logging out. Sets user_logged_ion to false on confirmation.
   async presentAlertConfirm() {
     const alert = await this.alertController.create({
       message: 'Log out?',
@@ -54,7 +57,7 @@ export class AppComponent {
           role: 'cancel',
           cssClass: 'secondary',
           id: 'cancel-button',
-          handler: (blah) => {
+          handler: () => {
           }
         }, {
           text: 'Log out',
@@ -62,6 +65,7 @@ export class AppComponent {
           handler: () => {
             this.menuController.close();
             this.user_logged_in = false;
+            this.storage.set("user_logged_in", false);
             this.router.navigateByUrl("/login");
           }
         }
@@ -71,14 +75,16 @@ export class AppComponent {
     await alert.present();
   }
 
+  // Set theme to theme_name
   setTheme(theme_name:string) {
     this.current_theme = theme_name;
     this.storage.set("current_theme", theme_name);
   }
 
-  current_user:string = "Michael Ellicott";
-  public user_logged_in:boolean = false;
 
-  current_theme:string;
-  
+  current_user:string = "User Name"; // Username of currently logged-in user.
+
+  public user_logged_in:boolean = false; // Boolean representing whether a user is currently logged in.
+
+  current_theme:string; // The current theme.
 }

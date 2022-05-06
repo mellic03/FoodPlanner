@@ -18,6 +18,7 @@ export class ShoppingListPage implements OnInit {
     });
   }
 
+  // Marks an ingredient as "checked".
   checkIngredient(index:number, newValue:boolean) {
     let ingredient_name = this.shopping_list[index][0];
     this.storage.checkIngredient(ingredient_name, newValue);

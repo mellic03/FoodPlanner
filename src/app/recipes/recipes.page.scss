@@ -1,1 +1,35 @@
 @import '../../global.scss';
+
+
+.nothing-here {
+    width: 100vw;
+    height: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.background {
+    width: 60vw;
+    height: 70vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    margin-top: 30vw;
+
+    box-shadow: var(--border_shadow);
+
+    background: var(--foreground_color_primary);
+    border-radius: var(--border_radius_size);
+}
+
+ion-label {
+    font-size: 22px;
+    color: var(--bold_text_color);
+}
+
+p {
+    color: var(--text_color);
+}

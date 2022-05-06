@@ -9,35 +9,23 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-list>
-
+  <ion-list class="shadow">
     <ion-card-header>
       <ion-card-title>Appearance</ion-card-title>
     </ion-card-header>
-
     <ion-radio-group [(ngModel)]="current_theme" #radio (ionChange)="setTheme(radio.value)">
-        <ion-item>
-          <ion-label>Light Theme</ion-label>
-          <ion-radio slot="end" value="light_theme"></ion-radio>
-        </ion-item>
-        <ion-item>
-          <ion-label>Dark Theme</ion-label>
-          <ion-radio slot="end" value="dark_theme"></ion-radio>
-        </ion-item>
-      </ion-radio-group>
-    <ion-item lines="none">
-      <ion-label>Accent color</ion-label>
-      <ion-select>
-        <ion-select-option>Blue</ion-select-option>
-        <ion-select-option>Purple</ion-select-option>
-        <ion-select-option>Green</ion-select-option>
-        <ion-select-option>Red</ion-select-option>
-      </ion-select>
-    </ion-item>
-
+      <ion-item>
+        <ion-label>Light Theme</ion-label>
+        <ion-radio slot="end" value="light_theme"></ion-radio>
+      </ion-item>
+      <ion-item>
+        <ion-label>Dark Theme</ion-label>
+        <ion-radio slot="end" value="dark_theme"></ion-radio>
+      </ion-item>
+    </ion-radio-group>
   </ion-list>
 
-  <ion-list>
+  <ion-list class="shadow">
     <ion-card-header>
       <ion-card-title>Account</ion-card-title>
     </ion-card-header>
@@ -57,7 +45,7 @@
 
   </ion-list>
 
-  <ion-list>
+  <ion-list class="shadow">
     <ion-card-header>
       <ion-card-title>System</ion-card-title>
     </ion-card-header>
@@ -70,10 +58,5 @@
       <ion-button (click)="populateData()">Populate</ion-button>
     </ion-item>
   </ion-list>
-
-  <ion-list>
-    <version></version>
-  </ion-list>
-
 
 </ion-content>

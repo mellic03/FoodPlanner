@@ -19,19 +19,36 @@
 
 <ion-content>
 
-  <ion-list>
-    <ion-item *ngFor="let recipe of persistent_recipes; index as i">
-      <ion-label>{{persistent_recipes?.[i]?.name}}</ion-label>
-      <ion-buttons slot="end">
-        <ion-button (click)="presentModal(i, true)">
-          <ion-icon name="pencil-outline"></ion-icon>
-        </ion-button>
-        <ion-button (click)="deleteRecipe(i)">
-          <ion-icon name="trash-outline"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-item>
+  <ion-list class="shadow" *ngIf="persistent_recipes?.length; else elseBlock;">
+    <ion-item-sliding *ngFor="let recipe of persistent_recipes; index as i">
+      <ion-item-options side="start">
+        <ion-item-option color="danger" (click)="deleteRecipe(i)">
+          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+        </ion-item-option>
+      </ion-item-options>
+      <ion-item>
+        <ion-label>{{persistent_recipes?.[i]?.name}}</ion-label>
+        <ion-buttons slot="end">
+          <ion-button (click)="presentModal(i, true)">
+            <ion-icon name="pencil-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+    </ion-item-sliding>
   </ion-list>
+
+  <ng-template #elseBlock class="CONVERT_THIS_TO_CUSTOM_COMPONENT">
+    <div class="nothing-here">
+      <div class="background">
+        <ion-label>Oops!</ion-label>
+        <br>
+        <p>There's nothing here.</p>
+        <br>
+        <br>
+        <ion-button (click)="presentModal()">Add Recipe</ion-button>
+      </div>
+    </div>
+  </ng-template>
 
 </ion-content>
 

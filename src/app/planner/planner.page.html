@@ -10,43 +10,43 @@
 <ion-content>
 
   <ion-list>
-    <ion-datetime></ion-datetime>
+    <div class="date-title">
+      <p>This shop should last until: </p>
+      <b>{{end_date_formatted}}</b>
+    </div>
+    <ion-datetime min="{{now_formatted}}" (ionChange)="updateDate()" size="cover" presentation="date" [(ngModel)]="end_date_input"></ion-datetime>
   </ion-list>
 
-  <ion-grid>
-    <ion-row>
-      <ion-col>
-        <ion-slides>
-          <ion-slide *ngFor="let day of days_of_week; index as i;">
+  <div class="slide-container">
+    <ion-slides>
+      <ion-slide *ngFor="let date of dates_formatted; index as i;">
 
-            <ion-list>
-              <ion-item>
-                <div class="title">
-                  <b>{{day[2]}}</b>
-                  <p>{{day[0]}}</p>
-                </div>
-                <ion-buttons slot="end">
-                      <ion-button (click)="presentModal()">
-                        <ion-icon name="add-outline"></ion-icon>
-                        <ion-label>Add</ion-label>
-                      </ion-button>
-                      <ion-button>
-                        <ion-icon name="pencil-outline"></ion-icon>
-                        <ion-label>Edit</ion-label>
-                      </ion-button>
-                </ion-buttons>
-              </ion-item>
+        <ion-list>
+          <ion-item>
+            <div class="list-title">
+              <b>{{date[0]}}</b>
+              <p>{{date[1]}}</p>
+            </div>
+            <ion-buttons slot="end">
+                  <ion-button (click)="presentModal(dates_formatted[i][0])">
+                    <ion-icon name="add-outline"></ion-icon>
+                    <ion-label>Add</ion-label>
+                  </ion-button>
+                  <ion-button (click)="generateDates()">
+                    <ion-icon name="pencil-outline"></ion-icon>
+                    <ion-label>Edit</ion-label>
+                  </ion-button>
+            </ion-buttons>
+          </ion-item>
 
-              <ion-item *ngFor="let recipe of day[1]; index as i;">
-                <ion-label>{{recipe}}</ion-label>
-                <ion-checkbox slot=end></ion-checkbox>
-              </ion-item>
-              <ion-item lines="none"></ion-item>
-            </ion-list>
-          </ion-slide>
-        </ion-slides>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
+          <ion-item *ngFor="let recipe of recipe_names; index as i;">
+            <ion-label>{{recipe}}</ion-label>
+            <ion-checkbox slot=end></ion-checkbox>
+          </ion-item>
 
+          <ion-item lines="none"></ion-item>
+        </ion-list>
+      </ion-slide>
+    </ion-slides>
+  </div>
 </ion-content>

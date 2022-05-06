@@ -3,19 +3,23 @@
   <ion-grid>
 
     <ion-row style="flex: 100;"></ion-row>
-    
+
+    Username = "username"
+    <br>
+    Password = "password"
+
     <ion-row>
       <ion-col>
-        <ion-text>
+        <ion-label>
           <b>Welcome</b>
-        </ion-text>
+        </ion-label>
       </ion-col>
     </ion-row>
- 
+
     <ion-row>
       <ion-col>
           <ion-input [(ngModel)]="username" class="top" placeholder="Username" clearInput="true"></ion-input>
-          <ion-input [(ngModel)]="password" class="bottom" placeholder="Password" clearInput="true"></ion-input>
+          <ion-input [(ngModel)]="password" class="bottom" placeholder="Password" clearInput="true" type="password"></ion-input>
       </ion-col>
     </ion-row>
     <ion-row>
@@ -23,10 +27,9 @@
         <ion-button (click)="login(username, password)">LOGIN</ion-button>
       </ion-col>
     </ion-row>
- 
+
     <ion-row style="flex: 100;"></ion-row>
  
   </ion-grid>
-
 
 </ion-content>

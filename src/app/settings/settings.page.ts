@@ -50,10 +50,12 @@ export class SettingsPage implements OnInit {
     await alert.present();
   }
 
+  // Take photo from camera or select from filesystem.
   take_photo() {
     this.photoService.takePicture();
   }
 
+  // Sets the theme to theme_name
   setTheme(theme_name:string) {
     this.current_theme = theme_name;
     this.appComponent.setTheme(theme_name);
@@ -61,170 +63,7 @@ export class SettingsPage implements OnInit {
 
   // Populates recipes object. Exists for testing purposes.
   populateData() {
-    this.storage.set("persistent_recipes", [
-      {
-        "name": "Bolognese",
-        "ingredients": [
-          {
-            "name": "mince",
-            "quantity": 250,
-            "unit": "gram",
-            "checked": false
-          },
-          {
-            "name": "pasta",
-            "quantity": 100,
-            "unit": "gram",
-            "checked": false
-          },
-          {
-            "name": "pasta sauce",
-            "quantity": 1,
-            "unit": "jar",
-            "checked": false
-          }
-        ]
-      },
-      {
-        "name": "Burgers",
-        "ingredients": [
-          {
-            "name": "mince",
-            "quantity": 500,
-            "unit": "gram",
-            "checked": false
-          },
-          {
-            "name": "buns",
-            "quantity": 4,
-            "unit": "unit",
-            "checked": false
-          },
-          {
-            "name": "cheese",
-            "quantity": 1,
-            "unit": "cup",
-            "checked": false
-          }
-        ]
-      },
-      {
-        "name": "Alfredo",
-        "ingredients": [
-          {
-            "name": "fettuccine",
-            "quantity": 200,
-            "unit": "gram",
-            "checked": false
-          },
-          {
-            "name": "cream",
-            "quantity": 1,
-            "unit": "cup",
-            "checked": false
-          },
-          {
-            "name": "garlic",
-            "quantity": 4,
-            "unit": "unit",
-            "checked": false
-          },
-          {
-            "name": "parsley",
-            "quantity": 1,
-            "unit": "unit",
-            "checked": false
-          }
-        ]
-      },
-      {
-        "name": "Pizza",
-        "ingredients": [
-          {
-            "name": "flour",
-            "quantity": 500,
-            "unit": "gram",
-            "checked": false
-          },
-          {
-            "name": "passata",
-            "quantity": 1,
-            "unit": "jar",
-            "checked": false
-          },
-          {
-            "name": "cheese",
-            "quantity": 200,
-            "unit": "gram",
-            "checked": false
-          },
-          {
-            "name": "pepperoni",
-            "quantity": 1,
-            "unit": "unit",
-            "checked": false
-          }
-        ]
-      },
-      {
-        "name": "Daal",
-        "ingredients": [
-          {
-            "name": "red lentils",
-            "quantity": 2,
-            "unit": "cup",
-            "checked": false
-          },
-          {
-            "name": "spices",
-            "quantity": 50,
-            "unit": "gram",
-            "checked": false
-          },
-          {
-            "name": "rice",
-            "quantity": 2,
-            "unit": "cup",
-            "checked": false
-          },
-          {
-            "name": "coconut milk",
-            "quantity": 1,
-            "unit": "cup",
-            "checked": false
-          }
-        ]
-      },
-      {
-        "name": "Chicken Schitzel",
-        "ingredients": [
-          {
-            "name": "chicken",
-            "quantity": 250,
-            "unit": "gram",
-            "checked": false
-          },
-          {
-            "name": "breadcrumbs",
-            "quantity": 1,
-            "unit": "cup",
-            "checked": false
-          },
-          {
-            "name": "egg",
-            "quantity": 2,
-            "unit": "unit",
-            "checked": false
-          },
-          {
-            "name": "flour",
-            "quantity": 1,
-            "unit": "cup",
-            "checked": false
-          }
-        ]
-      }
-    ]);
+    this.storage.populateData();
     console.log("Populated")
   }
 
