@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { StorageService } from '../services/storage.service';
+import Chart from 'chart.js/auto';
 
 @Component({
   selector: 'app-statistics',
@@ -7,9 +9,35 @@ import { Component, OnInit } from '@angular/core';
 })
 export class StatisticsPage implements OnInit {
 
-  constructor() { }
+  @ViewChild('food_usage_chart', {static: true}) canvas;
+  chart:any;
+  
+  constructor(private storage:StorageService) { }
 
-  ngOnInit() {
+  // Chart needs to read dates from date array and plot the last two weeks of dates
+
+  data = {
+    datasets: [{
+      label: "Rate of Food Usage Per Day",
+      data: [],
+      backgroundColor: []
+    }],
+    labels: [],
+  }
+
+  async ngOnInit() {
+
+    let formatted_dates:Array<Array<string>> = await this.storage.get("dates_formatted");
+
+    for (let date of formatted_dates) {
+      this.data.labels.push(date[1].substring(5, date[1].length))
+    }
+
+
+    this.chart = new Chart(this.canvas.nativeElement, {
+      type: 'bar',
+      data: this.data
+    });
   }
 
 }

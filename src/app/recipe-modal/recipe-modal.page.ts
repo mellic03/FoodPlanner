@@ -12,7 +12,7 @@ import { StorageService } from '../services/storage.service';
 
 export class RecipeModalPage implements OnInit {
 
-  constructor(private navParams:NavParams, private modalController:ModalController, platform:Platform, private storage:StorageService) {}
+  constructor(private navParams:NavParams, private modalController:ModalController, private storage:StorageService) {}
 
   ngOnInit() {
     // Load all recipes from persistent storage.
@@ -41,7 +41,7 @@ export class RecipeModalPage implements OnInit {
     }
   }
 
-  // adds the unit of measurement for an ingredient to units[], called when a unit of measurement is selected.
+  // Adds the unit of measurement for an ingredient to units[], called when a unit of measurement is selected.
   setUnit(unit:string, index:number) {
     this.current_recipe[2][index] = unit;
   }

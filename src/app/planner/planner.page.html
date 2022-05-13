@@ -4,6 +4,9 @@
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
     <ion-title>Planner</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="presentDateModal()">Change Date</ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
@@ -12,14 +15,14 @@
   <ion-list>
     <div class="date-title">
       <p>This shop should last until: </p>
-      <b>{{end_date_formatted}}</b>
+      <b>{{end_date_readable}}</b>
     </div>
-    <ion-datetime min="{{now_formatted}}" (ionChange)="updateDate()" size="cover" presentation="date" [(ngModel)]="end_date_input"></ion-datetime>
   </ion-list>
+
 
   <div class="slide-container">
     <ion-slides>
-      <ion-slide *ngFor="let date of dates_formatted; index as i;">
+      <ion-slide *ngFor="let date of formatted_dates; index as i;">
 
         <ion-list>
           <ion-item>
@@ -28,11 +31,11 @@
               <p>{{date[1]}}</p>
             </div>
             <ion-buttons slot="end">
-                  <ion-button (click)="presentModal(dates_formatted[i][0])">
+                  <ion-button (click)="presentAddModal(date, i)">
                     <ion-icon name="add-outline"></ion-icon>
                     <ion-label>Add</ion-label>
                   </ion-button>
-                  <ion-button (click)="generateDates()">
+                  <ion-button>
                     <ion-icon name="pencil-outline"></ion-icon>
                     <ion-label>Edit</ion-label>
                   </ion-button>

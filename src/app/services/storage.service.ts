@@ -31,7 +31,11 @@ export class StorageService {
   
   /* RECIPE-SPECIFIC FUNCTIONS */
 
-  // Returns an array of ingredient names.
+
+  /** Returns an array of ingredient names.
+   * @param recipe Recipe object. E.g. {name: "Bolognese", ingredients: [{}, {}, ...]}
+   * @returns Array<string>
+   */
   public getNames(recipe:Object) {
     let temp_array = [];
     for (let i = 0; i < recipe["ingredients"].length; i++) {
@@ -62,8 +66,10 @@ export class StorageService {
 
   /* ALL RECPIES */
 
-  // Returns an array of all ingredients in a recipe in the form of [[name, quantity, unit]].
-  // TODO: sum quantities of like-units of measurement.
+  /** Returns an array of all ingredients in an array of recipe objects in the form [[name, quantity, units, checked], ...]
+   * @param recipe_object_array Array of recipe objects
+   * @returns Array<Array<string | number | boolean>>
+   */
   public getAllInfo(recipe_object_array:Array<Object>) {
 
     let combined_array = [];
@@ -87,13 +93,15 @@ export class StorageService {
     // then removes the duplicate ingredient.
     for (let i = 0; i < combined_array.length; i++) {
       for (let j = 0; j < combined_array.length; j++) {
-        if (i != j && combined_array[i][0] == combined_array[j][0]) {
-          combined_array[i][1] += combined_array[j][1];
-          combined_array.splice(j, 1);
+        for (let k = 0; k < combined_array.length; k++) {
+          if (i != j && combined_array[i][0] == combined_array[j][0] && combined_array[i][2] == combined_array[j][2]) {
+            combined_array[i][1] += combined_array[j][1];
+            combined_array.splice(j, 1);
 
-          // If an item is removed at index j, j does not increase for one iteration.
-          // Otherwise, the program will skip an element.
-          j = j - 1;
+            // If an item is removed at index j, j does not increase for one iteration.
+            // Otherwise, the program will skip an element.
+            j = j - 1;
+          }
         }
       }
     }
@@ -101,7 +109,11 @@ export class StorageService {
     return(combined_array);
   }
 
-  // Returns an array of all recipe names.
+  /** Returns an array of all recipe names in an array of recipe objects.
+   * 
+   * @param recipe_object_array Array of recipe objects
+   * @returns Array<string>
+   */
   public getRecipeNames(recipe_object_array:Array<Object>) {
     let recipe_names:Array<string> = [];
 
@@ -121,7 +133,10 @@ export class StorageService {
   
   /* INGREDIENT-SPECIFIC FUNCTIONS */
 
-  // Marks an ingredient as "checked", used for shopping list.
+  /** Marks an ingredient as "checked". Used for marking ingredients off of the shopping list.
+   * @param ingredient_name Ingredient name
+   * @param newValue The new value of "checked"
+   */
   public checkIngredient(ingredient_name:string, newValue:boolean) {
 
     let persistent_recipes;

@@ -79,6 +79,7 @@
   background-color: var(--border_color);
 }
 
+
 ion-split-pane {
   --ion-background-color: var(--background_color);
 }
@@ -116,6 +117,7 @@ ion-item {
   color: var(--text_color);
   --background: var(--foreground_color_primary);
   --color-activated: var(--text_color);
+  --highlight-color-valid: var(--ion-color-primary);
   --ripple-color: transparent;
   --background-activated: transparent;
   --background-activated-opacity:transparent;
@@ -141,6 +143,10 @@ ion-grid {
   ion-row {
     --ion-background-color: var(--foreground_color_primary);
   }
+}
+
+ion-input {
+  background: var(--foreground_color_primary);
 }
 
 ion-alert {

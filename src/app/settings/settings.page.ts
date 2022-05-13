@@ -64,7 +64,6 @@ export class SettingsPage implements OnInit {
   // Populates recipes object. Exists for testing purposes.
   populateData() {
     this.storage.populateData();
-    console.log("Populated")
   }
 
   current_theme:string; // String to display on settings page for active theme.

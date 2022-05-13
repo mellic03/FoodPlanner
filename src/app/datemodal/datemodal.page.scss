@@ -1,0 +1,15 @@
+@import '../../global.scss';
+
+.date-title {
+    display: flex;
+    justify-content: center;
+    p {
+        padding-right: 10px;
+    }
+}
+
+ion-datetime {
+    --background: var(--foreground_color_primary);
+    color: var(--bold_text_color);
+    --title-color: blue
+}
