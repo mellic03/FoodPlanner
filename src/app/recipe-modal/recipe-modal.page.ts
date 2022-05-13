@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
+import { Recipe } from '../Recipe';
 import { StorageService } from '../services/storage.service';
 
 @Component({
@@ -16,7 +17,7 @@ export class RecipeModalPage implements OnInit {
 
   async ngOnInit() {
     // Load all recipes from persistent storage.
-    this.persistent_recipes = await this.storage.get("all_recipes");
+    this.all_recipes = await this.storage.get("all_recipes");
 
     // If in editing mode, get relevant recipe information.
     this.editing = this.navParams.get('editing');
@@ -51,8 +52,8 @@ export class RecipeModalPage implements OnInit {
     this.modalController.dismiss();
   }
 
-  // Combines the information in the current_recipe array and adds it to persistent_recipes.
-  // Then replaces persistent_recipes in ionic storage with the local persistent_recipes.
+  // Combines the information in the current_recipe array and adds it to all_recipes.
+  // Then replaces all_recipes in ionic storage with the local all_recipes.
   createRecipe(name:string, ingredients_array:Array<string>, quantities_array:Array<number>, units_array:Array<string>) {
 
     // "blank" object, where "recipe" is the recipe name
@@ -90,22 +91,21 @@ export class RecipeModalPage implements OnInit {
 
     // If in editing mode, replace the object at the correct index with working_object.
     if (this.editing) {
-      this.persistent_recipes[this.index] = temp_object;
+      this.all_recipes[this.index] = temp_object;
     }
 
     // If not in editing mode, push working_object to persistent storage.
     else {
-      this.persistent_recipes.push(temp_object);
+      this.all_recipes.push(temp_object);
     }
 
-    this.storage.set("all_reicpes", this.persistent_recipes);
-    this.modalController.dismiss();
+    this.modalController.dismiss(this.all_recipes);
   }
 
 
   recipe_name:string = ''; // Recipe name
   current_recipe = [[], [], [], []]; // Array of recipe information.
-  persistent_recipes:any; // Persistent recipes
+  all_recipes:any; // Persistent recipes
 
   // All valid units of measurement used by the app.
   units:Array<string> = ["gram", "kilogram", "millilitre", "litre", "cup", "jar", "unit"];
@@ -115,6 +115,4 @@ export class RecipeModalPage implements OnInit {
   editing:boolean = false;
   index:number;
 
-  minn:number = 1;
-  maxx:number = 1;
 }

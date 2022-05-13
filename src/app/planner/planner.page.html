@@ -12,23 +12,21 @@
 
 <ion-content>
 
-  <ion-list>
+  <div class="slide-container shadow">
+
     <div class="date-title">
       <p>This shop should last until: </p>
       <b>{{end_date_readable}}</b>
     </div>
-  </ion-list>
 
-
-  <div class="slide-container">
     <ion-slides>
-      <ion-slide *ngFor="let date of formatted_dates; index as i;">
+      <ion-slide *ngFor="let date of planner_dates; index as i;">
 
         <ion-list>
           <ion-item>
             <div class="list-title">
-              <b>{{date[0]}}</b>
-              <p>{{date[1]}}</p>
+              <b>{{date.day_of_week_alphabetical}}</b>
+              <p>{{date.month}}/{{date.year}}</p>
             </div>
             <ion-buttons slot="end">
                   <ion-button (click)="presentAddModal(date, i)">
@@ -42,9 +40,9 @@
             </ion-buttons>
           </ion-item>
 
-          <ion-item *ngFor="let recipe of recipe_names; index as i;">
-            <ion-label>{{recipe}}</ion-label>
-            <ion-checkbox slot=end></ion-checkbox>
+          <ion-item *ngFor="let recipe of planner_dates[i].recipes; index as j;" [ngClass]="{checkedItem: recipe[1] == true}">
+            <ion-label>{{recipe["recipe_name"]}}</ion-label>
+            <ion-checkbox [(ngModel)]="recipe[1]" (ionChange)="checkRecipe()" slot=end></ion-checkbox>
           </ion-item>
 
           <ion-item lines="none"></ion-item>

@@ -4,6 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { PlannerModalPage } from '../planner-modal/planner-modal.page';
 import { DatemodalPage } from '../datemodal/datemodal.page';
 import { format, parseISO } from 'date-fns'
+import { PlannerDate } from '../PlannerDate';
 
 @Component({
   selector: 'app-planner',
@@ -15,18 +16,31 @@ export class PlannerPage implements OnInit {
 
   constructor(private storage:StorageService, private modalController:ModalController) { }
 
+  async ngOnInit() {
+    let all_recipes = await this.storage.get("all_recipes");
+    this.recipe_names = this.storage.getRecipeNames(all_recipes);
+    this.planner_dates = await this.storage.get("planner_dates");
+    this.end_date = await this.storage.get("end_date")
+    this.end_date_readable = format(parseISO(this.end_date), 'MMM d, yyyy');
+  }
+
+  ngOnDestroy() {
+    this.storage.set("planner_dates", this.planner_dates);
+    this.storage.set("end_date", this.end_date);
+  }
+
+
   // Present the "change date" modal
   async presentDateModal() {
     const modal = await this.modalController.create({
       component: DatemodalPage,
       // Pass the current date as well as the formatted_dates array
-      componentProps: {now_date: this.now_date, formatted_dates: this.formatted_dates, end_date: this.end_date}
+      componentProps: {now_date: this.now_date, planner_dates: this.planner_dates, end_date: this.end_date}
       });
 
     modal.onDidDismiss().then((data) => {
-      // formatted_dates is altered within the modal, return the array and overwrite the local version.
       if (data.data != null) {
-        this.formatted_dates = data.data;
+        this.planner_dates = data.data;
         this.end_date = data.role;
         this.end_date_readable = format(parseISO(data.role), 'MMM d, yyyy');
       }
@@ -36,44 +50,34 @@ export class PlannerPage implements OnInit {
   }
 
   // Present the "add recipes" modal.
-  async presentAddModal(date, index:number) {
+  async presentAddModal(planner_date:PlannerDate, index:number) {
     const modal = await this.modalController.create({
       component: PlannerModalPage,
-      // Pass the list of recipe names to the modal along with the array of dates and an index position.
-      componentProps: {date: date[0], index: index}
+      // Pass the PlannerDate to the modal
+      componentProps: {planner_date: planner_date, all_recipe_names: this.recipe_names, index: index}
       });
 
-    modal.onDidDismiss().then((val) => {
-      // NOT YET IMPLEMENETED.
-      // val["recipes_to_add"] = array of strings
-      // val["index"] = number
+    modal.onDidDismiss().then((data) => {
+      console.log(data);
+      this.planner_dates[data.data.index] = data.data.planner_date;
     });
     
     return (modal.present());
   }
 
-  async ngOnInit() {
-    let all_recipes = await this.storage.get("persistent_recipes");
-    this.recipe_names = this.storage.getRecipeNames(all_recipes);
-    this.formatted_dates = await this.storage.get("formatted_dates");
-    this.end_date = await this.storage.get("end_date")
-    this.end_date_readable = format(parseISO(this.end_date), 'MMM d, yyyy');
-  }
-
-  ngOnDestroy() {
-    this.storage.set("formatted_dates", this.formatted_dates);
-    this.storage.set("end_date", this.end_date);
+  // Update planner_dates in ionic storage after checking a recipe
+  checkRecipe() {
+    this.storage.set("planner_dates", this.planner_dates);
   }
 
 
   end_date:string; // The date the user's shop is supposed to last until. Bound with [(ngModel)] to the ion-datetime.
   end_date_readable:string; // The end date but in the form Month day, year. E.g. "May 7, 2022". 
   now_date:Date = new Date(); // The current date.
-  
 
-  // Array containing the dates between now_date and end_date in the form [day of week, yyyy-mm-dd].
-  // Used to generate the day-by-day planner using *ngFor.
-  formatted_dates:Array<Array<string>> = [[]];
+  // Array of PlannerDates
+  // Used to generate the day-by-day planner with *ngFor and for generating the chart on the statistics page.
+  planner_dates:Array<PlannerDate> = [];
 
   recipe_names:Array<string>; // All recipe names, placeholder until separate arrays of ingredients for each day exists.
 

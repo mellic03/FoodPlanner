@@ -19,15 +19,15 @@
 
 <ion-content>
 
-  <ion-list class="shadow" *ngIf="persistent_recipes?.length; else elseBlock;">
-    <ion-item-sliding *ngFor="let recipe of persistent_recipes; index as i">
+  <ion-list class="shadow" *ngIf="all_recipes?.length; else elseBlock;">
+    <ion-item-sliding *ngFor="let recipe of all_recipes; index as i">
       <ion-item-options side="start">
         <ion-item-option color="danger" (click)="deleteRecipe(i)">
           <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
         </ion-item-option>
       </ion-item-options>
       <ion-item>
-        <ion-label>{{persistent_recipes?.[i]?.name}}</ion-label>
+        <ion-label>{{all_recipes?.[i]?.name}}</ion-label>
         <ion-buttons slot="end">
           <ion-button (click)="presentModal(i, true)">
             <ion-icon name="pencil-outline"></ion-icon>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { NavParams } from '@ionic/angular';
+import { PlannerDate } from '../PlannerDate';
 
 @Component({
   selector: 'app-datemodal',
@@ -30,28 +31,21 @@ export class DatemodalPage implements OnInit {
     return Math.abs(Math.round((date_1.getTime() - date_2.getTime()) / (1000 * 3600 * 24)));
   } 
 
-  // Generate an array of dates between now and the specified date in the form [day of week, yyyy-mm-dd].
+  // Generate an array of PlannerDates between now and the specified end date.
   generateDates(start, end) {
 
-    let start_date:Date = new Date(start);
-    let end_date:Date = new Date(end);
+    let start_date:PlannerDate = new PlannerDate(new Date(start));
+    let end_date:PlannerDate = new PlannerDate(new Date(end));
 
-    let temp_array_raw:Array<Date> = [];
-
-    // Generate array of ISO 8601 dates.
-    for (let i = 0; i < this.daysBetweenDates(start_date, end_date) + 1; i++) {
-      temp_array_raw.push( new Date(start_date.getTime() + i * (1000 * 60 * 60 * 24)) );
-    }
-
-    // Generate array of dates in the form of [day of week, yyyy-mm-dd].
-    let temp_array_formatted:Array<Array<any>> = [];
+    let temp_array:Array<PlannerDate> = [];
     let week_days:Array<string> = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    temp_array_raw.forEach( x => {
-      temp_array_formatted.push([week_days[x.getDay()], x.toISOString().split('T')[0]]);
-      }
-    );
-
-    return(temp_array_formatted);
+    
+    for (let i = 0; i < this.daysBetweenDates(start_date.date_ISO, end_date.date_ISO) + 1; i++) {
+      let plannerDate:PlannerDate = new PlannerDate(new Date(start_date.date_ISO.getTime() + i * (1000 * 60 * 60 * 24)));
+      temp_array.push(plannerDate);
+    }
+    
+    return(temp_array); // I never want to see this function again.
   }
 
   now_date:Date = new Date();

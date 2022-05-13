@@ -7,7 +7,10 @@
     p {
         padding-right: 10px;
     }
+    padding-top: 10px;
+    margin-bottom: 10px;
 }
+
 
 ion-datetime {
     --background: var(--foreground_color_primary);
@@ -41,13 +44,18 @@ ion-slides {
     --ion-background-color: var(--foreground_color_primary);
 }
 .slide-container {
+    min-height: 50vh;
     background: var((--foreground_color_primary));
     margin: 10px;
     border-radius: var(--border_radius_size);
 }
 
 ion-slide {
+    min-height: 50vh;
+
+    display: block;
     width: 100vw;
+    
     ion-list {
         margin: 0;
         padding: 0;

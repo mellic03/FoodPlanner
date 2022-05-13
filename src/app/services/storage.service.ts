@@ -123,7 +123,6 @@ export class StorageService {
     return(recipe_names);
   }
 
-
   /* INGREDIENT-SPECIFIC FUNCTIONS */
 
   /** Marks an ingredient as "checked". Used for marking ingredients off of the shopping list.
