@@ -19,8 +19,8 @@ export class StatisticsPage implements OnInit {
   data = {
     datasets: [{
       label: "Rate of Food Usage Per Day",
-      data: [],
-      backgroundColor: []
+      data: [5, 4, 5, 3, 2, 2, 1, 2, 1],
+      backgroundColor: ["rgba(105, 99, 215, 0.6)"]
     }],
     labels: [],
   }

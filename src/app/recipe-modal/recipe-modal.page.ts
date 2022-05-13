@@ -55,19 +55,25 @@ export class RecipeModalPage implements OnInit {
   // Then replaces persistent_recipes in ionic storage with the local persistent_recipes.
   createRecipe(name:string, ingredients_array:Array<string>, quantities_array:Array<number>, units_array:Array<string>) {
 
-    // Remove the [] in each array placed by the modal.
-    this.current_recipe[0].splice(0, 1);
-    this.current_recipe[1].splice(0, 1);
-    this.current_recipe[2].splice(0, 1);
-
     // "blank" object, where "recipe" is the recipe name
     let temp_object = {
       "name": "placeholder",
       "ingredients": []
     };
 
-    // Set recipe name
-    temp_object["name"] = name;
+    // If no recipe name, return
+    if (name == "") {
+      return(0);
+    }
+    else {
+      // Set recipe name
+      temp_object["name"] = name;
+    }
+    
+    // Remove the [] in each array placed by the modal.
+    this.current_recipe[0].splice(0, 1);
+    this.current_recipe[1].splice(0, 1);
+    this.current_recipe[2].splice(0, 1);
 
     // iterate from 0 to the number of ingredients
     for (let i = 0; i < ingredients_array.length; i++) {
