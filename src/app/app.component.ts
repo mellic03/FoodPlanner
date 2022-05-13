@@ -43,17 +43,16 @@ export class AppComponent {
       this.presentModal(); // Present modal with logged_in = undefined
     }
 
-
     // If the app has been used but the user isn't logged in.
     else if (await this.storage.get("user_logged_in") == false) {
       this.current_theme = (await this.storage.get("current_theme")); // Set the theme to the stored theme.
       this.presentModal(false); // Present modal with logged_in = false
     }
 
-
     // If the user is logged in.
     else if (await this.storage.get("user_logged_in") == true) {
       this.user_logged_in = true;
+      this.current_user = await this.storage.get("current_user");
       this.current_theme = (await this.storage.get("current_theme")); // Set the theme to the stored theme.
       this.photoService.loadSaved(); // Load the stored profile picture.
     }
@@ -68,8 +67,8 @@ export class AppComponent {
 
     // Modal returns the current username when dismissed.
     modal.onDidDismiss().then((data) => {
-
       this.current_user = data.data; // Set current_user to currently logged in user
+      this.storage.set("current_user", data.data);
       this.user_logged_in = true;
       this.storage.set("user_logged_in", true);
     });

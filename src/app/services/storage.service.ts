@@ -110,7 +110,6 @@ export class StorageService {
   }
 
   /** Returns an array of all recipe names in an array of recipe objects.
-   * 
    * @param recipe_object_array Array of recipe objects
    * @returns Array<string>
    */
@@ -124,50 +123,40 @@ export class StorageService {
     return(recipe_names);
   }
 
-  // Returns an array of recipes that contain a given ingredient.
-  public getRecipesUsingIngredient(ingredient_name:string) {
 
-  }
-
-
-  
   /* INGREDIENT-SPECIFIC FUNCTIONS */
 
   /** Marks an ingredient as "checked". Used for marking ingredients off of the shopping list.
    * @param ingredient_name Ingredient name
    * @param newValue The new value of "checked"
+   * @returns nothing
    */
-  public checkIngredient(ingredient_name:string, newValue:boolean) {
+  public async checkIngredient(ingredient_name:string, newValue:boolean) {
 
-    let persistent_recipes;
+    let persistent_recipes = await this.storage.get("all_recipes");
 
-    this.storage.get("persistent_recipes").then( val => {
-
-      persistent_recipes = val;
-
-      for (let i = 0; i < persistent_recipes.length; i++) {
-        for (let j = 0; j < persistent_recipes[i]["ingredients"].length; j++) {
-          if (persistent_recipes[i]["ingredients"][j]?.["name"] == ingredient_name) {
-            persistent_recipes[i]["ingredients"][j]["checked"] = newValue;
-          }
+    for (let i = 0; i < persistent_recipes.length; i++) {
+      for (let j = 0; j < persistent_recipes[i]["ingredients"].length; j++) {
+        if (persistent_recipes[i]["ingredients"][j]?.["name"] == ingredient_name) {
+          persistent_recipes[i]["ingredients"][j]["checked"] = newValue;
         }
       }
+    }
   
-      this.storage.set("persistent_recipes", persistent_recipes);
-    });
+    this.storage.set("all_recipes", persistent_recipes);
   }
 
  
 
   /* OTHER FUNCTIONS */
   public logRecipes() {
-    console.log(this.storage.get("persistent_recipes"))
+    console.log(this.storage.get("all_recipes"))
   }
 
 
   // Populates recipes object. Exists for testing purposes.
   public populateData() {
-    this.storage.set("persistent_recipes", [
+    this.storage.set("all_recipes", [
       {
         "name": "Bolognese",
         "ingredients": [

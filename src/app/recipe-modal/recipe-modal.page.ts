@@ -14,9 +14,9 @@ export class RecipeModalPage implements OnInit {
 
   constructor(private navParams:NavParams, private modalController:ModalController, private storage:StorageService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     // Load all recipes from persistent storage.
-    this.storage.get("persistent_recipes").then( val => {this.persistent_recipes = val;});
+    this.persistent_recipes = await this.storage.get("all_recipes");
 
     // If in editing mode, get relevant recipe information.
     this.editing = this.navParams.get('editing');
@@ -98,7 +98,7 @@ export class RecipeModalPage implements OnInit {
       this.persistent_recipes.push(temp_object);
     }
 
-    this.storage.set("persistent_recipes", this.persistent_recipes);
+    this.storage.set("all_reicpes", this.persistent_recipes);
     this.modalController.dismiss();
   }
 

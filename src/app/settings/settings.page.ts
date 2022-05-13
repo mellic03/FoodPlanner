@@ -40,7 +40,7 @@ export class SettingsPage implements OnInit {
           text: 'Delete',
           id: 'confirm-button',
           handler: () => {
-            this.storage.set("persistent_recipes", []);
+            this.storage.set("all_recipes", []);
             console.log("Deleted")
           }
         }
