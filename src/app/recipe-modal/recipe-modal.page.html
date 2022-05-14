@@ -25,16 +25,24 @@
             <ion-input [(ngModel)]="recipe_name" clearInput="true" placeholder="Recipe Name"></ion-input>
           </ion-item>
 
-          <ion-item *ngFor="let ingredient_name of ingredient_names; index as i">
+          <ion-item-sliding *ngFor="let ingredient_name of ingredient_names; index as i" #sliding_item>
 
-            <ion-input [(ngModel)]="ingredient_names[i+1]" clearInput="true" placeholder="Ingredient {{i+1}}"></ion-input>
+            <ion-item-options side="start">
+              <ion-item-option color="danger" (click)="removeIngredient(i+1, sliding_item)">
+                <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+              </ion-item-option>
+            </ion-item-options>
+
+            <ion-item>
+              <ion-input [(ngModel)]="ingredient_names[i+1]" clearInput="true" placeholder="Ingredient {{i+1}}"></ion-input>
             
-            <ion-input [(ngModel)]="ingredient_quantities[i+1]" type="number" maxlength="4" clearInput="true" placeholder="Quantity"></ion-input>
-            
-            <ion-select [(ngModel)]="ingredient_units[i+1]">
-              <ion-select-option *ngFor="let unit of units; index as i;" value="{{units[i]}}">{{unit}}</ion-select-option>
-            </ion-select>
-          </ion-item>
+              <ion-input [(ngModel)]="ingredient_quantities[i+1]" type="number" maxlength="4" clearInput="true" placeholder="Quantity"></ion-input>
+              
+              <ion-select [(ngModel)]="ingredient_units[i+1]">
+                <ion-select-option *ngFor="let unit of units; index as j;" value="{{units[j]}}">{{unit}}</ion-select-option>
+              </ion-select>
+            </ion-item>
+          </ion-item-sliding>
       
         </ion-list>
       </ion-col>

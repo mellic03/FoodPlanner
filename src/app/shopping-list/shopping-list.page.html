@@ -9,13 +9,17 @@
 
 <ion-content>
 
-  <ion-list class="shadow">
-    <ion-item *ngFor="let ingredient of shopping_list; index as i" [ngClass]="{checkedItem: shopping_list[i][3] == true}">
+  <ion-list class="shadow" *ngIf="is_loaded == true;">
+    <ion-item *ngFor="let ingredient of shopping_list; index as i;" [ngClass]="{checkedItem: shopping_list[i][3] == true}">
       <ion-label>{{shopping_list[i][0]}}</ion-label>
       <ion-label *ngIf="shopping_list[i][1] == 1;">{{shopping_list[i][1]}} {{shopping_list[i][2]}}</ion-label>
       <ion-label *ngIf="shopping_list[i][1] != 1;">{{shopping_list[i][1]}} {{shopping_list[i][2]}}s</ion-label>
       <ion-checkbox [(ngModel)]="shopping_list[i][3]" (ionChange)="checkIngredient(i, shopping_list[i][3])" slot=end></ion-checkbox>
     </ion-item>
   </ion-list>
+
+
+  <ng-template #elseBlock></ng-template>
+
 
 </ion-content>

@@ -19,8 +19,7 @@ export class SettingsPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   // Confirmation popup before deleting all recipe data
   async presentAlertConfirm() {

@@ -77,5 +77,4 @@ export class PlannerDate {
         }
         console.log("Could not find recipe: " + recipe_name);
     }
-
 }

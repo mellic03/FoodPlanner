@@ -79,6 +79,11 @@
   background-color: var(--border_color);
 }
 
+div.content {
+  margin: 10px;
+  background-color: var(--foreground_color_primary);
+  border-radius: var(--border_radius_size);
+}
 
 ion-split-pane {
   --ion-background-color: var(--background_color);

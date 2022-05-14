@@ -17,9 +17,9 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content [hidden]>
 
-  <ion-list class="shadow" *ngIf="all_recipes?.length; else elseBlock;">
+  <ion-list class="shadow" *ngIf="is_loaded == true && all_recipes?.length else elseBlock;">
     <ion-item-sliding *ngFor="let recipe of all_recipes; index as i">
       <ion-item-options side="start">
         <ion-item-option color="danger" (click)="deleteRecipe(i)">
@@ -37,7 +37,11 @@
     </ion-item-sliding>
   </ion-list>
 
-  <ng-template #elseBlock class="CONVERT_THIS_TO_CUSTOM_COMPONENT">
+  <ng-template #elseBlock></ng-template>
+
+
+
+  <ng-template #elseBlock2 class="CONVERT_THIS_TO_CUSTOM_COMPONENT">
     <div class="nothing-here">
       <div class="background">
         <ion-label>Oops!</ion-label>
@@ -49,6 +53,7 @@
       </div>
     </div>
   </ng-template>
+
 
 </ion-content>
 

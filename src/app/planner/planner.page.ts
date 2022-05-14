@@ -17,11 +17,18 @@ export class PlannerPage implements OnInit {
 
   constructor(private storage:StorageService, private modalController:ModalController) { }
 
-  async ngOnInit() {
-    this.all_recipes = await this.storage.get("all_recipes");
-    this.planner_dates = await this.storage.get("planner_dates");
-    this.planner_end_date = await this.storage.get("planner_end_date")
-    this.planner_end_date_readable = format(parseISO(this.planner_end_date), 'MMM d, yyyy');
+  ngOnInit() {
+    this.storage.get("all_recipes").then((val) => {
+      this.all_recipes = val;
+    });
+    this.storage.get("planner_dates").then((val) => {
+      this.planner_dates = val;
+    });
+    this.storage.get("planner_end_date").then((val) => {
+      this.planner_end_date = val;
+      this.planner_end_date_readable = format(parseISO(this.planner_end_date), 'MMM d, yyyy');
+    });
+
   }
 
   ngOnDestroy() {

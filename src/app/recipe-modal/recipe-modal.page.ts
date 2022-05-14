@@ -52,14 +52,9 @@ export class RecipeModalPage implements OnInit {
 
     let temp_recipe:Recipe = new Recipe(recipe_name);
 
-    // Remove the [] in each array placed by the modal.
-    this.ingredient_names.splice(0, 1);
-    this.ingredient_quantities.splice(0, 1);
-    this.ingredient_units.splice(0, 1);
-
-
     // Create ingredient objects from names, quantities and units arrays, then add them to the recipe object.
-    for (let i = 0; i < this.ingredient_names.length; i++) {
+    // Index starts at 1 as index 0 holds an empty value in all arrays.
+    for (let i = 1; i < this.ingredient_names.length; i++) {
       
       // If the ingredient has a name, continue. Otherwise, do nothing.
       if (this.ingredient_names[i]) {
@@ -82,11 +77,17 @@ export class RecipeModalPage implements OnInit {
     this.modalController.dismiss({recipe: temp_recipe, editing: this.editing, index: this.index});
   }
 
+  removeIngredient(index:number, sliding_item) {
+    this.ingredient_names.splice(index, 1);
+    this.ingredient_quantities.splice(index, 1);
+    this.ingredient_units.splice(index, 1);
+    sliding_item.close();
+  }
 
   recipe_name:string;
-  ingredient_names:Array<string> = [null, null];
-  ingredient_quantities:Array<number> = [null, null];
-  ingredient_units:Array<string> = [null, null];
+  ingredient_names:Array<string> = [null];
+  ingredient_quantities:Array<number> = [null];
+  ingredient_units:Array<string> = [null];
 
   // All valid units of measurement used by the app.
   units:Array<string> = ["gram", "kilogram", "millilitre", "litre", "cup", "jar", "unit"];
