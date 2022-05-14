@@ -26,7 +26,7 @@
           <ion-item>
             <div class="list-title">
               <b>{{date.day_of_week_alphabetical}}</b>
-              <p>{{date.month}}/{{date.year}}</p>
+              <p>{{date.day_of_month}}/{{date.month}}/{{date.year}}</p>
             </div>
             <ion-buttons slot="end">
                   <ion-button (click)="presentAddModal(date, i)">
@@ -41,8 +41,8 @@
           </ion-item>
 
           <ion-item *ngFor="let recipe of planner_dates[i].recipes; index as j;" [ngClass]="{checkedItem: recipe[1] == true}">
-            <ion-label>{{recipe["recipe_name"]}}</ion-label>
-            <ion-checkbox [(ngModel)]="recipe[1]" (ionChange)="checkRecipe()" slot=end></ion-checkbox>
+            <ion-label>{{recipe.name}}</ion-label>
+            <ion-checkbox [(ngModel)]="recipe.cooked" (ionChange)="checkRecipe(i)" slot=end></ion-checkbox>
           </ion-item>
 
           <ion-item lines="none"></ion-item>

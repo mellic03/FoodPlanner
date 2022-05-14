@@ -14,10 +14,10 @@
   </ion-list>
 
   <ion-list>
-    <ion-label>Food Left</ion-label>
-    <ion-progress-bar value="0.1"></ion-progress-bar>
-    <ion-label>Time Left</ion-label>
-    <ion-progress-bar value="0.9"></ion-progress-bar>
+    <ion-label>{{food_ingredients_left}} of {{food_ingredients_total}} ingredients left</ion-label>
+    <ion-progress-bar value="{{food_progress_bar}}"></ion-progress-bar>
+    <ion-label>{{time_days_left}} days, {{time_hours_left}} hours left</ion-label>
+    <ion-progress-bar value="{{time_progress_bar}}"></ion-progress-bar>
   </ion-list>
 
 </ion-content>

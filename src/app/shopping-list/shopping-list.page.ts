@@ -12,34 +12,18 @@ export class ShoppingListPage implements OnInit {
 
   async ngOnInit() {
     // loads the stored recipes
-    this.persistent_recipes = await this.storage.get("all_recipes");
+    this.all_recipes = await this.storage.get("all_recipes");
 
-    this.shopping_list = this.storage.getAllInfo(this.persistent_recipes);
+    this.shopping_list = this.storage.getAllInfo(this.all_recipes);
     // Sort shopping list into alphabetical and checked order with alphabetical being priority
-    this.shopping_list = this.sortListChecked(this.sortListAlphabet(this.shopping_list));
+    this.shopping_list = this.sortListChecked(this.shopping_list.sort());
   }
 
   // Marks an ingredient as "checked".
   checkIngredient(index:number, newValue:boolean) {
     let ingredient_name = this.shopping_list[index][0];
     this.storage.checkIngredient(ingredient_name, newValue);
-    this.shopping_list = this.sortListChecked(this.sortListAlphabet(this.shopping_list));
-  }
-
-  // Return a shopping list in 1. alphabetical order and 2. checked order.
-  sortListAlphabet(shopping_list:Array<Array<any>>) {
-    let sorted_shopping_list = shopping_list;
-    // Sort alphabetically.
-    for (let i = 0; i < sorted_shopping_list.length-1; i++) {
-      for (let j = 0; j < sorted_shopping_list.length-1; j++) {
-        if (sorted_shopping_list[j][0].substring(0, 1) > sorted_shopping_list[j+1][0].substring(0, 1)) {
-          let temp_obj:Array<any> = sorted_shopping_list[j];
-          sorted_shopping_list[j] = sorted_shopping_list[j+1];
-          sorted_shopping_list[j+1] = temp_obj;
-        }
-      }
-    }
-    return(sorted_shopping_list);
+    this.shopping_list = this.sortListChecked(this.shopping_list.sort());
   }
 
   sortListChecked(shopping_list:Array<Array<any>>) {
@@ -58,7 +42,6 @@ export class ShoppingListPage implements OnInit {
   }
 
 
-  persistent_recipes;
+  all_recipes;
   shopping_list:Array<Array<any>> = [];
-
 }

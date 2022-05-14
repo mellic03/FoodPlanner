@@ -19,7 +19,7 @@ export class DatemodalPage implements OnInit {
   closeModal(submit_data:boolean) {
     if (submit_data) {
       let date_array = this.generateDates(this.now_date, this.end_date);
-      this.modalController.dismiss(date_array, this.end_date);
+      this.modalController.dismiss({date_array: date_array, start_date: this.now_date, end_date: this.end_date});
     }
     else {
       this.modalController.dismiss();

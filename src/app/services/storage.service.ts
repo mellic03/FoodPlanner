@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Storage } from '@ionic/storage-angular';
+import { Ingredient, Recipe } from '../Recipe';
 
 @Injectable({
   providedIn: 'root'
@@ -64,7 +65,7 @@ export class StorageService {
 
 
 
-  /* ALL RECPIES */
+  /* RECIPE ARRAYS */
 
   /** Returns an array of all ingredients in an array of recipe objects in the form [[name, quantity, units, checked], ...]
    * @param recipe_object_array Array of recipe objects
@@ -123,6 +124,21 @@ export class StorageService {
     return(recipe_names);
   }
 
+  /** Returns an array of all Ingredient objects in a given Recipe array
+   * 
+   * @param recipe_array Array of Recipe objects
+   * @returns Array<Ingredient>
+   */
+  public getIngredients(recipe_array:Array<Recipe>) {
+    let temp_array:Array<Ingredient> = [];
+    for (let recipe of recipe_array) {
+      for (let ingredient of recipe.ingredients) {
+        temp_array.push(ingredient);
+      }
+    }
+    return(temp_array);
+  }
+
   /* INGREDIENT-SPECIFIC FUNCTIONS */
 
   /** Marks an ingredient as "checked". Used for marking ingredients off of the shopping list.
@@ -145,6 +161,24 @@ export class StorageService {
     this.storage.set("all_recipes", persistent_recipes);
   }
 
+
+  /** Returns an array of recipes containing a given ingredient.
+   * 
+   * @param ingredient_name Ingredient name
+   * @param recipe_array Array of Recipe objects
+   * @returns Array<Recipe>
+   */
+  public getRecipesContaining(ingredient_name:string, recipe_array:Array<Recipe>) {
+    let temp_array:Array<Recipe>;
+    for (let recipe of recipe_array) {
+      for (let ingredient of recipe.ingredients) {
+        if (ingredient.name == ingredient_name)  {
+          temp_array.push(recipe);
+        }
+      }
+    }
+    return(temp_array)
+  }
  
 
   /* OTHER FUNCTIONS */
@@ -155,7 +189,7 @@ export class StorageService {
 
   // Populates recipes object. Exists for testing purposes.
   public populateData() {
-    this.storage.set("all_recipes", [
+    let recipes = [
       {
         "name": "Bolognese",
         "ingredients": [
@@ -347,9 +381,28 @@ export class StorageService {
           }
         ]
       }
-    ]);
+    ];
+
+    let recipe_array:Array<Recipe> = [];
+
+    for (let recipe of recipes) {
+      let recipe_name = recipe.name;
+      let new_recipe:Recipe = new Recipe(recipe_name);
+      for (let ingredient of recipe.ingredients) {
+        let ingredient_name = ingredient.name;
+        let ingredient_quantity = ingredient.quantity;
+        let ingredient_unit = ingredient.unit;
+        let new_ingredient:Ingredient = new Ingredient(ingredient_name, ingredient_quantity, ingredient_unit);
+        new_recipe.addIngredient(new_ingredient);
+      }
+      recipe_array.push(new_recipe);
+    }
+
+    this.storage.set("all_recipes", recipe_array);
+
     console.log("Populated")
   }
   
+
 
 }

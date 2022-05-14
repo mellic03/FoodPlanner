@@ -29,7 +29,7 @@
       <ion-item>
         <ion-label>{{all_recipes?.[i]?.name}}</ion-label>
         <ion-buttons slot="end">
-          <ion-button (click)="presentModal(i, true)">
+          <ion-button (click)="presentModal(all_recipes[i], true, i)">
             <ion-icon name="pencil-outline"></ion-icon>
           </ion-button>
         </ion-buttons>

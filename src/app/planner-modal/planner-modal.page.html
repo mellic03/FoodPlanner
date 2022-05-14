@@ -1,19 +1,24 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-button (click)="closeModal()">
+        <ion-icon size="large" name="close-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+    <ion-title>Add Recipes to {{planner_date.day_of_week_alphabetical}}</ion-title>
     <ion-buttons slot="end">
       <ion-button (click)="closeModal()">
         <ion-label>Done</ion-label>
       </ion-button>
     </ion-buttons>
-    <ion-title>Add Recipes to {{planner_date.day_of_week_alphabetical}}</ion-title>
   </ion-toolbar>
 </ion-header>
 
 <ion-content>
 
   <ion-list>
-    <ion-item *ngFor="let recipe_name of all_recipe_names; index as i;">
-      <ion-label>{{recipe_name}}</ion-label>
+    <ion-item *ngFor="let recipe of all_recipes; index as i;">
+      <ion-label>{{recipe.name}}</ion-label>
       <ion-checkbox [(ngModel)]="recipe_indices[i]" slot=end></ion-checkbox>
     </ion-item>
   </ion-list>

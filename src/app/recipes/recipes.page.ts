@@ -3,6 +3,7 @@ import { RecipeModalPage } from '../recipe-modal/recipe-modal.page';
 import { ModalController } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
+import { Ingredient, Recipe } from '../Recipe';
 
 @Component({
   selector: 'app-recipes',
@@ -17,7 +18,6 @@ export class RecipesPage implements OnInit {
   async ngOnInit() {
     // load the stored recipes
     this.all_recipes = await this.storage.get("all_recipes");
-    console.log(this.all_recipes)
   }
 
   ngOnDestroy() {
@@ -26,18 +26,25 @@ export class RecipesPage implements OnInit {
   }
 
   // Presents the add/edit recipe modal. If editing the index i of a recipe is passed and editing is set to true.
-  async presentModal(i:number = 0, editing:boolean = false) {
+  async presentModal(recipe:Recipe = undefined, editing:boolean = false, index:number = undefined) {
     const modal = await this.modalController.create({
       component: RecipeModalPage,
-      // Passes the recipe object at index i, the index i and the editing boolean.
-      componentProps: {recipe: this.all_recipes[i], index: i, editing: editing}
+      // Passes the index of the object being edited.
+      componentProps: {recipe: recipe, editing: editing, index: index}
     });
 
     modal.onDidDismiss().then((data) => {
-      this.all_recipes = data.data;
-      this.storage.set("all_recipes", data.data);
+      // Add returned recipe to recipe array
+      if (data.data != undefined) {
+        if (data.data.editing) {
+          this.all_recipes[data.data.index] = data.data.recipe;
+        }
+        else {
+          this.all_recipes.push(data.data.recipe);
+        }
+        this.storage.set("all_recipes", this.all_recipes);
+      }
     });
-    
     return (modal.present());
   }
 
@@ -49,5 +56,5 @@ export class RecipesPage implements OnInit {
     this.storage.set("all_recipes", this.all_recipes);
   }
 
-  all_recipes:Array<any>; // recipes the user has not marked as "cooked".
+  all_recipes:Array<Recipe>; // Array of all recipe objects.
 }

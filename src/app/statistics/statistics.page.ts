@@ -1,6 +1,8 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { StorageService } from '../services/storage.service';
+import { Recipe, Ingredient } from '../Recipe';
 import Chart from 'chart.js/auto';
+import { now } from '@ionic/core/dist/types/utils/helpers';
 
 @Component({
   selector: 'app-statistics',
@@ -27,36 +29,76 @@ export class StatisticsPage implements OnInit {
 
   async ngOnInit() {
 
+    this.all_recipes = await this.storage.get("all_recipes");
+
+    this.calculateFoodProgress();
+    this.calculateTimeProgress();
+
     // Create x-axis labels of dates
     let planner_dates:Array<Array<string>> = await this.storage.get("planner_dates");
     for (let date of planner_dates) {
       this.data.labels.push(date["day_of_month"] + "/" + date["month"]);
     }
 
-
-    // Get number of ingredients
-    let number_of_ingredients:any = this.storage.getAllInfo(await this.storage.get("all_recipes"));
-    number_of_ingredients = number_of_ingredients.length;
-    console.log(number_of_ingredients);
-
-
-    // Get number of ingredients that are in "checked" (cooked) recipes
-    
-
-
-
- 
-
     this.chart = new Chart(this.canvas.nativeElement, {
       type: 'bar',
       data: this.data
     });
-
   }
 
+  // Calculates the proportion of food that has not been "checked".
+  calculateFoodProgress() {
+    // Get number of ingredients
+    let number_of_ingredients:number = this.storage.getAllInfo(this.all_recipes).length;
+    this.food_ingredients_total = number_of_ingredients;
 
+    // Get number of ingredients in cooked recipes.
+    // First, get all cooked recipes
+    let cooked_recipes:Array<Recipe> = [];
+    for (let recipe of this.all_recipes) {
+      if (recipe.cooked == true) {
+        cooked_recipes.push(recipe);
+      }
+    }
+    // Second, get all ingredients in cooked_recipes
+    let cooked_ingredients:Array<Ingredient> = this.storage.getIngredients(cooked_recipes);
+    let number_of_cooked_ingredients:number = cooked_ingredients.length;
+    this.food_ingredients_left = number_of_ingredients - number_of_cooked_ingredients;
 
-  
+    // Get array of checked/cooked recipes.
+    let number_of_cooked_recipes:number = 0;
+    for (let recipe of this.all_recipes) {
+      if (recipe.cooked == true) {
+        number_of_cooked_recipes += 1;
+      }
+    }
 
+    this.food_progress_bar = 1 - (number_of_cooked_ingredients / number_of_ingredients);
+  }
 
+  // Calculates the time progressed as a percentage towards the planner's end date since it was set by the user.
+  async calculateTimeProgress() {
+    let start_date = new Date(await this.storage.get("planner_start_date"));
+    let end_date = new Date(await this.storage.get("planner_end_date"));
+    let now_date = new Date();
+
+    let date_difference:number = end_date.getTime() - start_date.getTime();
+    this.time_progress_bar = ((now_date.getTime() - start_date.getTime()) / date_difference);
+    let time_ms_left:number = end_date.getTime() - now_date.getTime();
+
+    let days_left:number = time_ms_left / 86400000;
+    this.time_days_left = Math.floor(days_left);
+    this.time_hours_left = Math.round((days_left - this.time_days_left) * 24);
+    
+  }
+
+  all_recipes:Array<Recipe>;
+
+  food_progress_bar:number;
+  food_ingredients_left:number;
+  food_ingredients_total:number;
+
+  time_progress_bar:number;
+  time_days_left:number;
+  time_hours_left:number;
 }

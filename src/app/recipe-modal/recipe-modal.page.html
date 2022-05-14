@@ -8,7 +8,7 @@
     <ion-title *ngIf="editing == false">New Recipe</ion-title>
     <ion-title *ngIf="editing == true">Edit Recipe</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="createRecipe(recipe_name, current_recipe[0], current_recipe[1], current_recipe[2])">
+      <ion-button (click)="createRecipe(recipe_name)">
         Done
       </ion-button>
     </ion-buttons>
@@ -25,10 +25,13 @@
             <ion-input [(ngModel)]="recipe_name" clearInput="true" placeholder="Recipe Name"></ion-input>
           </ion-item>
 
-          <ion-item *ngFor="let ingredient of current_recipe[0]; index as i">
-            <ion-input [(ngModel)]="current_recipe[0][i+1]" clearInput="true" placeholder="Ingredient {{i+1}}"></ion-input>
-            <ion-input [(ngModel)]="current_recipe[1][i+1]" type="number" maxlength="4" clearInput="true" placeholder="Quantity"></ion-input>
-            <ion-select [(ngModel)]="current_recipe[2][i+1]" #C (ionChange)="setUnit(C.value, i+1)">
+          <ion-item *ngFor="let ingredient_name of ingredient_names; index as i">
+
+            <ion-input [(ngModel)]="ingredient_names[i+1]" clearInput="true" placeholder="Ingredient {{i+1}}"></ion-input>
+            
+            <ion-input [(ngModel)]="ingredient_quantities[i+1]" type="number" maxlength="4" clearInput="true" placeholder="Quantity"></ion-input>
+            
+            <ion-select [(ngModel)]="ingredient_units[i+1]">
               <ion-select-option *ngFor="let unit of units; index as i;" value="{{units[i]}}">{{unit}}</ion-select-option>
             </ion-select>
           </ion-item>
