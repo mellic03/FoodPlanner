@@ -9,54 +9,56 @@
 
 <ion-content [fullscreen]="true">
 
-  <ion-list class="shadow">
-    <ion-card-header>
-      <ion-card-title>Appearance</ion-card-title>
-    </ion-card-header>
-    <ion-radio-group [(ngModel)]="current_theme" #radio (ionChange)="setTheme(radio.value)">
+  <fade-in>
+    <ion-list class="shadow">
+      <ion-card-header>
+        <ion-card-title>Appearance</ion-card-title>
+      </ion-card-header>
+      <ion-radio-group [(ngModel)]="current_theme" #radio (ionChange)="setTheme(radio.value)">
+        <ion-item>
+          <ion-label>Light Theme</ion-label>
+          <ion-radio slot="end" value="light_theme"></ion-radio>
+        </ion-item>
+        <ion-item>
+          <ion-label>Dark Theme</ion-label>
+          <ion-radio slot="end" value="dark_theme"></ion-radio>
+        </ion-item>
+      </ion-radio-group>
+    </ion-list>
+  
+    <ion-list class="shadow">
+      <ion-card-header>
+        <ion-card-title>Account</ion-card-title>
+      </ion-card-header>
       <ion-item>
-        <ion-label>Light Theme</ion-label>
-        <ion-radio slot="end" value="light_theme"></ion-radio>
+        <ion-label>Profile Name</ion-label>
+        <ion-input style="text-align: end;" slot="end" placeholder="Michael"></ion-input>
+      </ion-item>
+      
+      <ion-item>
+        <ion-label>Profile Picture</ion-label>
+        <ion-buttons>
+          <ion-button (click)="take_photo()">
+            <ion-icon name="enter-outline"></ion-icon>
+          </ion-button>
+        </ion-buttons>
+      </ion-item>
+  
+    </ion-list>
+  
+    <ion-list class="shadow">
+      <ion-card-header>
+        <ion-card-title>System</ion-card-title>
+      </ion-card-header>
+      <ion-item>
+        <ion-label>Clear recipe data</ion-label>
+        <ion-button color="danger" (click)="presentAlertConfirm()">Delete</ion-button>
       </ion-item>
       <ion-item>
-        <ion-label>Dark Theme</ion-label>
-        <ion-radio slot="end" value="dark_theme"></ion-radio>
+        <ion-label>Populate recipe data</ion-label>
+        <ion-button (click)="populateData()">Populate</ion-button>
       </ion-item>
-    </ion-radio-group>
-  </ion-list>
-
-  <ion-list class="shadow">
-    <ion-card-header>
-      <ion-card-title>Account</ion-card-title>
-    </ion-card-header>
-    <ion-item>
-      <ion-label>Profile Name</ion-label>
-      <ion-input style="text-align: end;" slot="end" placeholder="Michael"></ion-input>
-    </ion-item>
-    
-    <ion-item>
-      <ion-label>Profile Picture</ion-label>
-      <ion-buttons>
-        <ion-button (click)="take_photo()">
-          <ion-icon name="enter-outline"></ion-icon>
-        </ion-button>
-      </ion-buttons>
-    </ion-item>
-
-  </ion-list>
-
-  <ion-list class="shadow">
-    <ion-card-header>
-      <ion-card-title>System</ion-card-title>
-    </ion-card-header>
-    <ion-item>
-      <ion-label>Clear recipe data</ion-label>
-      <ion-button color="danger" (click)="presentAlertConfirm()">Delete</ion-button>
-    </ion-item>
-    <ion-item>
-      <ion-label>Populate recipe data</ion-label>
-      <ion-button (click)="populateData()">Populate</ion-button>
-    </ion-item>
-  </ion-list>
+    </ion-list>
+  </fade-in>
 
 </ion-content>

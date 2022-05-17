@@ -20,7 +20,7 @@ export class StorageService {
     this._storage = storage;
   }
 
-  public set(key:string, value:any) {
+  public async set(key:string, value:any) {
     this._storage?.set(key, value);
   }
 
@@ -188,7 +188,7 @@ export class StorageService {
 
 
   // Populates recipes object. Exists for testing purposes.
-  public populateData() {
+  public async populateData() {
     let recipes = [
       {
         "name": "Bolognese",
@@ -398,9 +398,7 @@ export class StorageService {
       recipe_array.push(new_recipe);
     }
 
-    this.storage.set("all_recipes", recipe_array);
-
-    console.log("Populated")
+    await this.storage.set("all_recipes", recipe_array);
   }
   
 

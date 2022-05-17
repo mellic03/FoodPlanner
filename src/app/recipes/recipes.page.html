@@ -17,43 +17,38 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content [hidden]>
-
-  <ion-list class="shadow" *ngIf="is_loaded == true && all_recipes?.length else elseBlock;">
-    <ion-item-sliding *ngFor="let recipe of all_recipes; index as i">
-      <ion-item-options side="start">
-        <ion-item-option color="danger" (click)="deleteRecipe(i)">
-          <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-        </ion-item-option>
-      </ion-item-options>
-      <ion-item>
-        <ion-label>{{all_recipes?.[i]?.name}}</ion-label>
-        <ion-buttons slot="end">
-          <ion-button (click)="presentModal(all_recipes[i], true, i)">
-            <ion-icon name="pencil-outline"></ion-icon>
-          </ion-button>
-        </ion-buttons>
-      </ion-item>
-    </ion-item-sliding>
-  </ion-list>
-
-  <ng-template #elseBlock></ng-template>
-
-
-
-  <ng-template #elseBlock2 class="CONVERT_THIS_TO_CUSTOM_COMPONENT">
-    <div class="nothing-here">
-      <div class="background">
-        <ion-label>Oops!</ion-label>
-        <br>
-        <p>There's nothing here.</p>
-        <br>
-        <br>
-        <ion-button (click)="presentModal()">Add Recipe</ion-button>
+<ion-content>
+  <fade-in>
+    <ion-list class="shadow" *ngIf="all_recipes?.length else elseBlock;">
+      <ion-item-sliding *ngFor="let recipe of all_recipes; index as i">
+        <ion-item-options side="start">
+          <ion-item-option color="danger" (click)="deleteRecipe(i)">
+            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+          </ion-item-option>
+        </ion-item-options>
+        <ion-item>
+          <ion-label>{{all_recipes?.[i]?.name}}</ion-label>
+          <ion-buttons slot="end">
+            <ion-button (click)="presentModal(all_recipes[i], true, i)">
+              <ion-icon name="pencil-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+        </ion-item>
+      </ion-item-sliding>
+    </ion-list>
+  
+    <ng-template #elseBlock class="CONVERT_THIS_TO_CUSTOM_COMPONENT">
+      <div class="nothing-here">
+        <div class="background">
+          <ion-label>Oops!</ion-label>
+          <br>
+          <p>There's nothing here.</p>
+          <br>
+          <br>
+          <ion-button (click)="presentModal()">Add Recipe</ion-button>
+        </div>
       </div>
-    </div>
-  </ng-template>
-
-
+    </ng-template>
+  </fade-in>
 </ion-content>
 

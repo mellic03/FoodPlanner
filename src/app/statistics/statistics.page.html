@@ -8,16 +8,16 @@
 </ion-header>
 
 <ion-content>
-
-  <ion-list>
-    <canvas #food_usage_chart></canvas>
-  </ion-list>
-
-  <ion-list>
-    <ion-label>{{food_ingredients_left}} of {{food_ingredients_total}} ingredients left</ion-label>
-    <ion-progress-bar value="{{food_progress_bar}}"></ion-progress-bar>
-    <ion-label>{{time_days_left}} days, {{time_hours_left}} hours left</ion-label>
-    <ion-progress-bar value="{{time_progress_bar}}"></ion-progress-bar>
-  </ion-list>
-
+  <fade-in>
+    <ion-list>
+      <canvas #food_usage_chart></canvas>
+    </ion-list>
+  
+    <ion-list>
+      <ion-label>{{food_ingredients_left}} of {{food_ingredients_total}} ingredients left</ion-label>
+      <ion-progress-bar value="{{food_progress_bar}}"></ion-progress-bar>
+      <ion-label>{{time_days_left}} days, {{time_hours_left}} hours left</ion-label>
+      <ion-progress-bar value="{{time_progress_bar}}"></ion-progress-bar>
+    </ion-list>
+  </fade-in>
 </ion-content>

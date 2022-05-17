@@ -15,7 +15,7 @@ import { ModalController } from '@ionic/angular';
   providers: [Storage]
 })
 export class AppComponent {
-
+  
   public appPages = [
     { title: 'Shopping List', url: '/shopping-list', icon: 'list' },
     { title: 'Recipes', url: '/recipes', icon: 'restaurant' },
@@ -24,12 +24,17 @@ export class AppComponent {
     { title: 'Settings', url: '/settings', icon: 'settings' },
   ];
 
-  constructor(public router:Router, private modalController:ModalController, public menuController:MenuController, private storage:StorageService, public photoService:PhotoService, public alertController: AlertController) {
+  constructor(
+    public router:Router,
+    private modalController:ModalController,
+    public menuController:MenuController,
+    private storage:StorageService,
+    public photoService:PhotoService,
+    public alertController: AlertController) {
     this.initializeApp();
   }
 
   async initializeApp() {
-
     // Check if the user is logged in. If null, then the app hasn't been used before.
     if (await this.storage.get("user_logged_in") == null) {
 
@@ -104,6 +109,11 @@ export class AppComponent {
     await alert.present();
   }
 
+  navToPage(page_url:string) {
+    this.router.navigateByUrl(page_url);
+  }
+
+
   // Set theme to theme_name
   async setTheme(theme_name:string) {
     this.current_theme = theme_name;
@@ -113,4 +123,6 @@ export class AppComponent {
   current_user:string; // Username of currently logged-in user.
   user_logged_in:boolean = false; // Boolean representing whether a user is currently logged in.
   current_theme:string; // The current theme.
+
+  selected_item:object;
 }

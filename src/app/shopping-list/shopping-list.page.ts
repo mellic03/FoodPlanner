@@ -6,21 +6,18 @@ import { StorageService } from '../services/storage.service';
   templateUrl: './shopping-list.page.html',
   styleUrls: ['./shopping-list.page.scss'],
 })
-export class ShoppingListPage implements OnInit {
 
+export class ShoppingListPage implements OnInit {
+  
   constructor(private storage:StorageService) { }
 
   async ngOnInit() {
     // loads the stored recipes
-    this.storage.get("all_recipes").then((val) => {
-      this.all_recipes = val;
-      this.is_loaded = true;
-    
-      this.shopping_list = this.storage.getAllInfo(this.all_recipes);
-      // Sort shopping list into alphabetical and checked order with alphabetical being priority
-      this.shopping_list = this.sortListChecked(this.shopping_list.sort());
+    this.all_recipes = await this.storage.get("all_recipes");
 
-    });
+    // Sort shopping list into alphabetical and checked order with alphabetical being priority
+    this.shopping_list = this.storage.getAllInfo(this.all_recipes);
+    this.shopping_list = this.sortListChecked(this.shopping_list.sort());
   }
 
   // Marks an ingredient as "checked".
@@ -45,7 +42,6 @@ export class ShoppingListPage implements OnInit {
     return(sorted_shopping_list);
   }
 
-  is_loaded:boolean = false;
 
   all_recipes;
   shopping_list:Array<Array<any>> = [];

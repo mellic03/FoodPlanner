@@ -1,10 +1,9 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { StorageService } from '../services/storage.service';
 import { ModalController } from '@ionic/angular';
 import { PlannerModalPage } from '../planner-modal/planner-modal.page';
 import { DatemodalPage } from '../datemodal/datemodal.page';
 import { format, parseISO } from 'date-fns'
-//import { PlannerDate } from '../PlannerDate';
 import { Recipe, Ingredient, PlannerDate } from '../Recipe';
 
 @Component({
@@ -17,18 +16,11 @@ export class PlannerPage implements OnInit {
 
   constructor(private storage:StorageService, private modalController:ModalController) { }
 
-  ngOnInit() {
-    this.storage.get("all_recipes").then((val) => {
-      this.all_recipes = val;
-    });
-    this.storage.get("planner_dates").then((val) => {
-      this.planner_dates = val;
-    });
-    this.storage.get("planner_end_date").then((val) => {
-      this.planner_end_date = val;
-      this.planner_end_date_readable = format(parseISO(this.planner_end_date), 'MMM d, yyyy');
-    });
-
+  async ngOnInit() {
+    this.all_recipes = await this.storage.get("all_recipes");
+    this.planner_dates = await this.storage.get("planner_dates");
+    this.planner_end_date = await this.storage.get("planner_end_date")
+    this.planner_end_date_readable = format(parseISO(this.planner_end_date), 'MMM d, yyyy');
   }
 
   ngOnDestroy() {

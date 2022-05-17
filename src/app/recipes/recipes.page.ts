@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RecipeModalPage } from '../recipe-modal/recipe-modal.page';
 import { ModalController } from '@ionic/angular';
-import { Platform } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
 import { Ingredient, Recipe } from '../Recipe';
 
@@ -13,23 +12,11 @@ import { Ingredient, Recipe } from '../Recipe';
 })
 export class RecipesPage implements OnInit {
 
-  constructor(private modalController:ModalController, platform:Platform, private storage:StorageService) {}
+  constructor(private modalController:ModalController, private storage:StorageService) {}
 
-  ngOnInit() {
+  async ngOnInit() {
     // load the stored recipes
-    this.storage.get("all_recipes").then((val) => {
-      this.all_recipes = val;
-      this.is_loaded = true;
-    });
-  }
-
-  ionViewDidEnter() {
-    this.is_loaded = true;
-  }
-
-  ngOnDestroy() {
-    // Update persistent storage with the local array.
-    this.storage.set("all_recipes", this.all_recipes);
+    this.all_recipes = await this.storage.get("all_recipes");
   }
 
   // Presents the add/edit recipe modal. If editing the index i of a recipe is passed and editing is set to true.
@@ -64,5 +51,4 @@ export class RecipesPage implements OnInit {
   }
 
   all_recipes:Array<Recipe>; // Array of all recipe objects.
-  is_loaded:boolean = false;
 }
