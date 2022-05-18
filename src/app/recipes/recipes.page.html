@@ -18,8 +18,9 @@
 </ion-header>
 
 <ion-content>
-  <fade-in>
-    <ion-list class="shadow" *ngIf="all_recipes?.length else elseBlock;">
+
+  <fade-in *ngIf="all_recipes?.length else elseBlock;">
+    <ion-list class="shadow" >
       <ion-item-sliding *ngFor="let recipe of all_recipes; index as i">
         <ion-item-options side="start">
           <ion-item-option color="danger" (click)="deleteRecipe(i)">
@@ -36,19 +37,16 @@
         </ion-item>
       </ion-item-sliding>
     </ion-list>
-  
-    <ng-template #elseBlock class="CONVERT_THIS_TO_CUSTOM_COMPONENT">
-      <div class="nothing-here">
-        <div class="background">
-          <ion-label>Oops!</ion-label>
-          <br>
-          <p>There's nothing here.</p>
-          <br>
-          <br>
-          <ion-button (click)="presentModal()">Add Recipe</ion-button>
-        </div>
-      </div>
-    </ng-template>
   </fade-in>
+
+  <ng-template #elseBlock>
+    <fade-in [duration]="250">
+    <no-recipes>
+      <ion-button (click)="presentModal()">Add Recipe</ion-button>
+    </no-recipes>
+      <div class="custom component"></div>
+    </fade-in>
+  </ng-template>
+
 </ion-content>
 

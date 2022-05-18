@@ -40,7 +40,8 @@ export class SettingsPage implements OnInit {
           id: 'confirm-button',
           handler: () => {
             this.storage.set("all_recipes", []);
-            console.log("Deleted")
+            this.storage.set("shopping_list", []);
+            console.log("Deleted");
           }
         }
       ]

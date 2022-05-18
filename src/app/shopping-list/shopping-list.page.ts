@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { RecipeService, Ingredient, Recipe  } from '../services/recipe.service';
+import { RecipeModalPage } from '../recipe-modal/recipe-modal.page';
+import { ModalController } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
 
 @Component({
@@ -9,40 +12,51 @@ import { StorageService } from '../services/storage.service';
 
 export class ShoppingListPage implements OnInit {
   
-  constructor(private storage:StorageService) { }
+  constructor(private recipeService:RecipeService, private modalController:ModalController, private storage:StorageService) { }
 
   async ngOnInit() {
-    // loads the stored recipes
-    this.all_recipes = await this.storage.get("all_recipes");
 
-    // Sort shopping list into alphabetical and checked order with alphabetical being priority
-    this.shopping_list = this.storage.getAllInfo(this.all_recipes);
-    this.shopping_list = this.sortListChecked(this.shopping_list.sort());
+
+    this.shopping_list = await this.recipeService.generateShoppingList();
+    this.finished_loading = true;
   }
 
   // Marks an ingredient as "checked".
-  checkIngredient(index:number, newValue:boolean) {
-    let ingredient_name = this.shopping_list[index][0];
-    this.storage.checkIngredient(ingredient_name, newValue);
-    this.shopping_list = this.sortListChecked(this.shopping_list.sort());
+  checkIngredient(index:number, new_value:boolean) {
+    this.recipeService.checkIngredient(this.shopping_list[index].name, new_value);
+    this.shopping_list = this.recipeService.sortByCheckedAndAlphabetically(this.shopping_list);
   }
 
-  sortListChecked(shopping_list:Array<Array<any>>) {
-    let sorted_shopping_list = shopping_list;
-    // Sort from unchecked to checked
-    for (let i = 0; i < sorted_shopping_list.length-1; i++) {
-      for (let j = 0; j < sorted_shopping_list.length-1; j++) {
-        if (sorted_shopping_list[j][3] == true && sorted_shopping_list[j+1][3] == false) {
-          let temp_obj:Array<any> = sorted_shopping_list[j];
-          sorted_shopping_list[j] = sorted_shopping_list[j+1];
-          sorted_shopping_list[j+1] = temp_obj;
+  // Presents the add/edit recipe modal. If editing the index i of a recipe is passed and editing is set to true.
+  async presentModal() {
+    const modal = await this.modalController.create({
+      component: RecipeModalPage,
+      // Passes the index of the object being edited.
+      componentProps: {}
+    });
+
+    modal.onDidDismiss().then((data) => {
+      // Add returned recipe to recipe array
+      if (data.data != undefined) {
+
+        if (data.data.editing) {
+          this.all_recipes[data.data.index] = data.data.recipe;
         }
+        else {
+          this.all_recipes.push(data.data.recipe);
+        }
+        this.storage.set("all_recipes", this.all_recipes);
       }
-    }
-    return(sorted_shopping_list);
+    })
+    .then(() => {
+      this.recipeService.generateShoppingList();
+    })
+    
+    return (modal.present());
   }
 
+  all_recipes:Array<Recipe> = [];
+  shopping_list:Array<Ingredient> = [];
 
-  all_recipes;
-  shopping_list:Array<Array<any>> = [];
+  finished_loading:boolean = false;
 }

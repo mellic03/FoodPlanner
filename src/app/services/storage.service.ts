@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 
 import { Storage } from '@ionic/storage-angular';
-import { Ingredient, Recipe } from '../Recipe';
+import { Ingredient, Recipe } from './recipe.service';
 
 @Injectable({
   providedIn: 'root'
@@ -140,26 +140,6 @@ export class StorageService {
   }
 
   /* INGREDIENT-SPECIFIC FUNCTIONS */
-
-  /** Marks an ingredient as "checked". Used for marking ingredients off of the shopping list.
-   * @param ingredient_name Ingredient name
-   * @param newValue The new value of "checked"
-   * @returns nothing
-   */
-  public async checkIngredient(ingredient_name:string, newValue:boolean) {
-
-    let persistent_recipes = await this.storage.get("all_recipes");
-
-    for (let i = 0; i < persistent_recipes.length; i++) {
-      for (let j = 0; j < persistent_recipes[i]["ingredients"].length; j++) {
-        if (persistent_recipes[i]["ingredients"][j]?.["name"] == ingredient_name) {
-          persistent_recipes[i]["ingredients"][j]["checked"] = newValue;
-        }
-      }
-    }
-  
-    this.storage.set("all_recipes", persistent_recipes);
-  }
 
 
   /** Returns an array of recipes containing a given ingredient.
@@ -388,6 +368,7 @@ export class StorageService {
     for (let recipe of recipes) {
       let recipe_name = recipe.name;
       let new_recipe:Recipe = new Recipe(recipe_name);
+      
       for (let ingredient of recipe.ingredients) {
         let ingredient_name = ingredient.name;
         let ingredient_quantity = ingredient.quantity;
@@ -401,6 +382,8 @@ export class StorageService {
     await this.storage.set("all_recipes", recipe_array);
   }
   
-
+  public async clear() {
+    this.clear();
+  }
 
 }

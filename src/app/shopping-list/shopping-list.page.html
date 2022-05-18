@@ -9,15 +9,25 @@
 
 <ion-content>
 
-  <fade-in>
+  <fade-in *ngIf="finished_loading == true && shopping_list?.length > 0; else elseBlock;">
     <ion-list class="shadow">
-      <ion-item *ngFor="let ingredient of shopping_list; index as i;" [ngClass]="{checkedItem: shopping_list[i][3] == true}">
-        <ion-label>{{shopping_list[i][0]}}</ion-label>
-        <ion-label *ngIf="shopping_list[i][1] == 1;">{{shopping_list[i][1]}} {{shopping_list[i][2]}}</ion-label>
-        <ion-label *ngIf="shopping_list[i][1] != 1;">{{shopping_list[i][1]}} {{shopping_list[i][2]}}s</ion-label>
-        <ion-checkbox [(ngModel)]="shopping_list[i][3]" (ionChange)="checkIngredient(i, shopping_list[i][3])" slot=end></ion-checkbox>
+      <ion-item *ngFor="let ingredient of shopping_list; index as i;" [ngClass]="{checkedItem: ingredient.checked == true}">
+        <ion-label>{{ingredient.name}}</ion-label>
+        <ion-label *ngIf="ingredient.quantity == 1;">{{ingredient.quantity}} {{ingredient.unit}}</ion-label>
+        <ion-label *ngIf="ingredient.quantity != 1;">{{ingredient.quantity}} {{ingredient.unit}}s</ion-label>
+        <ion-checkbox [(ngModel)]="ingredient.checked" (ionChange)="checkIngredient(i, ingredient.checked)" slot=end></ion-checkbox>
       </ion-item>
     </ion-list>
   </fade-in>
+
+
+  <ng-template #elseBlock>
+    <fade-in [duration]="250">
+    <no-recipes>
+      <ion-button (click)="presentModal()">Add Recipe</ion-button>
+    </no-recipes>
+      <div class="custom component"></div>
+    </fade-in>
+  </ng-template>
 
 </ion-content>

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
-import { Ingredient, Recipe } from '../Recipe';
+import { Ingredient, Recipe } from '../services/recipe.service';
 import { StorageService } from '../services/storage.service';
 
 @Component({

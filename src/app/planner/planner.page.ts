@@ -4,7 +4,7 @@ import { ModalController } from '@ionic/angular';
 import { PlannerModalPage } from '../planner-modal/planner-modal.page';
 import { DatemodalPage } from '../datemodal/datemodal.page';
 import { format, parseISO } from 'date-fns'
-import { Recipe, Ingredient, PlannerDate } from '../Recipe';
+import { Recipe, Ingredient, PlannerDate } from '../services/recipe.service';
 
 @Component({
   selector: 'app-planner',

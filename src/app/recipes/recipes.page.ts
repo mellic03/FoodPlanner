@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { RecipeModalPage } from '../recipe-modal/recipe-modal.page';
 import { ModalController } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
-import { Ingredient, Recipe } from '../Recipe';
+import { RecipeService, Recipe, Ingredient } from '../services/recipe.service';
 
 @Component({
   selector: 'app-recipes',

@@ -1,8 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { StorageService } from '../services/storage.service';
-import { Recipe, Ingredient } from '../Recipe';
+import { Recipe, Ingredient } from '../services/recipe.service';
 import Chart from 'chart.js/auto';
-import { now } from '@ionic/core/dist/types/utils/helpers';
 
 @Component({
   selector: 'app-statistics',

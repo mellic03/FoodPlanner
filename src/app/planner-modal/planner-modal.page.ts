@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import { Recipe, PlannerDate } from '../Recipe';
+import { Recipe, PlannerDate } from '../services/recipe.service';
 
 @Component({
   selector: 'app-planner-modal',

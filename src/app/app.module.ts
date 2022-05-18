@@ -12,7 +12,8 @@ import { DatemodalPageModule } from './datemodal/datemodal.module';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  imports: [BrowserModule,
+  imports: [
+    BrowserModule,
     IonicModule.forRoot(),
     AppRoutingModule,
     RecipeModalPageModule,

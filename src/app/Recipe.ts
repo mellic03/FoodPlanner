@@ -1,3 +1,4 @@
+/*
 export class Ingredient {
     
     name:string;
@@ -13,7 +14,6 @@ export class Ingredient {
         this.unit = unit;
     }
 }
-
 
 export class Recipe {
 
@@ -78,3 +78,4 @@ export class PlannerDate {
         console.log("Could not find recipe: " + recipe_name);
     }
 }
+*/
