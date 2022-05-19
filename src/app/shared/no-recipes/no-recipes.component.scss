@@ -5,6 +5,7 @@
     justify-content: center;
     align-items: center;
 }
+
 .background {
     width: 60vw;
     height: 70vw;
@@ -19,4 +20,12 @@
 
     background: var(--foreground_color_primary);
     border-radius: var(--border_radius_size);
+}
+
+p {
+    color: var(--text_color);
+}
+
+ion-label {
+    color: var(--text_color);
 }

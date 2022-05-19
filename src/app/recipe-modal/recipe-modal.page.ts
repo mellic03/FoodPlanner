@@ -46,7 +46,7 @@ export class RecipeModalPage implements OnInit {
   createRecipe(recipe_name) {
 
     // Don't continue if the user has not entered a recipe name.
-    if (recipe_name == undefined) {
+    if (recipe_name == undefined || recipe_name == "") {
       return(0);
     }
 

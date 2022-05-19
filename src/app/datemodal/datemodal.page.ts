@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { NavParams } from '@ionic/angular';
-import { PlannerDate } from '../PlannerDate';
+import { PlannerDate } from '../services/recipe.service';
 
 @Component({
   selector: 'app-datemodal',

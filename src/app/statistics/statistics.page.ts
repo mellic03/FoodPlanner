@@ -1,6 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { StorageService } from '../services/storage.service';
-import { Recipe, Ingredient } from '../services/recipe.service';
+import { RecipeService, Recipe, Ingredient } from '../services/recipe.service';
 import Chart from 'chart.js/auto';
 
 @Component({
@@ -13,7 +12,7 @@ export class StatisticsPage implements OnInit {
   @ViewChild('food_usage_chart', {static: true}) canvas;
   chart:any;
   
-  constructor(private storage:StorageService) { }
+  constructor(private recipeService:RecipeService) { }
 
   // Chart needs to read dates from date array and plot the last two weeks of dates
 
@@ -28,13 +27,13 @@ export class StatisticsPage implements OnInit {
 
   async ngOnInit() {
 
-    this.all_recipes = await this.storage.get("all_recipes");
+    this.all_recipes = await this.recipeService.getRecipes(); 
 
     this.calculateFoodProgress();
     this.calculateTimeProgress();
 
     // Create x-axis labels of dates
-    let planner_dates:Array<Array<string>> = await this.storage.get("planner_dates");
+    let planner_dates:Array<Array<string>> = await this.recipeService.getPlannerDates();
     for (let date of planner_dates) {
       this.data.labels.push(date["day_of_month"] + "/" + date["month"]);
     }
@@ -48,7 +47,7 @@ export class StatisticsPage implements OnInit {
   // Calculates the proportion of food that has not been "checked".
   calculateFoodProgress() {
     // Get number of ingredients
-    let number_of_ingredients:number = this.storage.getAllInfo(this.all_recipes).length;
+    let number_of_ingredients:number = this.recipeService.getAllIngredients(this.all_recipes).length;
     this.food_ingredients_total = number_of_ingredients;
 
     // Get number of ingredients in cooked recipes.
@@ -60,7 +59,7 @@ export class StatisticsPage implements OnInit {
       }
     }
     // Second, get all ingredients in cooked_recipes
-    let cooked_ingredients:Array<Ingredient> = this.storage.getIngredients(cooked_recipes);
+    let cooked_ingredients:Array<Ingredient> = this.recipeService.getAllIngredients(cooked_recipes);
     let number_of_cooked_ingredients:number = cooked_ingredients.length;
     this.food_ingredients_left = number_of_ingredients - number_of_cooked_ingredients;
 
@@ -77,8 +76,9 @@ export class StatisticsPage implements OnInit {
 
   // Calculates the time progressed as a percentage towards the planner's end date since it was set by the user.
   async calculateTimeProgress() {
-    let start_date = new Date(await this.storage.get("planner_start_date"));
-    let end_date = new Date(await this.storage.get("planner_end_date"));
+
+    let start_date = new Date(await this.recipeService.getPlannerStartDate());
+    let end_date = new Date(await this.recipeService.getPlannerEndDate());
     let now_date = new Date();
 
     let date_difference:number = end_date.getTime() - start_date.getTime();

@@ -14,17 +14,15 @@ export class RecipeService {
    * @returns Array<Ingredient>
    */
   public sortAlphabetically(shopping_list:Array<Ingredient>) {
-    let temp_array:Array<Ingredient> = shopping_list;
-    for (let i = 0; i < temp_array.length-1; i++) {
-      for (let j = 0; j < temp_array.length-1; j++) {
-        if (temp_array[j].name > temp_array[j+1].name) {
-          let temp_ingredient = temp_array[j];
-          temp_array[j] = temp_array[j+1];
-          temp_array[j+1] = temp_ingredient;
+    for (let i = 0; i < shopping_list.length-1; i++) {
+      for (let j = 0; j < shopping_list.length-1; j++) {
+        if (shopping_list[j].name > shopping_list[j+1].name) {
+          let temp_ingredient = shopping_list[j];
+          shopping_list[j] = shopping_list[j+1];
+          shopping_list[j+1] = temp_ingredient;
         }
       }
     }
-    return (temp_array);
   }
 
   /** Returns a shopping list sorted by checked order
@@ -32,50 +30,35 @@ export class RecipeService {
    * @returns Array<Ingredient>
    */
   public sortByChecked(shopping_list:Array<Ingredient>) {
-    let temp_array:Array<Ingredient> = shopping_list;
-    for (let i = 0; i < temp_array.length-1; i++) {
-      for (let j = 0; j < temp_array.length-1; j++) {
-        if (temp_array[j].checked == true && temp_array[j+1].checked == false) {
-          let temp_ingredient = temp_array[j+1]
-          temp_array[j+1] = temp_array[j]
-          temp_array[j] = temp_ingredient;
+    for (let i = 0; i < shopping_list.length-1; i++) {
+      for (let j = 0; j < shopping_list.length-1; j++) {
+        if (shopping_list[j].checked == true && shopping_list[j+1].checked == false) {
+          let temp_ingredient = shopping_list[j+1]
+          shopping_list[j+1] = shopping_list[j]
+          shopping_list[j] = temp_ingredient;
         }
       }
     }
-    return (temp_array);
-  }
-
-  /** Returns a list sorted both by alphabetical and checked order with alphabetical order taking priority.
-   * @param shopping_list Array<Ingredient>
-   * @returns Array<Ingredient>
-   */
-  public sortByCheckedAndAlphabetically(shopping_list:Array<Ingredient>) {
-    let temp_array:Array<Ingredient> = shopping_list;
-    temp_array = this.sortByChecked(this.sortAlphabetically(temp_array));
-    return (temp_array);
   }
 
   /** Returns an array of ingredients sorted in 1. Alphabetal order and 2. "checked" order.
    * @returns Array<Ingredient>
    */
-  public async generateShoppingList() {
-
-    let ingredients:Array<Ingredient> = await this.getAllIngredients();
-    // Sort shopping list alphabetically
-    ingredients = this.sortByCheckedAndAlphabetically(ingredients);
-    // Sort shopping list by checked.
-    return (ingredients);
+  public generateShoppingList(ingredients:Array<Ingredient>) {
+    let temp_array = ingredients
+    this.sortAlphabetically(temp_array)
+    this.sortByChecked(temp_array);
+    return (temp_array);
   }
 
   /** Returns an array of all Ingredients from all Recipes.
    * @returns Array<Ingredient>
    */
-   public async getAllIngredients() {
+  public getAllIngredients(recipes:Array<Recipe>) {
     
-    let all_recipes:Array<Recipe> = await this.storage.get("all_recipes");
     let temp_array:Array<Ingredient> = [];
 
-    for (let recipe of all_recipes) {
+    for (let recipe of recipes) {
       for (let ingredient of recipe.ingredients) {
         temp_array.push(ingredient);
       }
@@ -97,13 +80,12 @@ export class RecipeService {
         }
       }
     }
-
     return (temp_array);
   }
 
   /** Marks an ingredient as "checked". Used for marking ingredients off of the shopping list.
    * @param ingredient_name Ingredient name
-   * @param newValue The new value of "checked"
+   * @param new_value The new value of "checked"
    * @returns nothing
    */
    public async checkIngredient(ingredient_name:string, new_value:boolean) {
@@ -120,6 +102,46 @@ export class RecipeService {
     this.storage.set("all_recipes", all_recipes);
   }
 
+  /** Updates the recipe array in storage.
+   * 
+   * @param recipes Array<Recipe>
+   * @returns nothing
+   */
+  public setRecipes(recipes:Array<Recipe>) {
+    this.storage.set("all_recipes", recipes);
+  }
+
+  /** Retrieves the array of all stored recipes from storage
+   * 
+   * @returns Array<Recipe>
+   */
+  public async getRecipes() {
+    return(await this.storage.get("all_recipes"));
+  }
+
+
+  // PLANNER-RELATED FUNCTIONS //
+  
+  public async getPlannerDates() {
+    return (this.storage.get("planner_dates"));
+  }
+  public setPlannerDates(planner_dates:Array<PlannerDate>) {
+    this.storage.set("planner_dates", planner_dates);
+  }
+
+  public async getPlannerEndDate() {
+    return (this.storage.get("planner_end_date"));
+  }
+  public setPlannerEndDate(end_date:string) {
+    this.storage.set("planner_end_date", end_date);
+  }
+
+  public async getPlannerStartDate() {
+    return (await this.storage.get("planner_start_date"));
+  }
+  public setPlannerStartDate(start_date:Date) {
+    this.storage.set("planner_start_date", start_date);
+  }
 }
 
 

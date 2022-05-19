@@ -1,10 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { StorageService } from '../services/storage.service';
 import { ModalController } from '@ionic/angular';
 import { PlannerModalPage } from '../planner-modal/planner-modal.page';
 import { DatemodalPage } from '../datemodal/datemodal.page';
 import { format, parseISO } from 'date-fns'
-import { Recipe, Ingredient, PlannerDate } from '../services/recipe.service';
+import { RecipeService, Recipe, Ingredient, PlannerDate } from '../services/recipe.service';
+
 
 @Component({
   selector: 'app-planner',
@@ -14,18 +14,18 @@ import { Recipe, Ingredient, PlannerDate } from '../services/recipe.service';
 
 export class PlannerPage implements OnInit {
 
-  constructor(private storage:StorageService, private modalController:ModalController) { }
+  constructor(private recipeService:RecipeService, private modalController:ModalController) { }
 
   async ngOnInit() {
-    this.all_recipes = await this.storage.get("all_recipes");
-    this.planner_dates = await this.storage.get("planner_dates");
-    this.planner_end_date = await this.storage.get("planner_end_date")
+    this.all_recipes = await this.recipeService.getRecipes();
+    this.planner_dates = await this.recipeService.getPlannerDates();
+    this.planner_end_date = await this.recipeService.getPlannerEndDate();
     this.planner_end_date_readable = format(parseISO(this.planner_end_date), 'MMM d, yyyy');
   }
 
   ngOnDestroy() {
-    this.storage.set("planner_dates", this.planner_dates);
-    this.storage.set("planner_end_date", this.planner_end_date);
+    this.recipeService.setPlannerDates(this.planner_dates);
+    this.recipeService.setPlannerEndDate(this.planner_end_date);
   }
 
   // Present the "change date" modal
@@ -43,8 +43,8 @@ export class PlannerPage implements OnInit {
         this.planner_end_date = data.data.end_date;
         this.planner_end_date_readable = format(parseISO(data.data.end_date), 'MMM d, yyyy');
         
-        this.storage.set("planner_start_date", data.data.start_date); // The date the planner schedule was set.
-        this.storage.set("planner_end_date", data.data.end_date); // The date the planner schedule is set to end.
+        this.recipeService.setPlannerStartDate(data.data.start_date);
+        this.recipeService.setPlannerEndDate(data.data.end_date);
       }
     });
     
@@ -66,7 +66,7 @@ export class PlannerPage implements OnInit {
     return (modal.present());
   }
 
-  // Update planner_dates in ionic storage after checking a recipe
+  // Update planner dates in ionic storage after checking a recipe
   checkRecipe(index:number) {
     for (let planner_date_recipe of this.planner_dates[index].recipes) {
       for (let i = 0; i < this.all_recipes.length; i++) {
@@ -76,8 +76,8 @@ export class PlannerPage implements OnInit {
         }
       }
     }
-    this.storage.set("planner_dates", this.planner_dates);
-    this.storage.set("all_recipes", this.all_recipes);
+    this.recipeService.setPlannerDates(this.planner_dates);
+    this.recipeService.setRecipes(this.all_recipes);
   }
 
   planner_end_date:string; // The date the user's shop is supposed to last until. Bound with [(ngModel)] to the ion-datetime.
