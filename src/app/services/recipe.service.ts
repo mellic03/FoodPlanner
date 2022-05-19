@@ -8,8 +8,29 @@ export class RecipeService {
 
   constructor(private storage:StorageService) { }
 
-  /** Returns a shopping list sorted in alphabetical order
+  // Observable whose value is: {recipes: [], recipe_date_mapping: []}
+
+  recipe_observable:m_Observable = new m_Observable();
+
+  /** Subscribes an observer to recipe_observable.
+   * @param observer The observer to subcribe.
+   * @returns nothing
+   */
+  subscribe(observer:m_Observer) {
+    this.recipe_observable.subscribe(observer);
+    this.recipe_observable.update(this.recipe_observable.data);
+  }
+
+  /** Run in app.component.ts on app start. Assigns initial value to recipe_obsevable.
    * 
+   */
+  initialise() {
+    this.getRecipes().then((val) => {
+      this.recipe_observable.update({recipes: val, recipe_date_mappings: {}});
+    })
+  }
+
+  /** Returns a shopping list sorted in alphabetical order
    * @param shopping_list 
    * @returns Array<Ingredient>
    */
@@ -108,6 +129,7 @@ export class RecipeService {
    * @returns nothing
    */
   public setRecipes(recipes:Array<Recipe>) {
+    this.recipe_observable.update(recipes);
     this.storage.set("all_recipes", recipes);
   }
 
@@ -142,6 +164,221 @@ export class RecipeService {
   public setPlannerStartDate(start_date:Date) {
     this.storage.set("planner_start_date", start_date);
   }
+
+  // Populates recipes object. Exists for testing purposes.
+  public async populateData() {
+    let recipes = [
+      {
+        "name": "Bolognese",
+        "ingredients": [
+          {
+            "name": "mince",
+            "quantity": 250,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "pasta",
+            "quantity": 100,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "pasta sauce",
+            "quantity": 1,
+            "unit": "jar",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "name": "Burgers",
+        "ingredients": [
+          {
+            "name": "mince",
+            "quantity": 500,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "buns",
+            "quantity": 4,
+            "unit": "unit",
+            "checked": false
+          },
+          {
+            "name": "cheese",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "name": "Alfredo",
+        "ingredients": [
+          {
+            "name": "fettuccine",
+            "quantity": 200,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "cream",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "garlic",
+            "quantity": 4,
+            "unit": "unit",
+            "checked": false
+          },
+          {
+            "name": "parsley",
+            "quantity": 1,
+            "unit": "unit",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "name": "Pizza",
+        "ingredients": [
+          {
+            "name": "flour",
+            "quantity": 2,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "passata",
+            "quantity": 1,
+            "unit": "jar",
+            "checked": false
+          },
+          {
+            "name": "cheese",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "pepperoni",
+            "quantity": 1,
+            "unit": "unit",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "name": "Daal",
+        "ingredients": [
+          {
+            "name": "red lentils",
+            "quantity": 2,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "spices",
+            "quantity": 50,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "rice",
+            "quantity": 2,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "coconut milk",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "name": "Chicken Schitzel",
+        "ingredients": [
+          {
+            "name": "chicken",
+            "quantity": 250,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "breadcrumbs",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "egg",
+            "quantity": 2,
+            "unit": "unit",
+            "checked": false
+          },
+          {
+            "name": "flour",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          }
+        ]
+      },
+      {
+        "name": "Potato salad",
+        "ingredients": [
+          {
+            "name": "potato",
+            "quantity": 4,
+            "unit": "unit",
+            "checked": false
+          },
+          {
+            "name": "mayonnaise",
+            "quantity": 1,
+            "unit": "cup",
+            "checked": false
+          },
+          {
+            "name": "vinegar",
+            "quantity": 20,
+            "unit": "gram",
+            "checked": false
+          },
+          {
+            "name": "pepper",
+            "quantity": 1,
+            "unit": "unit",
+            "checked": false
+          }
+        ]
+      }
+    ];
+
+    let recipe_array:Array<Recipe> = [];
+
+    for (let recipe of recipes) {
+      let recipe_name = recipe.name;
+      let new_recipe:Recipe = new Recipe(recipe_name);
+      
+      for (let ingredient of recipe.ingredients) {
+        let ingredient_name = ingredient.name;
+        let ingredient_quantity = ingredient.quantity;
+        let ingredient_unit = ingredient.unit;
+        let new_ingredient:Ingredient = new Ingredient(ingredient_name, ingredient_quantity, ingredient_unit);
+        new_recipe.addIngredient(new_ingredient);
+      }
+      recipe_array.push(new_recipe);
+    }
+    this.setRecipes(recipe_array);
+  }
+
 }
 
 
@@ -168,6 +405,9 @@ export class Recipe {
 
   // Used in planner/statistics to tell whether a recipe has been cooked.
   cooked:boolean = false;
+  
+  // Used in planner/statistics to tell whether a recipe is already assigned to a PlannerDate.
+  already_assigned:boolean = false;
 
   constructor(name:string, ingredients:Array<Ingredient> = []) {
     this.name = name;
@@ -189,8 +429,21 @@ export class PlannerDate {
   month:number;
   year:number;
 
-  // An array of recipe name-checked pairs
-  recipes:Array<Recipe>;
+  // Observe recipes_observable to stay updated on list of recipes as well as their date-assignments.
+
+  //  recipes_observer.data = {
+  //    recipes: [],
+  //    recipe_date_mappings: {
+  //      "Burger": planner_dates[x],
+  //      "Bolognese": planner_dates[y],
+  //      "Ravioli": planner_dates[z] 
+  //    }
+  //  }
+
+  recipes_observer:m_Observer = new m_Observer();
+
+  // An array of Recipe objects.
+  recipes:Array<Recipe> = this.recipes_observer.data;
 
   constructor(date_ISO) {
     this.date_ISO = date_ISO;
@@ -221,5 +474,41 @@ export class PlannerDate {
         }
     }
     console.log("Could not find recipe: " + recipe_name);
+  }
+}
+
+export class m_Observable {
+
+  data:any;
+  
+  observers:Array<m_Observer> = [];
+
+  subscribe(observer:m_Observer) {
+    this.observers.push(observer);
+  }
+
+  unsubscribe(observer:m_Observer) {
+    for (let i = 0; i < this.observers.length; i++) {
+      if (this.observers[i] == observer) {
+        this.observers.splice(i, 1)
+        break;
+      }
+    }
+  }
+
+  update(new_value:any) {
+    this.data = new_value;
+    for (let observer of this.observers) {
+      observer.update(this.data);
+    }
+  }
+}
+
+export class m_Observer {
+  
+  data:any;
+
+  update(new_value:any) {
+    this.data = new_value;
   }
 }

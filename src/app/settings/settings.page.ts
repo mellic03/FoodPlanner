@@ -3,6 +3,7 @@ import { AppComponent } from '../app.component';
 import { StorageService } from '../services/storage.service';
 import { AlertController } from '@ionic/angular';
 import { PhotoService, UserPhoto } from '../services/photo.service';
+import { RecipeService } from '../services/recipe.service';
 
 @Component({
   selector: 'app-settings',
@@ -12,7 +13,7 @@ import { PhotoService, UserPhoto } from '../services/photo.service';
 
 export class SettingsPage implements OnInit {
 
-  constructor(public photoService:PhotoService, private appComponent:AppComponent, private storage:StorageService, public alertController: AlertController) {
+  constructor(private recipeService:RecipeService, public photoService:PhotoService, private appComponent:AppComponent, private storage:StorageService, public alertController: AlertController) {
     // Get theme info from storage.
     this.storage.get("current_theme").then( val => {
       this.current_theme = val;
@@ -63,7 +64,7 @@ export class SettingsPage implements OnInit {
 
   // Populates recipes object. Exists for testing purposes.
   async populateData() {
-    await this.storage.populateData();
+    await this.recipeService.populateData();
   }
 
   current_theme:string; // String to display on settings page for active theme.

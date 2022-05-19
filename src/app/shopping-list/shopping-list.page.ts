@@ -3,6 +3,8 @@ import { RecipeService, Ingredient, Recipe  } from '../services/recipe.service';
 import { RecipeModalPage } from '../recipe-modal/recipe-modal.page';
 import { ModalController } from '@ionic/angular';
 
+import { m_Observable, m_Observer } from '../services/recipe.service';
+
 @Component({
   selector: 'app-shopping-list',
   templateUrl: './shopping-list.page.html',
@@ -13,8 +15,9 @@ export class ShoppingListPage implements OnInit {
   
   constructor(private recipeService:RecipeService, private modalController:ModalController) { }
 
-  async ngOnInit() {
-    this.all_recipes = await this.recipeService.getRecipes();
+  ngOnInit() {
+    this.recipeService.subscribe(this.all_recipes_observer); // Subscribe to all_recipes observable
+    this.all_recipes = this.all_recipes_observer.data.recipes;
     this.all_ingredients = this.recipeService.getAllIngredients(this.all_recipes);
     this.shopping_list = this.recipeService.generateShoppingList(this.all_ingredients);
     this.finished_loading = true;
@@ -51,6 +54,8 @@ export class ShoppingListPage implements OnInit {
     
     return (modal.present());
   }
+
+  all_recipes_observer:m_Observer = new m_Observer();
 
   all_recipes:Array<Recipe> = [];
   all_ingredients:Array<Ingredient> = [];

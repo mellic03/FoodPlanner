@@ -52,15 +52,15 @@ export class PlannerPage implements OnInit {
   }
 
   // Present the "add recipes" modal.
-  async presentAddModal(planner_date:PlannerDate, index:number) {
+  async presentAddModal(planner_dates:Array<PlannerDate>, index:number) {
     const modal = await this.modalController.create({
       component: PlannerModalPage,
-      // Pass the PlannerDate to the modal
-      componentProps: {planner_date: planner_date, all_recipes: this.all_recipes, index: index}
+      // Pass the PlannerDate of the currently viewed date to the modal.
+      componentProps: {planner_dates: planner_dates, all_recipes: this.all_recipes, index: index}
       });
 
     modal.onDidDismiss().then((data) => {
-      this.planner_dates[data.data.index] = data.data.planner_date;
+      this.planner_dates[data.data.index].recipes = data.data.recipes_to_add;
     });
     
     return (modal.present());
@@ -80,6 +80,7 @@ export class PlannerPage implements OnInit {
     this.recipeService.setRecipes(this.all_recipes);
   }
 
+
   planner_end_date:string; // The date the user's shop is supposed to last until. Bound with [(ngModel)] to the ion-datetime.
   planner_end_date_readable:string; // The end date but in the form Month day, year. E.g. "May 7, 2022". 
   now_date:Date = new Date(); // The current date.
@@ -88,7 +89,8 @@ export class PlannerPage implements OnInit {
   // Used to generate the day-by-day planner with *ngFor and for generating the chart on the statistics page.
   planner_dates:Array<PlannerDate> = [];
 
-  recipe_names:Array<string>; // All recipe names, placeholder until separate arrays of ingredients for each day exists.
+  recipe_names:Array<string>;
 
   all_recipes:Array<Recipe>;
+
 }

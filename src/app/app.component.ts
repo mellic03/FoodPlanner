@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { MenuController } from '@ionic/angular';
-import { StorageService } from './services/storage.service';
-import { PhotoService } from './services/photo.service';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
-
 import { LoginmodalPage } from './loginmodal/loginmodal.page'
 import { ModalController } from '@ionic/angular';
+import { StorageService } from './services/storage.service';
+import { PhotoService } from './services/photo.service';
+import { RecipeService } from './services/recipe.service';
 
 @Component({
   selector: 'app-root',
@@ -30,11 +30,16 @@ export class AppComponent {
     public menuController:MenuController,
     private storage:StorageService,
     public photoService:PhotoService,
+    private recipeService:RecipeService,
     public alertController: AlertController) {
     this.initializeApp();
   }
 
   async initializeApp() {
+
+    // Initialise recipe observable.
+    this.recipeService.initialise();
+
     // Check if the user is logged in. If null, then the app hasn't been used before.
     if (await this.storage.get("user_logged_in") == null) {
 
@@ -43,7 +48,7 @@ export class AppComponent {
       this.storage.set("current_theme", "light_theme"); // Store in persistent storage
 
       // POPULATE DATA FOR TESTING PURPOSES. YOU MUST REMOVE THIS
-      this.storage.populateData();
+      this.recipeService.populateData();
       
       this.presentModal(); // Present modal with logged_in = undefined
     }
@@ -61,6 +66,7 @@ export class AppComponent {
       this.current_theme = (await this.storage.get("current_theme")); // Set the theme to the stored theme.
       this.photoService.loadSaved(); // Load the stored profile picture.
     }
+
   }
 
   // Presents the login screen.
