@@ -10,14 +10,13 @@ import { RecipeService, Recipe, Ingredient, m_Observer } from '../services/recip
   styleUrls: ['./recipes.page.scss'],
   providers: [StorageService]
 })
-export class RecipesPage implements OnInit {
 
+export class RecipesPage implements OnInit {
   constructor(private modalController:ModalController, private recipeService:RecipeService) {}
 
   async ngOnInit() {
-    // Subscribe to all_recipes observable
-    this.recipeService.subscribe(this.all_recipes_observer);
-    this.all_recipes = this.all_recipes_observer.data.recipes;
+    await this.recipeService.subscribe(this.all_recipes_observer); // Subscribe to all_recipes observable
+    this.all_recipes = this.all_recipes_observer.data;
   }
 
   // Presents the add/edit recipe modal. If editing the index i of a recipe is passed and editing is set to true.
@@ -45,10 +44,8 @@ export class RecipesPage implements OnInit {
 
   // Remove a recipe from the recipe list.
   deleteRecipe(i:number) {
-    // Remove the recipe from the local array
-    this.all_recipes.splice(i, 1);
-    // Replace the persistent object.
-    this.recipeService.setRecipes(this.all_recipes);
+    this.all_recipes.splice(i, 1); // Remove the recipe from the local recipe array
+    this.recipeService.setRecipes(this.all_recipes); // Replace recipes in storage with the local recipe array.
   }
 
   all_recipes_observer:m_Observer = new m_Observer();

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { RecipeService, Ingredient, Recipe  } from '../services/recipe.service';
 import { RecipeModalPage } from '../recipe-modal/recipe-modal.page';
-import { ModalController } from '@ionic/angular';
-
+import { ModalController, ViewDidEnter } from '@ionic/angular';
+import { StorageService } from '../services/storage.service';
 import { m_Observable, m_Observer } from '../services/recipe.service';
 
 @Component({
@@ -13,15 +13,20 @@ import { m_Observable, m_Observer } from '../services/recipe.service';
 
 export class ShoppingListPage implements OnInit {
   
-  constructor(private recipeService:RecipeService, private modalController:ModalController) { }
+  constructor(private recipeService:RecipeService, private storage:StorageService, private modalController:ModalController) {
 
-  ngOnInit() {
-    this.recipeService.subscribe(this.all_recipes_observer); // Subscribe to all_recipes observable
-    this.all_recipes = this.all_recipes_observer.data.recipes;
+  }
+
+  async ngOnInit() {
+
+    await this.recipeService.subscribe(this.recipes_observer); // Subscribe to all_recipes observable.
+    this.all_recipes = this.recipes_observer.data; // get data from observer.
+
     this.all_ingredients = this.recipeService.getAllIngredients(this.all_recipes);
     this.shopping_list = this.recipeService.generateShoppingList(this.all_ingredients);
     this.finished_loading = true;
   }
+
 
   // Marks an ingredient as "checked".
   checkIngredient(index:number, new_value:boolean) {
@@ -55,7 +60,7 @@ export class ShoppingListPage implements OnInit {
     return (modal.present());
   }
 
-  all_recipes_observer:m_Observer = new m_Observer();
+  recipes_observer:m_Observer = new m_Observer();
 
   all_recipes:Array<Recipe> = [];
   all_ingredients:Array<Ingredient> = [];

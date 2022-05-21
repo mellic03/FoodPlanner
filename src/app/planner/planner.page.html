@@ -27,7 +27,7 @@
                 <p>{{date.day_of_month}}/{{date.month}}/{{date.year}}</p>
               </div>
               <ion-buttons slot="end">
-                    <ion-button (click)="presentAddModal(planner_dates, i)">
+                    <ion-button (click)="presentAddModal(planner_dates[i])">
                       <ion-icon name="add-outline"></ion-icon>
                       <ion-label>Edit</ion-label>
                     </ion-button>

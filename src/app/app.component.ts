@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, enableProdMode, OnInit } from '@angular/core';
 import { MenuController } from '@ionic/angular';
 import { AlertController } from '@ionic/angular';
 import { Router } from '@angular/router';
@@ -7,6 +7,8 @@ import { ModalController } from '@ionic/angular';
 import { StorageService } from './services/storage.service';
 import { PhotoService } from './services/photo.service';
 import { RecipeService } from './services/recipe.service';
+import { Platform } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-root',
@@ -14,7 +16,8 @@ import { RecipeService } from './services/recipe.service';
   styleUrls: ['app.component.scss'],
   providers: [Storage]
 })
-export class AppComponent {
+
+export class AppComponent implements OnInit {
   
   public appPages = [
     { title: 'Shopping List', url: '/shopping-list', icon: 'list' },
@@ -25,48 +28,56 @@ export class AppComponent {
   ];
 
   constructor(
+    private recipeService:RecipeService,
     public router:Router,
     private modalController:ModalController,
-    public menuController:MenuController,
+    private menuController:MenuController,
     private storage:StorageService,
     public photoService:PhotoService,
-    private recipeService:RecipeService,
-    public alertController: AlertController) {
+    public alertController: AlertController,
+    private platform:Platform
+  ) { }
+
+  ngOnInit() {
+    //enableProdMode();
     this.initializeApp();
   }
 
   async initializeApp() {
+    
+    // Get user_logged_in boolean.
+    let user_logged_in:boolean = await this.storage.get("user_logged_in");
+    let current_theme:string = await this.storage.get("current_theme");
+    let current_user:string = await this.storage.get("current_user");
 
-    // Initialise recipe observable.
-    this.recipeService.initialise();
+    // If user_logged_in doesn't exist, run setup code.
+    if (user_logged_in == null) {
 
-    // Check if the user is logged in. If null, then the app hasn't been used before.
-    if (await this.storage.get("user_logged_in") == null) {
+      this.recipeService.populateData(); // POPULATE DATA FOR TESTING PURPOSES. YOU MUST REMOVE THIS
 
-      // If the app hasn't been used yet, set the theme to light_theme
-      this.current_theme = "light_theme"; // Immediately changes app.component.html class to "light_theme"
-      this.storage.set("current_theme", "light_theme"); // Store in persistent storage
+      // Set default values
+      this.current_theme = "light_theme";
+      this.storage.set("current_theme", "light_theme");
 
-      // POPULATE DATA FOR TESTING PURPOSES. YOU MUST REMOVE THIS
-      this.recipeService.populateData();
-      
       this.presentModal(); // Present modal with logged_in = undefined
     }
 
-    // If the app has been used but the user isn't logged in.
-    else if (await this.storage.get("user_logged_in") == false) {
-      this.current_theme = (await this.storage.get("current_theme")); // Set the theme to the stored theme.
-      this.presentModal(false); // Present modal with logged_in = false
-    }
+    // If the app has been used before.
+    else {
+      this.current_theme = current_theme; // Set the theme to the stored theme.
 
-    // If the user is logged in.
-    else if (await this.storage.get("user_logged_in") == true) {
-      this.user_logged_in = true;
-      this.current_user = await this.storage.get("current_user");
-      this.current_theme = (await this.storage.get("current_theme")); // Set the theme to the stored theme.
-      this.photoService.loadSaved(); // Load the stored profile picture.
-    }
+      // If the user is logged in.
+      if (user_logged_in == true) {
+        this.user_logged_in = true;
+        this.current_user = current_user;
+        this.photoService.loadSaved(); // Load the stored profile picture.
+      }
 
+      // If the user is not logged in.
+      else if (user_logged_in == false) {
+        this.presentModal(false); // Present modal with logged_in = false
+      }
+    }
   }
 
   // Presents the login screen.

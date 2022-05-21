@@ -3,7 +3,7 @@ import { ModalController } from '@ionic/angular';
 import { PlannerModalPage } from '../planner-modal/planner-modal.page';
 import { DatemodalPage } from '../datemodal/datemodal.page';
 import { format, parseISO } from 'date-fns'
-import { RecipeService, Recipe, Ingredient, PlannerDate } from '../services/recipe.service';
+import { RecipeService, Recipe, Ingredient, PlannerDate, m_Observable, m_Observer } from '../services/recipe.service';
 
 
 @Component({
@@ -16,8 +16,12 @@ export class PlannerPage implements OnInit {
 
   constructor(private recipeService:RecipeService, private modalController:ModalController) { }
 
+
   async ngOnInit() {
-    this.all_recipes = await this.recipeService.getRecipes();
+    
+    await this.recipeService.subscribe(this.recipes_observer);
+    this.all_recipes = this.recipes_observer.data
+
     this.planner_dates = await this.recipeService.getPlannerDates();
     this.planner_end_date = await this.recipeService.getPlannerEndDate();
     this.planner_end_date_readable = format(parseISO(this.planner_end_date), 'MMM d, yyyy');
@@ -52,15 +56,18 @@ export class PlannerPage implements OnInit {
   }
 
   // Present the "add recipes" modal.
-  async presentAddModal(planner_dates:Array<PlannerDate>, index:number) {
+  async presentAddModal(planner_date:PlannerDate) {
     const modal = await this.modalController.create({
       component: PlannerModalPage,
       // Pass the PlannerDate of the currently viewed date to the modal.
-      componentProps: {planner_dates: planner_dates, all_recipes: this.all_recipes, index: index}
+      componentProps: {planner_date: planner_date}
       });
 
     modal.onDidDismiss().then((data) => {
-      this.planner_dates[data.data.index].recipes = data.data.recipes_to_add;
+      
+      console.log(data.data)
+
+
     });
     
     return (modal.present());
@@ -91,6 +98,7 @@ export class PlannerPage implements OnInit {
 
   recipe_names:Array<string>;
 
+  recipes_observer:m_Observer = new m_Observer();
   all_recipes:Array<Recipe>;
 
 }

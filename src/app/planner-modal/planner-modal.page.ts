@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import { Recipe, PlannerDate, m_Observer  } from '../services/recipe.service';
+import { RecipeService, Recipe, PlannerDate, m_Observer } from '../services/recipe.service';
 
 @Component({
   selector: 'app-planner-modal',
@@ -10,15 +10,49 @@ import { Recipe, PlannerDate, m_Observer  } from '../services/recipe.service';
 
 export class PlannerModalPage implements OnInit {
 
-  constructor(private navParams:NavParams, private modalController:ModalController) { }
+  constructor(private navParams:NavParams, private modalController:ModalController, private recipeService:RecipeService) { }
 
   ngOnInit() {
-    this.planner_dates = this.navParams.get("planner_dates"); // The individual PlannerDate that is being edited.
-    this.index = this.navParams.get("index");
-    this.planner_date = this.planner_dates[this.index];
-    this.all_recipes = this.navParams.get("all_recipes");
+    
+    // Retrieve PlannerDate from NavParams.
+    this.planner_date = this.navParams.get("planner_date");
 
-    // Determine which recipes already exist on that day.
+  }
+
+
+
+  doStuff() {
+
+    this.recipeService.subscribe(this.planner_date.recipes_observer) // Subscribe PlannerDate to all_recipes observable.
+
+    // plannerDate.updateRecipes()
+  }
+
+  planner_date:PlannerDate;
+
+
+
+}
+
+
+
+
+
+
+
+
+/*
+  ngOnInit() {
+
+    // Get all_recipes from observable.
+    this.recipes_observer = this.navParams.get("recipes_observer");
+    this.all_recipes = this.recipes_observer.data;
+
+    // Get current PlannerDate and index position of PlannerDate from NavParams.
+    this.planner_date = this.navParams.get("planner_date");
+    this.index = this.navParams.get("index");
+
+    // Determine which recipes already exist on that PlannerDate.
     for (let i = 0; i < this.planner_date.recipes.length; i++) {
       for (let j = 0; j < this.all_recipes.length; j++) {
         if (this.planner_date.recipes[i].name == this.all_recipes[j].name) {
@@ -44,9 +78,11 @@ export class PlannerModalPage implements OnInit {
 
   day_of_week:string;
 
+  recipes_observer:m_Observer = new m_Observer();;
   all_recipes:Array<Recipe>;
+
   recipe_indices:Array<boolean> = [];
-  planner_dates:Array<PlannerDate>;
+
   planner_date:PlannerDate;
   index:number;
-}
+*/

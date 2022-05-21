@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { RecipeService, Recipe, Ingredient } from '../services/recipe.service';
+import { RecipeService, Recipe, Ingredient, m_Observable, m_Observer } from '../services/recipe.service';
 import Chart from 'chart.js/auto';
 
 @Component({
@@ -27,7 +27,9 @@ export class StatisticsPage implements OnInit {
 
   async ngOnInit() {
 
-    this.all_recipes = await this.recipeService.getRecipes(); 
+    await this.recipeService.subscribe(this.recipes_observer);
+
+    this.all_recipes = this.recipes_observer.data;
 
     this.calculateFoodProgress();
     this.calculateTimeProgress();
@@ -91,6 +93,7 @@ export class StatisticsPage implements OnInit {
     
   }
 
+  recipes_observer:m_Observer = new m_Observer();
   all_recipes:Array<Recipe>;
 
   food_progress_bar:number;

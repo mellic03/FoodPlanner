@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { NavParams } from '@ionic/angular';
-import { PlannerDate } from '../services/recipe.service';
+import { RecipeService, PlannerDate } from '../services/recipe.service';
+
 
 @Component({
   selector: 'app-datemodal',
@@ -10,7 +11,7 @@ import { PlannerDate } from '../services/recipe.service';
 })
 export class DatemodalPage implements OnInit {
 
-  constructor(private modalController:ModalController, private navParams:NavParams) { }
+  constructor(private modalController:ModalController, private navParams:NavParams, private recipeService:RecipeService) { }
 
   async ngOnInit() {
     this.end_date = await this.navParams.get("end_date");

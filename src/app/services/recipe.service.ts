@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { StorageService } from './storage.service';
 
 @Injectable({
@@ -6,28 +6,21 @@ import { StorageService } from './storage.service';
 })
 export class RecipeService {
 
+
+
+
   constructor(private storage:StorageService) { }
 
-  // Observable whose value is: {recipes: [], recipe_date_mapping: []}
-
+  // Observable which holds "recipe_array" from ionic storage
   recipe_observable:m_Observable = new m_Observable();
 
   /** Subscribes an observer to recipe_observable.
    * @param observer The observer to subcribe.
    * @returns nothing
    */
-  subscribe(observer:m_Observer) {
+  async subscribe(observer:m_Observer) {
     this.recipe_observable.subscribe(observer);
-    this.recipe_observable.update(this.recipe_observable.data);
-  }
-
-  /** Run in app.component.ts on app start. Assigns initial value to recipe_obsevable.
-   * 
-   */
-  initialise() {
-    this.getRecipes().then((val) => {
-      this.recipe_observable.update({recipes: val, recipe_date_mappings: {}});
-    })
+    this.recipe_observable.update(await this.storage.get("all_recipes"));
   }
 
   /** Returns a shopping list sorted in alphabetical order
@@ -120,7 +113,11 @@ export class RecipeService {
         }
       }
     }
-    this.storage.set("all_recipes", all_recipes);
+    this.setRecipes(all_recipes);
+  }
+
+  public updateObservable(new_value:any) {
+    this.recipe_observable.update(new_value);
   }
 
   /** Updates the recipe array in storage.
@@ -130,7 +127,7 @@ export class RecipeService {
    */
   public setRecipes(recipes:Array<Recipe>) {
     this.recipe_observable.update(recipes);
-    this.storage.set("all_recipes", recipes);
+    this.storage.set("all_recipes", this.recipe_observable.data);
   }
 
   /** Retrieves the array of all stored recipes from storage
@@ -138,7 +135,7 @@ export class RecipeService {
    * @returns Array<Recipe>
    */
   public async getRecipes() {
-    return(await this.storage.get("all_recipes"));
+    return (this.storage.get("all_recipes"));
   }
 
 
@@ -376,10 +373,30 @@ export class RecipeService {
       }
       recipe_array.push(new_recipe);
     }
+    console.log("populating with:", recipe_array);
     this.setRecipes(recipe_array);
   }
 
 }
+
+
+
+
+// Store an array of observable recipes? //
+// all_recipes:Array<m_Observable> = [];
+// let observable_recipe:m_Observable = new m_Observable();
+// observable_recipe.update(new Recipe(name = "", ingredients = []));
+// all_recipes.push(observable_recipe);
+
+
+
+
+
+
+
+
+
+
 
 
 export class Ingredient {
@@ -409,6 +426,9 @@ export class Recipe {
   // Used in planner/statistics to tell whether a recipe is already assigned to a PlannerDate.
   already_assigned:boolean = false;
 
+  // Keeps track of what date the recipe is assigned to.
+  date_assigned_to:Date;
+
   constructor(name:string, ingredients:Array<Ingredient> = []) {
     this.name = name;
     this.ingredients = ingredients;
@@ -429,16 +449,6 @@ export class PlannerDate {
   month:number;
   year:number;
 
-  // Observe recipes_observable to stay updated on list of recipes as well as their date-assignments.
-
-  //  recipes_observer.data = {
-  //    recipes: [],
-  //    recipe_date_mappings: {
-  //      "Burger": planner_dates[x],
-  //      "Bolognese": planner_dates[y],
-  //      "Ravioli": planner_dates[z] 
-  //    }
-  //  }
 
   recipes_observer:m_Observer = new m_Observer();
 
@@ -459,18 +469,28 @@ export class PlannerDate {
     this.recipes = [];
   }
 
+  
+  updateRecipes() {
+    for (let recipe of this.recipes_observer.data) {
+      if (recipe.date_assigned_to == this.date_ISO) {
+        this.addRecipe(recipe);
+      }
+    }
+  }
+
+
   // Add a recipe to the recipe array
   addRecipe(recipe:Recipe) {
     this.recipes.push(recipe);
   }
 
-  // Remove a recipe to the recipe array
+  // Remove a recipe from the recipe array
   removeRecipe(recipe_name:string) {
     for (let i = 0; i < this.recipes.length; i++) {
         if (this.recipes[i].name == recipe_name) {
-            this.recipes.splice(i, 1);
-            console.log("Removed: " + recipe_name);
-            return(0);
+          this.recipes.splice(i, 1);
+          console.log("Removed: " + recipe_name);
+          return (0);
         }
     }
     console.log("Could not find recipe: " + recipe_name);
@@ -480,8 +500,11 @@ export class PlannerDate {
 export class m_Observable {
 
   data:any;
-  
   observers:Array<m_Observer> = [];
+
+  constructor(data:any = []) {
+    this.data = data;
+  }
 
   subscribe(observer:m_Observer) {
     this.observers.push(observer);
@@ -497,9 +520,12 @@ export class m_Observable {
   }
 
   update(new_value:any) {
+
     this.data = new_value;
+    //console.log("Observers:", this.observers);
+
     for (let observer of this.observers) {
-      observer.update(this.data);
+      observer?.update(this.data);
     }
   }
 }
