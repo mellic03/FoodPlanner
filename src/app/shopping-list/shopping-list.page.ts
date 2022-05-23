@@ -4,6 +4,7 @@ import { RecipeModalPage } from '../recipe-modal/recipe-modal.page';
 import { ModalController, ViewDidEnter } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
 import { m_Observable, m_Observer } from '../services/recipe.service';
+import { AnimationController } from '@ionic/angular';
 
 @Component({
   selector: 'app-shopping-list',
@@ -13,20 +14,37 @@ import { m_Observable, m_Observer } from '../services/recipe.service';
 
 export class ShoppingListPage implements OnInit {
   
-  constructor(private recipeService:RecipeService, private storage:StorageService, private modalController:ModalController) {
+  constructor(private recipeService:RecipeService, private storage:StorageService, private modalController:ModalController, private animationCtrl:AnimationController) {
 
   }
 
   async ngOnInit() {
 
-    await this.recipeService.subscribe(this.recipes_observer); // Subscribe to all_recipes observable.
-    this.all_recipes = this.recipes_observer.data; // get data from observer.
+    await this.recipeService.subscribe(this.all_recipes_observer); // Subscribe to all_recipes observable.
+    this.all_recipes = this.all_recipes_observer.data; // get data from observer.
 
     this.all_ingredients = this.recipeService.getAllIngredients(this.all_recipes);
     this.shopping_list = this.recipeService.generateShoppingList(this.all_ingredients);
     this.finished_loading = true;
   }
+  
+  async testAnim(index:number, checked:boolean) {
+    const animation = this.animationCtrl.create()
+    .addElement(document.querySelectorAll(`.item_${index}`))
+    .duration(200)
+    .iterations(1)
+    .keyframes([
+      { offset: 0, transform: 'scale(100%)'},
+      { offset: 0.5, transform: 'scale(110%)'},
+      { offset: 1, transform: 'scale(0%)'},
+      { offset: 1, transform: 'scale(100%)'},
+    ])
+    .easing('ease-in')
 
+    await animation.play();
+
+    this.checkIngredient(index, checked)
+  }
 
   // Marks an ingredient as "checked".
   checkIngredient(index:number, new_value:boolean) {
@@ -60,7 +78,7 @@ export class ShoppingListPage implements OnInit {
     return (modal.present());
   }
 
-  recipes_observer:m_Observer = new m_Observer();
+  all_recipes_observer:m_Observer = new m_Observer();
 
   all_recipes:Array<Recipe> = [];
   all_ingredients:Array<Ingredient> = [];

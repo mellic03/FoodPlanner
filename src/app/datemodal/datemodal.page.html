@@ -1,13 +1,13 @@
 <ion-header>
   <ion-toolbar>
     <ion-buttons slot="start">
-      <ion-button (click)="closeModal(false)">
+      <ion-button (click)="closeModalDontSubmit()">
         <ion-icon size="large" name="close-outline"></ion-icon>
       </ion-button>
     </ion-buttons>
     <ion-title>Change Date</ion-title>
     <ion-buttons slot="end">
-      <ion-button (click)="closeModal(true)">Done</ion-button>
+      <ion-button (click)="closeModalAndSubmit()">Done</ion-button>
     </ion-buttons>
   </ion-toolbar>
 </ion-header>

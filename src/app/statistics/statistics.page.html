@@ -8,7 +8,8 @@
 </ion-header>
 
 <ion-content>
-  <fade-in>
+
+  <fade-in [hidden]="planner_dates?.[0] == null">
     <ion-list>
       <canvas #food_usage_chart></canvas>
     </ion-list>
@@ -20,4 +21,14 @@
       <ion-progress-bar value="{{time_progress_bar}}"></ion-progress-bar>
     </ion-list>
   </fade-in>
+
+  <fade-in [hidden]="planner_dates?.[0] != null">
+    <no-recipes>
+      <ion-button (click)="navToPlanner()">Go to Scheduler</ion-button>
+    </no-recipes>
+  </fade-in>
+
 </ion-content>
+
+
+

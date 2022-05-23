@@ -29,3 +29,9 @@ p {
 ion-label {
     color: var(--text_color);
 }
+
+ion-icon {
+    color:var(--bold_text_color);
+    font-size:100px;
+    --ionicon-stroke-width: 8px;
+}

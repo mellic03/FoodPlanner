@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { NavParams } from '@ionic/angular';
-import { RecipeService, PlannerDate } from '../services/recipe.service';
+import { RecipeService, PlannerDate, m_Observable, m_Observer } from '../services/recipe.service';
 
 
 @Component({
@@ -17,14 +17,22 @@ export class DatemodalPage implements OnInit {
     this.end_date = await this.navParams.get("end_date");
   }
 
-  closeModal(submit_data:boolean) {
-    if (submit_data) {
-      let date_array = this.generateDates(this.now_date, this.end_date);
-      this.modalController.dismiss({date_array: date_array, start_date: this.now_date, end_date: this.end_date});
+  closeModalDontSubmit() {
+    this.modalController.dismiss();
+  }
+
+  async closeModalAndSubmit() {
+    // Set all recipe.date_assigned_to as undefined for all recipes.
+    await this.recipeService.subscribe(this.recipes_observer);
+    for (let recipe of this.recipes_observer.data) {
+      recipe.date_assigned_to = undefined;
     }
-    else {
-      this.modalController.dismiss();
-    }
+    this.recipeService.setRecipes(this.recipes_observer.data);
+    
+    // Generate array of PlannerDates between now and the specified end date.
+    let date_array = this.generateDates(this.now_date, this.end_date);
+    
+    this.modalController.dismiss({date_array: date_array, start_date: this.now_date, end_date: this.end_date});
   }
 
   // Calculate the number of days between two dates
@@ -53,4 +61,5 @@ export class DatemodalPage implements OnInit {
   now_date_datetime:string = new Date().toISOString(); // The current date but compatible with ion-datetime
   end_date:string; // The date the user's shop is supposed to last until. Bound with [(ngModel)] to the ion-datetime.
 
+  recipes_observer:m_Observer = new m_Observer();
 }

@@ -10,79 +10,81 @@ import { RecipeService, Recipe, PlannerDate, m_Observer } from '../services/reci
 
 export class PlannerModalPage implements OnInit {
 
-  constructor(private navParams:NavParams, private modalController:ModalController, private recipeService:RecipeService) { }
+  constructor(private navParams:NavParams, private modalController:ModalController, private recipeService:RecipeService) {
+  }
 
-  ngOnInit() {
-    
+  async ngOnInit() {
+
+    // Get all_recpies from observable.
+    await this.recipeService.subscribe(this.recipes_observer);
+    this.all_recipes = this.recipes_observer.data;
+
     // Retrieve PlannerDate from NavParams.
     this.planner_date = this.navParams.get("planner_date");
 
+    // Find which recipes are and are not alreay assigned to another PlannerDate.
+    for (let recipe of this.all_recipes) {
+      if (recipe.date_assigned_to != undefined && recipe.date_assigned_to?.getTime() != this.planner_date.date_ISO.getTime()) {
+        this.already_assigned_recipes.push(recipe);
+      }
+      else if (recipe.date_assigned_to == undefined || recipe.date_assigned_to?.getTime() == this.planner_date.date_ISO.getTime()) {
+        this.not_already_assigned_recipes.push(recipe);
+      }
+    }
+
+    // Find which recipes are already assigned to this date. Set to true in this.recipe_indices.
+    for (let i = 0; i < this.not_already_assigned_recipes.length; i++) {
+      if (this.not_already_assigned_recipes[i].date_assigned_to?.getTime() == this.planner_date.date_ISO?.getTime()) {
+        this.recipe_indices[i] = true;
+      }
+    }
+
+    this.finished_loading = true;
   }
 
-
-
-  doStuff() {
-
-    this.recipeService.subscribe(this.planner_date.recipes_observer) // Subscribe PlannerDate to all_recipes observable.
-
-    // plannerDate.updateRecipes()
+  closeModalDontSubmit() {
+    this.modalController.dismiss();
   }
 
-  planner_date:PlannerDate;
+  closeModalAndSubmit() {
+    // Set the date of recipes in not_already_assigned_recipes
+    for (let i = 0; i < this.recipe_indices.length; i++) {
+      // If the recipe is checked.
+      if (this.recipe_indices[i] == true) {
+        this.not_already_assigned_recipes[i].date_assigned_to = this.planner_date.date_ISO;
+      }
+      // If the recipe is unchecked.
+      else {
+        this.not_already_assigned_recipes[i].date_assigned_to = undefined;
+        this.not_already_assigned_recipes[i].cooked = false;
+      }
+    }
 
-
-
-}
-
-
-
-
-
-
-
-
-/*
-  ngOnInit() {
-
-    // Get all_recipes from observable.
-    this.recipes_observer = this.navParams.get("recipes_observer");
-    this.all_recipes = this.recipes_observer.data;
-
-    // Get current PlannerDate and index position of PlannerDate from NavParams.
-    this.planner_date = this.navParams.get("planner_date");
-    this.index = this.navParams.get("index");
-
-    // Determine which recipes already exist on that PlannerDate.
-    for (let i = 0; i < this.planner_date.recipes.length; i++) {
-      for (let j = 0; j < this.all_recipes.length; j++) {
-        if (this.planner_date.recipes[i].name == this.all_recipes[j].name) {
-          this.recipe_indices[j] = true;
+    // Overwrite recipes in all_recipes with the updated versions from not_already_assigned_recipes.
+    for (let recipe of this.all_recipes) {
+      for (let non_assigned of this.not_already_assigned_recipes) {
+        if (recipe.name == non_assigned.name) {
+          recipe.date_assigned_to = non_assigned.date_assigned_to;
         }
       }
     }
-  }
-  
-  // Dismisses the modal.
-  closeModal() {
 
-    // Create array of recipes to add
-    let recipes_to_add:Array<Recipe> = [];
-
-    for (let i = 0; i < this.recipe_indices.length; i++) {
-      if (this.recipe_indices[i] == true) {
-        recipes_to_add.push(this.all_recipes[i]);
-      }
-    }
-    this.modalController.dismiss({recipes_to_add: recipes_to_add, index: this.index});
+    // Update the recipes observable with the new data.
+    this.recipeService.setRecipes(this.all_recipes);
+    this.modalController.dismiss();
   }
 
-  day_of_week:string;
-
-  recipes_observer:m_Observer = new m_Observer();;
-  all_recipes:Array<Recipe>;
-
-  recipe_indices:Array<boolean> = [];
 
   planner_date:PlannerDate;
-  index:number;
-*/
+  
+  recipes_observer:m_Observer = new m_Observer();
+  all_recipes:Array<Recipe> = [];
+  
+  already_assigned_recipes:Array<Recipe> = []; // Recipes which are already assigned to another PlannerDate
+  not_already_assigned_recipes:Array<Recipe> = []; // Recipes which are not already assigned to another PlannerDate..
+
+  recipe_indices:Array<boolean> = [false]; // The index positions of recipes in not_already_assigned_recipes to add to the PlannerDate.
+
+  finished_loading:boolean = false;
+
+}

@@ -34,7 +34,7 @@
             </ion-item-options>
 
             <ion-item>
-              <ion-input [(ngModel)]="ingredient_names[i+1]" clearInput="true" placeholder="Ingredient {{i+1}}"></ion-input>
+              <ion-input [(ngModel)]="ingredient_names[i+1]" cancellable clearInput="true" placeholder="Ingredient {{i+1}}"></ion-input>
             
               <ion-input [(ngModel)]="ingredient_quantities[i+1]" type="number" maxlength="4" clearInput="true" placeholder="Quantity"></ion-input>
               

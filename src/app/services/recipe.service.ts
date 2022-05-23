@@ -7,9 +7,8 @@ import { StorageService } from './storage.service';
 export class RecipeService {
 
 
-
-
-  constructor(private storage:StorageService) { }
+  constructor(private storage:StorageService) {
+  }
 
   // Observable which holds "recipe_array" from ionic storage
   recipe_observable:m_Observable = new m_Observable();
@@ -116,11 +115,7 @@ export class RecipeService {
     this.setRecipes(all_recipes);
   }
 
-  public updateObservable(new_value:any) {
-    this.recipe_observable.update(new_value);
-  }
-
-  /** Updates the recipe array in storage.
+  /** Updates the recipe array in storage and the value of this.recipe_observable.
    * 
    * @param recipes Array<Recipe>
    * @returns nothing
@@ -145,6 +140,7 @@ export class RecipeService {
     return (this.storage.get("planner_dates"));
   }
   public setPlannerDates(planner_dates:Array<PlannerDate>) {
+    planner_dates.forEach((planner_date) => { planner_date.recipes = []});
     this.storage.set("planner_dates", planner_dates);
   }
 
@@ -382,18 +378,6 @@ export class RecipeService {
 
 
 
-// Store an array of observable recipes? //
-// all_recipes:Array<m_Observable> = [];
-// let observable_recipe:m_Observable = new m_Observable();
-// observable_recipe.update(new Recipe(name = "", ingredients = []));
-// all_recipes.push(observable_recipe);
-
-
-
-
-
-
-
 
 
 
@@ -423,11 +407,8 @@ export class Recipe {
   // Used in planner/statistics to tell whether a recipe has been cooked.
   cooked:boolean = false;
   
-  // Used in planner/statistics to tell whether a recipe is already assigned to a PlannerDate.
-  already_assigned:boolean = false;
-
   // Keeps track of what date the recipe is assigned to.
-  date_assigned_to:Date;
+  date_assigned_to:Date = undefined;
 
   constructor(name:string, ingredients:Array<Ingredient> = []) {
     this.name = name;
@@ -449,11 +430,8 @@ export class PlannerDate {
   month:number;
   year:number;
 
-
-  recipes_observer:m_Observer = new m_Observer();
-
   // An array of Recipe objects.
-  recipes:Array<Recipe> = this.recipes_observer.data;
+  recipes:Array<Recipe> = [];
 
   constructor(date_ISO) {
     this.date_ISO = date_ISO;
@@ -467,15 +445,6 @@ export class PlannerDate {
     this.year = this.date_ISO.getFullYear();
 
     this.recipes = [];
-  }
-
-  
-  updateRecipes() {
-    for (let recipe of this.recipes_observer.data) {
-      if (recipe.date_assigned_to == this.date_ISO) {
-        this.addRecipe(recipe);
-      }
-    }
   }
 
 

@@ -44,8 +44,8 @@ export class AppComponent implements OnInit {
   }
 
   async initializeApp() {
-    
-    // Get user_logged_in boolean.
+
+    // Get values from storage
     let user_logged_in:boolean = await this.storage.get("user_logged_in");
     let current_theme:string = await this.storage.get("current_theme");
     let current_user:string = await this.storage.get("current_user");

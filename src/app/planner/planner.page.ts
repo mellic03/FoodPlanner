@@ -1,10 +1,9 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { PlannerModalPage } from '../planner-modal/planner-modal.page';
 import { DatemodalPage } from '../datemodal/datemodal.page';
 import { format, parseISO } from 'date-fns'
 import { RecipeService, Recipe, Ingredient, PlannerDate, m_Observable, m_Observer } from '../services/recipe.service';
-
 
 @Component({
   selector: 'app-planner',
@@ -16,20 +15,50 @@ export class PlannerPage implements OnInit {
 
   constructor(private recipeService:RecipeService, private modalController:ModalController) { }
 
-
   async ngOnInit() {
     
     await this.recipeService.subscribe(this.recipes_observer);
     this.all_recipes = this.recipes_observer.data
 
     this.planner_dates = await this.recipeService.getPlannerDates();
-    this.planner_end_date = await this.recipeService.getPlannerEndDate();
-    this.planner_end_date_readable = format(parseISO(this.planner_end_date), 'MMM d, yyyy');
+    
+    if (this.planner_dates != null) {
+      this.planner_end_date = await this.recipeService.getPlannerEndDate();
+      this.planner_end_date_readable = format(parseISO(this.planner_end_date), 'MMM d, yyyy');
+      this.updatePlannerDates();
+    }
+    
   }
 
   ngOnDestroy() {
-    this.recipeService.setPlannerDates(this.planner_dates);
-    this.recipeService.setPlannerEndDate(this.planner_end_date);
+    if (this.planner_dates != null) {
+      this.recipeService.setPlannerDates(this.planner_dates);
+      this.recipeService.setPlannerEndDate(this.planner_end_date);
+    }
+  }
+
+
+  // Retrieves recipes data from the recipes observable,
+  // then sorts the data and finds which recipes belong to which PlannerDate.
+  updatePlannerDates() {
+
+    let all_recipes = this.recipes_observer.data;
+
+    //console.log(this.recipes_observer.data)
+
+    // Clear recipes
+    for (let planner_date of this.planner_dates) {
+      planner_date.recipes = [];
+    }
+
+    // use new recipe array for each PlannerDate
+    for (let planner_date of this.planner_dates) {
+      for (let recipe of all_recipes) {
+        if (recipe.date_assigned_to?.getTime() == planner_date.date_ISO?.getTime()) {
+          planner_date.recipes.push(recipe);
+        }
+      }
+    }
   }
 
   // Present the "change date" modal
@@ -64,10 +93,7 @@ export class PlannerPage implements OnInit {
       });
 
     modal.onDidDismiss().then((data) => {
-      
-      console.log(data.data)
-
-
+      this.updatePlannerDates();
     });
     
     return (modal.present());
@@ -75,16 +101,20 @@ export class PlannerPage implements OnInit {
 
   // Update planner dates in ionic storage after checking a recipe
   checkRecipe(index:number) {
-    for (let planner_date_recipe of this.planner_dates[index].recipes) {
-      for (let i = 0; i < this.all_recipes.length; i++) {
-        // If recipe.name is in both planner date and in all_recipes, then update the recipe in all_recipes.
-        if (planner_date_recipe.name == this.all_recipes[i].name) {
-          this.all_recipes[i] = planner_date_recipe;
+
+    let all_recipes = this.recipes_observer.data;
+    let planner_recipes = this.planner_dates[index].recipes
+
+    for (let i = 0; i < planner_recipes.length; i++) {
+      for (let j = 0; j < all_recipes.length; j++) {
+        if (planner_recipes[i].name == all_recipes[j].name) {
+          all_recipes[j].cooked = all_recipes[j].cooked;
         }
       }
     }
-    this.recipeService.setPlannerDates(this.planner_dates);
-    this.recipeService.setRecipes(this.all_recipes);
+
+    // Update recipe observable
+    this.recipeService.setRecipes(all_recipes);
   }
 
 
@@ -94,9 +124,8 @@ export class PlannerPage implements OnInit {
 
   // Array of PlannerDates
   // Used to generate the day-by-day planner with *ngFor and for generating the chart on the statistics page.
+  planner_dates_observer:m_Observer = new m_Observer();
   planner_dates:Array<PlannerDate> = [];
-
-  recipe_names:Array<string>;
 
   recipes_observer:m_Observer = new m_Observer();
   all_recipes:Array<Recipe>;

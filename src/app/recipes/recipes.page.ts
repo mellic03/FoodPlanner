@@ -3,6 +3,7 @@ import { RecipeModalPage } from '../recipe-modal/recipe-modal.page';
 import { ModalController } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
 import { RecipeService, Recipe, Ingredient, m_Observer } from '../services/recipe.service';
+import { AnimationController } from '@ionic/angular';
 
 @Component({
   selector: 'app-recipes',
@@ -12,7 +13,7 @@ import { RecipeService, Recipe, Ingredient, m_Observer } from '../services/recip
 })
 
 export class RecipesPage implements OnInit {
-  constructor(private modalController:ModalController, private recipeService:RecipeService) {}
+  constructor(private modalController:ModalController, private recipeService:RecipeService, private animationCtrl:AnimationController) {}
 
   async ngOnInit() {
     await this.recipeService.subscribe(this.all_recipes_observer); // Subscribe to all_recipes observable
@@ -43,7 +44,21 @@ export class RecipesPage implements OnInit {
   }
 
   // Remove a recipe from the recipe list.
-  deleteRecipe(i:number) {
+  async deleteRecipe(i:number) {
+
+    const animation = this.animationCtrl.create()
+    .addElement(document.querySelectorAll(`.item_${i}`))
+    .duration(200)
+    .iterations(1)
+    .keyframes([
+      { offset: 0, transform: 'scale(100%)'},
+      { offset: 0.5, transform: 'scale(110%)'},
+      { offset: 1, transform: 'scale(0%)'},
+    ])
+    .easing('ease-in')
+
+    await animation.play();
+
     this.all_recipes.splice(i, 1); // Remove the recipe from the local recipe array
     this.recipeService.setRecipes(this.all_recipes); // Replace recipes in storage with the local recipe array.
   }

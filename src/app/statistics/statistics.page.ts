@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { RecipeService, Recipe, Ingredient, m_Observable, m_Observer } from '../services/recipe.service';
+import { RecipeService, Recipe, Ingredient, PlannerDate, m_Observable, m_Observer } from '../services/recipe.service';
+import { Router } from '@angular/router';
 import Chart from 'chart.js/auto';
 
 @Component({
@@ -12,7 +13,7 @@ export class StatisticsPage implements OnInit {
   @ViewChild('food_usage_chart', {static: true}) canvas;
   chart:any;
   
-  constructor(private recipeService:RecipeService) { }
+  constructor(private recipeService:RecipeService, private router:Router) { }
 
   // Chart needs to read dates from date array and plot the last two weeks of dates
 
@@ -26,25 +27,29 @@ export class StatisticsPage implements OnInit {
   }
 
   async ngOnInit() {
-
+    
     await this.recipeService.subscribe(this.recipes_observer);
-
     this.all_recipes = this.recipes_observer.data;
+    
+    this.planner_dates = await this.recipeService.getPlannerDates();
+    
+    if (this.planner_dates?.[0] != null) {
 
-    this.calculateFoodProgress();
-    this.calculateTimeProgress();
+      // Create x-axis labels of dates
+      for (let planner_date of this.planner_dates) {
+        this.data.labels.push(planner_date.day_of_month + "/" + planner_date.month);
+      }
+  
+      this.calculateFoodProgress();
+      this.calculateTimeProgress();
 
-    // Create x-axis labels of dates
-    let planner_dates:Array<Array<string>> = await this.recipeService.getPlannerDates();
-    for (let date of planner_dates) {
-      this.data.labels.push(date["day_of_month"] + "/" + date["month"]);
+      this.chart = new Chart(this.canvas.nativeElement, {
+        type: 'bar',
+        data: this.data
+      });
     }
-
-    this.chart = new Chart(this.canvas.nativeElement, {
-      type: 'bar',
-      data: this.data
-    });
   }
+
 
   // Calculates the proportion of food that has not been "checked".
   calculateFoodProgress() {
@@ -92,6 +97,12 @@ export class StatisticsPage implements OnInit {
     this.time_hours_left = Math.round((days_left - this.time_days_left) * 24);
     
   }
+
+  navToPlanner() {
+    this.router.navigateByUrl("planner");
+  }
+
+  planner_dates:Array<PlannerDate> = [];
 
   recipes_observer:m_Observer = new m_Observer();
   all_recipes:Array<Recipe>;
