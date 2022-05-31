@@ -64,6 +64,9 @@ export class LoginmodalPage implements OnInit {
     }
   }
 
+  switchToCreateUser() {
+    this.use_create_user_screen = true;
+  }
 
   user_array:Array<Array<string>>; // An array of all users in the form [ [username, password], [username, password], ... ]
   error_message:string;
@@ -76,4 +79,7 @@ export class LoginmodalPage implements OnInit {
   new_username:string;
   new_password:string;
   new_password_confirmation:string;
+
+  use_create_user_screen:boolean = false;
+
 }

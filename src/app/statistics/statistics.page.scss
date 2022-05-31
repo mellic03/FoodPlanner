@@ -20,3 +20,11 @@ ion-label {
     margin-left: 20px;
     color: var(--text_color);
 }
+
+.ingredient_progress_bar {
+    --progress-background: rgba(105, 99, 215, 1);
+}
+
+.recipe_progress_bar {
+    --progress-background: rgba(228, 151, 0, 1);
+}

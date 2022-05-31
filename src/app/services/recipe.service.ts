@@ -1,5 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { StorageService } from './storage.service';
+import { PlannerDate } from './date.service';
 
 @Injectable({
   providedIn: 'root'
@@ -64,7 +65,7 @@ export class RecipeService {
     return (temp_array);
   }
 
-  /** Returns an array of all Ingredients from all Recipes.
+  /** Returns an array of all Ingredients from all Recipes with duplicates removed and quantity summed.
    * @returns Array<Ingredient>
    */
   public getAllIngredients(recipes:Array<Recipe>) {
@@ -91,6 +92,20 @@ export class RecipeService {
             j = j - 1;
           }
         }
+      }
+    }
+    return (temp_array);
+  }
+
+  /** Returns an array of all Ingredients from all Recipes without duplicates removed or quantity summed.
+   * @returns Array<Ingredient>
+   */
+  public getAllIngredientsWithDuplicates(recipes:Array<Recipe>) {
+    let temp_array:Array<Ingredient> = [];
+
+    for (let recipe of recipes) {
+      for (let ingredient of recipe.ingredients) {
+        temp_array.push(ingredient);
       }
     }
     return (temp_array);
@@ -420,51 +435,6 @@ export class Recipe {
   }
 }
 
-export class PlannerDate {
-
-  date_ISO:Date;
-
-  day_of_week_alphabetical:string;
-  day_of_week:number;
-  day_of_month:number;
-  month:number;
-  year:number;
-
-  // An array of Recipe objects.
-  recipes:Array<Recipe> = [];
-
-  constructor(date_ISO) {
-    this.date_ISO = date_ISO;
-    this.day_of_week = this.date_ISO.getDay();
-
-    let week_days:Array<string> = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    this.day_of_week_alphabetical = week_days[this.day_of_week];
-
-    this.day_of_month = this.date_ISO.getDate();
-    this.month = this.date_ISO.getMonth();
-    this.year = this.date_ISO.getFullYear();
-
-    this.recipes = [];
-  }
-
-
-  // Add a recipe to the recipe array
-  addRecipe(recipe:Recipe) {
-    this.recipes.push(recipe);
-  }
-
-  // Remove a recipe from the recipe array
-  removeRecipe(recipe_name:string) {
-    for (let i = 0; i < this.recipes.length; i++) {
-        if (this.recipes[i].name == recipe_name) {
-          this.recipes.splice(i, 1);
-          console.log("Removed: " + recipe_name);
-          return (0);
-        }
-    }
-    console.log("Could not find recipe: " + recipe_name);
-  }
-}
 
 export class m_Observable {
 

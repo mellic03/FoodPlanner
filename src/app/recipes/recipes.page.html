@@ -19,24 +19,26 @@
 
 <ion-content>
 
-  <fade-in *ngIf="all_recipes?.length else elseBlock;">
-    <ion-list class="shadow" >
-      <ion-item-sliding class="item_{{i}}" *ngFor="let recipe of all_recipes; index as i">
-        <ion-item-options side="start">
-          <ion-item-option color="danger" (click)="deleteRecipe(i)">
-            <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
-          </ion-item-option>
-        </ion-item-options>
-        <ion-item>
-          <ion-label>{{all_recipes?.[i]?.name}}</ion-label>
-          <ion-buttons slot="end">
-            <ion-button (click)="presentModal(all_recipes[i], true, i)">
-              <ion-icon name="pencil-outline"></ion-icon>
-            </ion-button>
-          </ion-buttons>
-        </ion-item>
-      </ion-item-sliding>
-    </ion-list>
+  <fade-in *ngIf="finished_loading == true;">
+    <ng-container *ngIf="all_recipes?.length > 0; else elseBlock;">
+      <ion-list class="shadow">
+        <ion-item-sliding class="item_{{i}}" *ngFor="let recipe of all_recipes; index as i">
+          <ion-item-options side="start">
+            <ion-item-option color="danger" (click)="deleteRecipe(i)">
+              <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
+            </ion-item-option>
+          </ion-item-options>
+          <ion-item>
+            <ion-label>{{all_recipes?.[i]?.name}}</ion-label>
+            <ion-buttons slot="end">
+              <ion-button (click)="presentModal(all_recipes[i], true, i)">
+                <ion-icon name="pencil-outline"></ion-icon>
+              </ion-button>
+            </ion-buttons>
+          </ion-item>
+        </ion-item-sliding>
+      </ion-list>
+    </ng-container>
   </fade-in>
 
 </ion-content>
@@ -49,3 +51,4 @@
     <div class="custom component"></div>
   </fade-in>
 </ng-template>
+

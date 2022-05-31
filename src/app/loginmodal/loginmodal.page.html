@@ -1,8 +1,14 @@
-<ion-header></ion-header>
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons>
+      <ion-button slot="end" (click)="switchToCreateUser()">New User</ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
 
 <ion-content>
 
-  <ion-grid *ngIf="logged_in == undefined; else else_block;">
+  <ion-grid *ngIf="logged_in == undefined || use_create_user_screen == true; else else_block;">
     <ion-row style="flex: 100;"></ion-row>
     <ion-row>
       <ion-col>

@@ -6,6 +6,9 @@ import { PhotoService, UserPhoto } from '../services/photo.service';
 import { RecipeService } from '../services/recipe.service';
 import { element } from 'protractor';
 
+
+
+
 @Component({
   selector: 'app-settings',
   templateUrl: './settings.page.html',
@@ -124,6 +127,8 @@ export class SettingsPage implements OnInit {
   async populateData() {
     await this.recipeService.populateData();
   }
+  
+
 
 
   current_theme:string; // String to display on settings page for active theme.
@@ -133,3 +138,5 @@ export class SettingsPage implements OnInit {
 
   finished_loading:boolean = false;
 }
+
+let discount = (price) => { price *= 0.8; };

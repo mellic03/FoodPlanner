@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController, NavParams } from '@ionic/angular';
-import { RecipeService, Recipe, PlannerDate, m_Observer } from '../services/recipe.service';
+import { RecipeService, Recipe, m_Observer } from '../services/recipe.service';
+import { PlannerDate } from '../services/date.service';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-planner-modal',
@@ -10,7 +12,10 @@ import { RecipeService, Recipe, PlannerDate, m_Observer } from '../services/reci
 
 export class PlannerModalPage implements OnInit {
 
-  constructor(private navParams:NavParams, private modalController:ModalController, private recipeService:RecipeService) {
+  constructor(private navParams:NavParams,
+    private router:Router,
+    private modalController:ModalController,
+    private recipeService:RecipeService) {
   }
 
   async ngOnInit() {
@@ -42,10 +47,12 @@ export class PlannerModalPage implements OnInit {
     this.finished_loading = true;
   }
 
+  // Dismiss modal without sending data through NavParams
   closeModalDontSubmit() {
     this.modalController.dismiss();
   }
 
+  // Dismiss modal sending data through NavParams
   closeModalAndSubmit() {
     // Set the date of recipes in not_already_assigned_recipes
     for (let i = 0; i < this.recipe_indices.length; i++) {
@@ -69,11 +76,18 @@ export class PlannerModalPage implements OnInit {
       }
     }
 
+    console.log(this.all_recipes);
+
     // Update the recipes observable with the new data.
     this.recipeService.setRecipes(this.all_recipes);
     this.modalController.dismiss();
   }
 
+  // Navigate to the recipes page
+  navToRecipePage() {
+    this.router.navigateByUrl("recipes");
+    this.closeModalDontSubmit();
+  }
 
   planner_date:PlannerDate;
   

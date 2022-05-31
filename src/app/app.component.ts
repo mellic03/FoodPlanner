@@ -6,9 +6,9 @@ import { LoginmodalPage } from './loginmodal/loginmodal.page'
 import { ModalController } from '@ionic/angular';
 import { StorageService } from './services/storage.service';
 import { PhotoService } from './services/photo.service';
-import { RecipeService } from './services/recipe.service';
+import { m_Observer, RecipeService } from './services/recipe.service';
+import { DateService } from './services/date.service';
 import { Platform } from '@ionic/angular';
-
 
 @Component({
   selector: 'app-root',
@@ -18,12 +18,13 @@ import { Platform } from '@ionic/angular';
 })
 
 export class AppComponent implements OnInit {
-  
+
   public appPages = [
     { title: 'Shopping List', url: '/shopping-list', icon: 'list' },
     { title: 'Recipes', url: '/recipes', icon: 'restaurant' },
     { title: 'Planner', url: '/planner', icon: 'calendar' },
     { title: 'Statistics', url: '/statistics', icon: 'stats-chart' },
+    { title: 'Map', url: '/map', icon: 'map' },
     { title: 'Settings', url: '/settings', icon: 'settings' },
   ];
 
@@ -35,13 +36,14 @@ export class AppComponent implements OnInit {
     private storage:StorageService,
     public photoService:PhotoService,
     public alertController: AlertController,
-    private platform:Platform
+    private dateService:DateService
   ) { }
 
   ngOnInit() {
-    //enableProdMode();
+    enableProdMode();
     this.initializeApp();
   }
+
 
   async initializeApp() {
 
@@ -49,6 +51,8 @@ export class AppComponent implements OnInit {
     let user_logged_in:boolean = await this.storage.get("user_logged_in");
     let current_theme:string = await this.storage.get("current_theme");
     let current_user:string = await this.storage.get("current_user");
+
+    //this.initializeStats();
 
     // If user_logged_in doesn't exist, run setup code.
     if (user_logged_in == null) {
@@ -130,16 +134,22 @@ export class AppComponent implements OnInit {
     this.router.navigateByUrl(page_url);
   }
 
-
   // Set theme to theme_name
   async setTheme(theme_name:string) {
     this.current_theme = theme_name;
     await this.storage.set("current_theme", theme_name);
   }
 
+  public toggleMenuSwipe(value:boolean) {
+    this.menuController.swipeGesture(value);
+  }
+
+
   current_user:string; // Username of currently logged-in user.
   user_logged_in:boolean = false; // Boolean representing whether a user is currently logged in.
   current_theme:string; // The current theme.
 
   selected_item:object;
+
+
 }

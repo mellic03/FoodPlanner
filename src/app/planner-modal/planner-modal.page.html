@@ -16,11 +16,19 @@
 
 <ion-content>
   
-  <ion-list *ngIf="finished_loading == true;">
-    <ion-item *ngFor="let recipe of not_already_assigned_recipes; index as i;" [ngClass]="{checkedItem: recipe_indices[i] == true}">
-      <ion-label>{{recipe.name}}</ion-label>
-      <ion-checkbox [(ngModel)]="recipe_indices[i]" slot=end></ion-checkbox>
-    </ion-item>
-  </ion-list>
+  <ng-container *ngIf="finished_loading == true;">
+    <ion-list *ngIf="not_already_assigned_recipes?.length > 0; else no_recipes_left;">
+      <ion-item *ngFor="let recipe of not_already_assigned_recipes; index as i;" [ngClass]="{checkedItem: recipe_indices[i] == true}">
+        <ion-label>{{recipe.name}}</ion-label>
+        <ion-checkbox [(ngModel)]="recipe_indices[i]" slot=end></ion-checkbox>
+      </ion-item>
+    </ion-list>
+  </ng-container>
 
 </ion-content>
+
+<ng-template #no_recipes_left>
+  <no-recipes>
+    <ion-button (click)="navToRecipePage()">Add Recipe</ion-button>
+  </no-recipes>
+</ng-template>

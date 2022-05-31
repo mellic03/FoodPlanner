@@ -28,8 +28,9 @@ export class ShoppingListPage implements OnInit {
     this.finished_loading = true;
   }
   
-  async testAnim(index:number, checked:boolean) {
-    const animation = this.animationCtrl.create()
+  // Animation for checking/unchecking shopping list items.
+  async checkAnimation(index:number, checked:boolean) {
+    const animation1 = this.animationCtrl.create()
     .addElement(document.querySelectorAll(`.item_${index}`))
     .duration(200)
     .iterations(1)
@@ -37,16 +38,27 @@ export class ShoppingListPage implements OnInit {
       { offset: 0, transform: 'scale(100%)'},
       { offset: 0.5, transform: 'scale(110%)'},
       { offset: 1, transform: 'scale(0%)'},
+    ])
+    .easing('ease-in')
+
+    const animation2 = this.animationCtrl.create()
+    .addElement(document.querySelectorAll(`.item_${index}`))
+    .duration(200)
+    .iterations(1)
+    .keyframes([
+      { offset: 0, transform: 'scale(0%)'},
+      { offset: 0.5, transform: 'scale(110%)'},
       { offset: 1, transform: 'scale(100%)'},
     ])
     .easing('ease-in')
 
-    await animation.play();
-
+    await animation1.play();
     this.checkIngredient(index, checked)
+    animation2.play();
+
   }
 
-  // Marks an ingredient as "checked".
+  // Marks an ingredient as checked/unchecked.
   checkIngredient(index:number, new_value:boolean) {
     this.recipeService.checkIngredient(this.shopping_list[index].name, new_value);
     this.shopping_list = this.recipeService.generateShoppingList(this.shopping_list);

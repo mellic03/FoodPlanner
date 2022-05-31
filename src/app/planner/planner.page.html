@@ -11,39 +11,41 @@
 </ion-header>
 
 <ion-content>
-  <fade-in *ngIf="planner_end_date != null; else no_date_yet;">
-    <div class="slide-container shadow">
-      <div class="date-title">
-        <p>This shop should last until: </p>
-        <b>{{planner_end_date_readable}}</b>
+  <fade-in *ngIf="finished_loading == true;">
+    <ng-container *ngIf="planner_end_date != null; else no_date_yet;">
+      <div class="slide-container shadow">
+        <div class="date-title">
+          <p>This shop should last until: </p>
+          <b>{{planner_end_date_readable}}</b>
+        </div>
+        <ion-slides>
+          <ion-slide *ngFor="let date of planner_dates; index as i;">
+    
+            <ion-list>
+              <ion-item>
+                <div class="list-title">
+                  <b>{{date.day_of_week_alphabetical}}</b>
+                  <p>{{date.day_of_month}}/{{date.month}}/{{date.year}}</p>
+                </div>
+                <ion-buttons slot="end">
+                  <ion-button (click)="presentAddModal(planner_dates[i])">
+                    <ion-icon name="add-outline"></ion-icon>
+                    <ion-label>Edit</ion-label>
+                  </ion-button>
+                </ion-buttons>
+              </ion-item>
+    
+              <ion-item class="list_item" *ngFor="let recipe of planner_dates[i].recipes; index as j;" [ngClass]="{checkedItem: recipe.cooked == true}">
+                <ion-label>{{recipe.name}}</ion-label>
+                <ion-checkbox [(ngModel)]="recipe.cooked" (ionChange)="checkRecipe(i)" slot=end></ion-checkbox>
+              </ion-item>
+    
+              <ion-item lines="none"></ion-item>
+            </ion-list>
+          </ion-slide>
+        </ion-slides>
       </div>
-      <ion-slides>
-        <ion-slide *ngFor="let date of planner_dates; index as i;">
-  
-          <ion-list>
-            <ion-item>
-              <div class="list-title">
-                <b>{{date.day_of_week_alphabetical}}</b>
-                <p>{{date.day_of_month}}/{{date.month}}/{{date.year}}</p>
-              </div>
-              <ion-buttons slot="end">
-                <ion-button (click)="presentAddModal(planner_dates[i])">
-                  <ion-icon name="add-outline"></ion-icon>
-                  <ion-label>Edit</ion-label>
-                </ion-button>
-              </ion-buttons>
-            </ion-item>
-  
-            <ion-item class="list_item" *ngFor="let recipe of planner_dates[i].recipes; index as j;" [ngClass]="{checkedItem: recipe.cooked == true}">
-              <ion-label>{{recipe.name}}</ion-label>
-              <ion-checkbox [(ngModel)]="recipe.cooked" (ionChange)="checkRecipe(i)" slot=end></ion-checkbox>
-            </ion-item>
-  
-            <ion-item lines="none"></ion-item>
-          </ion-list>
-        </ion-slide>
-      </ion-slides>
-    </div>
+    </ng-container>
   </fade-in>
 
 </ion-content>

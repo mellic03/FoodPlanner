@@ -3,7 +3,8 @@ import { ModalController } from '@ionic/angular';
 import { PlannerModalPage } from '../planner-modal/planner-modal.page';
 import { DatemodalPage } from '../datemodal/datemodal.page';
 import { format, parseISO } from 'date-fns'
-import { RecipeService, Recipe, Ingredient, PlannerDate, m_Observable, m_Observer } from '../services/recipe.service';
+import { RecipeService, Recipe, Ingredient, m_Observable, m_Observer } from '../services/recipe.service';
+import { DateService, PlannerDate } from '../services/date.service';
 
 @Component({
   selector: 'app-planner',
@@ -13,23 +14,23 @@ import { RecipeService, Recipe, Ingredient, PlannerDate, m_Observable, m_Observe
 
 export class PlannerPage implements OnInit {
 
-  constructor(private recipeService:RecipeService, private modalController:ModalController) { }
-
+  constructor(private recipeService:RecipeService, private dateService:DateService, private modalController:ModalController) { }
+  
   async ngOnInit() {
     
     await this.recipeService.subscribe(this.recipes_observer);
     this.all_recipes = this.recipes_observer.data
 
     this.planner_dates = await this.recipeService.getPlannerDates();
-    
     if (this.planner_dates != null) {
       this.planner_end_date = await this.recipeService.getPlannerEndDate();
       this.planner_end_date_readable = format(parseISO(this.planner_end_date), 'MMM d, yyyy');
       this.updatePlannerDates();
     }
     
+    this.finished_loading = true;
   }
-
+  
   ngOnDestroy() {
     if (this.planner_dates != null) {
       this.recipeService.setPlannerDates(this.planner_dates);
@@ -37,16 +38,12 @@ export class PlannerPage implements OnInit {
     }
   }
 
-
   // Retrieves recipes data from the recipes observable,
   // then sorts the data and finds which recipes belong to which PlannerDate.
   updatePlannerDates() {
 
     let all_recipes = this.recipes_observer.data;
 
-    //console.log(this.recipes_observer.data)
-
-    // Clear recipes
     for (let planner_date of this.planner_dates) {
       planner_date.recipes = [];
     }
@@ -130,4 +127,5 @@ export class PlannerPage implements OnInit {
   recipes_observer:m_Observer = new m_Observer();
   all_recipes:Array<Recipe>;
 
+  finished_loading:boolean = false;
 }

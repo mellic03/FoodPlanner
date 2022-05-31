@@ -18,6 +18,7 @@ export class RecipesPage implements OnInit {
   async ngOnInit() {
     await this.recipeService.subscribe(this.all_recipes_observer); // Subscribe to all_recipes observable
     this.all_recipes = this.all_recipes_observer.data;
+    this.finished_loading = true;
   }
 
   // Presents the add/edit recipe modal. If editing the index i of a recipe is passed and editing is set to true.
@@ -66,4 +67,6 @@ export class RecipesPage implements OnInit {
   all_recipes_observer:m_Observer = new m_Observer();
 
   all_recipes:Array<Recipe>; // Array of all recipe objects.
+
+  finished_loading:boolean = false;
 }

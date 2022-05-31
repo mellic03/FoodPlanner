@@ -1,60 +1,61 @@
 import { Component, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { NavParams } from '@ionic/angular';
-import { RecipeService, PlannerDate, m_Observable, m_Observer } from '../services/recipe.service';
-
+import { RecipeService, m_Observer } from '../services/recipe.service';
+import { DateService } from '../services/date.service';
+import { ELocalNotificationTriggerUnit, LocalNotifications } from '@ionic-native/local-notifications/ngx';
 
 @Component({
   selector: 'app-datemodal',
   templateUrl: './datemodal.page.html',
   styleUrls: ['./datemodal.page.scss'],
 })
+
 export class DatemodalPage implements OnInit {
 
-  constructor(private modalController:ModalController, private navParams:NavParams, private recipeService:RecipeService) { }
+  constructor(private localNotifications:LocalNotifications, private dateService:DateService, private modalController:ModalController, private navParams:NavParams, private recipeService:RecipeService) { }
 
   async ngOnInit() {
     this.end_date = await this.navParams.get("end_date");
   }
 
+  // Close modal without sending data through NavParams
   closeModalDontSubmit() {
     this.modalController.dismiss();
   }
 
+  // Close modal sending data through NavParams.
   async closeModalAndSubmit() {
-    // Set all recipe.date_assigned_to as undefined for all recipes.
+    // Set all recipe.date_assigned_to as undefined and cooked to false for all recipes.
     await this.recipeService.subscribe(this.recipes_observer);
     for (let recipe of this.recipes_observer.data) {
       recipe.date_assigned_to = undefined;
+      recipe.cooked = false;
     }
     this.recipeService.setRecipes(this.recipes_observer.data);
     
     // Generate array of PlannerDates between now and the specified end date.
-    let date_array = this.generateDates(this.now_date, this.end_date);
-    
+    let date_array = this.dateService.generateDates(this.now_date, this.end_date);
+
+    // Ask for notification permission, if given, schedule notification.
+    this.localNotifications.requestPermission();
+    if (this.localNotifications.hasPermission()) {
+      this.scheduleNotification(this.end_date);
+    }
+
+    // Dismiss modal
     this.modalController.dismiss({date_array: date_array, start_date: this.now_date, end_date: this.end_date});
   }
 
-  // Calculate the number of days between two dates
-  daysBetweenDates(date_1:Date, date_2:Date) {
-    return Math.abs(Math.round((date_1.getTime() - date_2.getTime()) / (1000 * 3600 * 24)));
-  } 
-
-  // Generate an array of PlannerDates between now and the specified end date.
-  generateDates(start, end) {
-
-    let start_date:PlannerDate = new PlannerDate(new Date(start));
-    let end_date:PlannerDate = new PlannerDate(new Date(end));
-
-    let temp_array:Array<PlannerDate> = [];
-    let week_days:Array<string> = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-    
-    for (let i = 0; i < this.daysBetweenDates(start_date.date_ISO, end_date.date_ISO) + 1; i++) {
-      let plannerDate:PlannerDate = new PlannerDate(new Date(start_date.date_ISO.getTime() + i * (1000 * 60 * 60 * 24)));
-      temp_array.push(plannerDate);
-    }
-    
-    return(temp_array); // I never want to see this function again.
+  // Schedules a notification at a given time.
+  scheduleNotification(date:string | Date) {
+    console.log("scheduling notification for", date);
+    this.localNotifications.schedule({
+      id: 1,
+      title: "You've reached the end of the schedule",
+      text: "Tap to make another one",
+      trigger: {at: new Date(new Date(date).getTime()) }
+    })
   }
 
   now_date:Date = new Date();
@@ -63,3 +64,4 @@ export class DatemodalPage implements OnInit {
 
   recipes_observer:m_Observer = new m_Observer();
 }
+
