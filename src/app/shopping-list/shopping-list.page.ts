@@ -3,7 +3,7 @@ import { RecipeService, Ingredient, Recipe  } from '../services/recipe.service';
 import { RecipeModalPage } from '../recipe-modal/recipe-modal.page';
 import { ModalController, ViewDidEnter } from '@ionic/angular';
 import { StorageService } from '../services/storage.service';
-import { m_Observable, m_Observer } from '../services/recipe.service';
+import { m_Observer } from '../services/recipe.service';
 import { AnimationController } from '@ionic/angular';
 
 @Component({
@@ -22,8 +22,8 @@ export class ShoppingListPage implements OnInit {
 
     await this.recipeService.subscribe(this.all_recipes_observer); // Subscribe to all_recipes observable.
     this.all_recipes = this.all_recipes_observer.data; // get data from observer.
-
     this.all_ingredients = this.recipeService.getAllIngredients(this.all_recipes);
+    
     this.shopping_list = this.recipeService.generateShoppingList(this.all_ingredients);
     this.finished_loading = true;
   }
@@ -72,19 +72,10 @@ export class ShoppingListPage implements OnInit {
       componentProps: {}
     });
 
-    modal.onDidDismiss().then((data) => {
-      // Add returned recipe to recipe array
-      if (data.data != undefined) {
-        if (data.data.editing) {
-          this.all_recipes[data.data.index] = data.data.recipe;
-        }
-        else {
-          this.all_recipes.push(data.data.recipe);
-          this.all_ingredients = this.recipeService.getAllIngredients(this.all_recipes);
-          this.shopping_list = this.recipeService.generateShoppingList(this.all_ingredients);
-        }
-        this.recipeService.setRecipes(this.all_recipes);
-      }
+    modal.onDidDismiss().then(() => {
+      // Update shopping list
+      this.all_ingredients = this.recipeService.getAllIngredients(this.all_recipes_observer.data);
+      this.shopping_list = this.recipeService.generateShoppingList(this.all_ingredients);
     })
     
     return (modal.present());

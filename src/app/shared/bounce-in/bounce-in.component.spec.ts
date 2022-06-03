@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { NoRecipesComponent } from './no-recipes.component';
+import { BounceInComponent } from './bounce-in.component';
 
-describe('NoRecipesComponent', () => {
-  let component: NoRecipesComponent;
-  let fixture: ComponentFixture<NoRecipesComponent>;
+describe('BounceInComponent', () => {
+  let component: BounceInComponent;
+  let fixture: ComponentFixture<BounceInComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ NoRecipesComponent ],
+      declarations: [ BounceInComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(NoRecipesComponent);
+    fixture = TestBed.createComponent(BounceInComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

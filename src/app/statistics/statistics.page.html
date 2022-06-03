@@ -8,9 +8,7 @@
 </ion-header>
 
 <ion-content>
-
-  <fade-in [hidden]="planner_dates?.[0] == null">
-    <ng-container></ng-container>
+  <bounce-in [hidden]="planner_dates?.[0] == null">
     <ion-list>
       <canvas #food_usage_chart></canvas>
     </ion-list>
@@ -26,14 +24,12 @@
       <ion-label>{{time_days_left}} days, {{time_hours_left}} hours</ion-label>
       <ion-progress-bar value="{{time_progress_bar}}"></ion-progress-bar>
     </ion-list>
-  </fade-in>
-
-  <fade-in [hidden]="planner_dates?.[0] != null">
-    <no-recipes>
-      <ion-button (click)="navToPlanner()">Go to Scheduler</ion-button>
-    </no-recipes>
-  </fade-in>
-
+  </bounce-in>
+  <bounce-in>
+    <nothing-here [hidden]="planner_dates?.[0] != null">
+      <ion-button (click)="navToPlanner()">Go to Planner</ion-button>
+    </nothing-here>
+  </bounce-in>
 </ion-content>
 
 

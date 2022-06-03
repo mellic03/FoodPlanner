@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Camera, CameraResultType, Photo } from '@capacitor/camera';
 import { StorageService } from './storage.service';
 import { Filesystem, Directory, Encoding } from '@capacitor/filesystem';
+import {HttpClient} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +18,7 @@ export class PhotoService {
   public profile_picture;
   private PHOTO_STORAGE: string = 'profile_picture';
   
-  constructor(private storage:StorageService) { }
+  constructor(private storage:StorageService, private http:HttpClient) { }
 
   public takePicture = async () => {
     const image = await Camera.getPhoto({
@@ -82,16 +83,19 @@ export class PhotoService {
     // Retrieve cached photo
     const photoList = await this.storage.get("profile_picture");
     this.profile_picture = await this.storage.get("profile_picture");
+    
+    if (this.profile_picture != null) {
+      // Read saved photo's data from the Filesystem
+      const readFile = await Filesystem.readFile({
+        path: this.profile_picture.filepath,
+        directory: Directory.Data,
+      });
+      // Web platform only: Load the photo as base64 data
+      this.profile_picture.webviewPath = `data:image/jpeg;base64,${readFile.data}`;
+    }
 
-    // Read saved photo's data from the Filesystem
-    const readFile = await Filesystem.readFile({
-      path: this.profile_picture.filepath,
-      directory: Directory.Data,
-    });
-
-    // Web platform only: Load the photo as base64 data
-    this.profile_picture.webviewPath = `data:image/jpeg;base64,${readFile.data}`;
   }
+
 }
 
 export interface UserPhoto {

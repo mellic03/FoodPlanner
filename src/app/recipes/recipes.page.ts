@@ -13,11 +13,15 @@ import { AnimationController } from '@ionic/angular';
 })
 
 export class RecipesPage implements OnInit {
-  constructor(private modalController:ModalController, private recipeService:RecipeService, private animationCtrl:AnimationController) {}
+  constructor(
+    private modalController:ModalController,
+    private recipeService:RecipeService,
+    private animationCtrl:AnimationController) {
+
+  }
 
   async ngOnInit() {
     await this.recipeService.subscribe(this.all_recipes_observer); // Subscribe to all_recipes observable
-    this.all_recipes = this.all_recipes_observer.data;
     this.finished_loading = true;
   }
 
@@ -29,17 +33,7 @@ export class RecipesPage implements OnInit {
       componentProps: {recipe: recipe, editing: editing, index: index}
     });
 
-    modal.onDidDismiss().then((data) => {
-      // Add returned recipe to recipe array
-      if (data.data != undefined) {
-        if (data.data.editing) {
-          this.all_recipes[data.data.index] = data.data.recipe;
-        }
-        else {
-          this.all_recipes.push(data.data.recipe);
-        }
-        this.recipeService.setRecipes(this.all_recipes);
-      }
+    modal.onDidDismiss().then(() => {
     });
     return (modal.present());
   }
@@ -60,8 +54,8 @@ export class RecipesPage implements OnInit {
 
     await animation.play();
 
-    this.all_recipes.splice(i, 1); // Remove the recipe from the local recipe array
-    this.recipeService.setRecipes(this.all_recipes); // Replace recipes in storage with the local recipe array.
+    this.all_recipes_observer.data.splice(i, 1); // Remove the recipe from the local recipe array
+    this.recipeService.setRecipes(this.all_recipes_observer.data); // Replace recipes in storage with the local recipe array.
   }
 
   all_recipes_observer:m_Observer = new m_Observer();

@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ViewWillLeave } from '@ionic/angular';
 import { PlannerModalPage } from '../planner-modal/planner-modal.page';
 import { DatemodalPage } from '../datemodal/datemodal.page';
 import { format, parseISO } from 'date-fns'
@@ -12,7 +12,7 @@ import { DateService, PlannerDate } from '../services/date.service';
   styleUrls: ['./planner.page.scss'],
 })
 
-export class PlannerPage implements OnInit {
+export class PlannerPage implements OnInit, ViewWillLeave {
 
   constructor(private recipeService:RecipeService, private dateService:DateService, private modalController:ModalController) { }
   
@@ -21,9 +21,9 @@ export class PlannerPage implements OnInit {
     await this.recipeService.subscribe(this.recipes_observer);
     this.all_recipes = this.recipes_observer.data
 
-    this.planner_dates = await this.recipeService.getPlannerDates();
+    this.planner_dates = await this.dateService.getPlannerDates();
     if (this.planner_dates != null) {
-      this.planner_end_date = await this.recipeService.getPlannerEndDate();
+      this.planner_end_date = await this.dateService.getPlannerEndDate();
       this.planner_end_date_readable = format(parseISO(this.planner_end_date), 'MMM d, yyyy');
       this.updatePlannerDates();
     }
@@ -32,9 +32,15 @@ export class PlannerPage implements OnInit {
   }
   
   ngOnDestroy() {
+
+  }
+
+  async ionViewWillLeave() {
     if (this.planner_dates != null) {
-      this.recipeService.setPlannerDates(this.planner_dates);
-      this.recipeService.setPlannerEndDate(this.planner_end_date);
+      // Clear PlannerDate recipes in order to avoid having to store them.
+      await this.dateService.clearPlannerDateRecipes(this.planner_dates);
+      // Store end date.
+      this.dateService.setPlannerEndDate(this.planner_end_date);
     }
   }
 
@@ -73,8 +79,8 @@ export class PlannerPage implements OnInit {
         this.planner_end_date = data.data.end_date;
         this.planner_end_date_readable = format(parseISO(data.data.end_date), 'MMM d, yyyy');
         
-        this.recipeService.setPlannerStartDate(data.data.start_date);
-        this.recipeService.setPlannerEndDate(data.data.end_date);
+        this.dateService.setPlannerStartDate(data.data.start_date);
+        this.dateService.setPlannerEndDate(data.data.end_date);
       }
     });
     

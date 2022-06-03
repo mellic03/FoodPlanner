@@ -3,7 +3,8 @@ import { ModalController } from '@ionic/angular';
 import { NavParams } from '@ionic/angular';
 import { RecipeService, m_Observer } from '../services/recipe.service';
 import { DateService } from '../services/date.service';
-import { ELocalNotificationTriggerUnit, LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { LocalNotifications } from '@ionic-native/local-notifications/ngx';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-datemodal',
@@ -13,7 +14,13 @@ import { ELocalNotificationTriggerUnit, LocalNotifications } from '@ionic-native
 
 export class DatemodalPage implements OnInit {
 
-  constructor(private localNotifications:LocalNotifications, private dateService:DateService, private modalController:ModalController, private navParams:NavParams, private recipeService:RecipeService) { }
+  constructor(private localNotifications:LocalNotifications,
+    private dateService:DateService,
+    private modalController:ModalController,
+    private navParams:NavParams,
+    private recipeService:RecipeService,
+    private alertController:AlertController) {
+  }
 
   async ngOnInit() {
     this.end_date = await this.navParams.get("end_date");
@@ -41,6 +48,7 @@ export class DatemodalPage implements OnInit {
     this.localNotifications.requestPermission();
     if (this.localNotifications.hasPermission()) {
       this.scheduleNotification(this.end_date);
+
     }
 
     // Dismiss modal
@@ -49,13 +57,44 @@ export class DatemodalPage implements OnInit {
 
   // Schedules a notification at a given time.
   scheduleNotification(date:string | Date) {
-    console.log("scheduling notification for", date);
+
+    let trigger_date = new Date(date)
+    trigger_date.setHours(18, 0, 0);
+    console.log("scheduling notification for", trigger_date);
+
     this.localNotifications.schedule({
       id: 1,
-      title: "You've reached the end of the schedule",
-      text: "Tap to make another one",
-      trigger: {at: new Date(new Date(date).getTime()) }
+      title: "You've reached the end of the schedule.",
+      text: "Time to make another one.",
+      trigger: {at: trigger_date}
     })
+  }
+
+  // Confirmation popup before creating new schedule.
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      header: 'Are you sure?',
+      message: 'This will <strong>delete</strong> any current schedule.',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          id: 'cancel-button',
+          handler: (blah) => {
+            console.log('Cancelled');
+          }
+        }, {
+          text: 'Delete',
+          id: 'confirm-button',
+          handler: () => {
+            this.closeModalAndSubmit();
+          }
+        }
+      ]
+    });
+
+    await alert.present();
   }
 
   now_date:Date = new Date();

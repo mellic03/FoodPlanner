@@ -3,6 +3,7 @@ import { ModalController, NavParams } from '@ionic/angular';
 import { Platform } from '@ionic/angular';
 import { Ingredient, Recipe } from '../services/recipe.service';
 import { StorageService } from '../services/storage.service';
+import { RecipeService, m_Observer } from '../services/recipe.service';
 
 @Component({
   selector: 'app-recipe-modal',
@@ -13,9 +14,17 @@ import { StorageService } from '../services/storage.service';
 
 export class RecipeModalPage implements OnInit {
 
-  constructor(private navParams:NavParams, private modalController:ModalController, private storage:StorageService) {}
+  constructor(
+    private navParams:NavParams,
+    private modalController:ModalController,
+    private recipeService:RecipeService) {
+
+  }
 
   async ngOnInit() {
+
+    await this.recipeService.subscribe(this.all_recipes_observer);
+    this.all_recipes = this.all_recipes_observer.data;
 
     let editing = this.navParams.get("editing");
 
@@ -47,7 +56,7 @@ export class RecipeModalPage implements OnInit {
 
     // Don't continue if the user has not entered a recipe name.
     if (recipe_name == undefined || recipe_name == "") {
-      return(0);
+      return (0);
     }
 
     let temp_recipe:Recipe = new Recipe(recipe_name);
@@ -74,9 +83,20 @@ export class RecipeModalPage implements OnInit {
         temp_recipe.ingredients.push(new_ingredient); // obj.function() does not work if obj is passed through NavParams.
       }
     }
-    this.modalController.dismiss({recipe: temp_recipe, editing: this.editing, index: this.index});
+  
+    if (this.editing) {
+      this.all_recipes[this.index] = temp_recipe;
+    }
+    else {
+      this.all_recipes.push(temp_recipe);
+    }
+    
+    this.recipeService.setRecipes(this.all_recipes);
+
+    this.modalController.dismiss();
   }
 
+  // Remove an ingredient from a recipe
   removeIngredient(index:number, sliding_item) {
     this.ingredient_names.splice(index, 1);
     this.ingredient_quantities.splice(index, 1);
@@ -84,13 +104,15 @@ export class RecipeModalPage implements OnInit {
     sliding_item.close();
   }
 
+  all_recipes_observer:m_Observer = new m_Observer();
+  all_recipes:Array<Recipe> = [];
   recipe_name:string;
   ingredient_names:Array<string> = [null];
   ingredient_quantities:Array<number> = [null];
   ingredient_units:Array<string> = [null];
 
   // All valid units of measurement used by the app.
-  units:Array<string> = ["gram", "kilogram", "millilitre", "litre", "cup", "jar", "unit"];
+  units:Array<string> = ["gram", "kilogram", "millilitre", "litre", "cup", "jar", "teaspoon", "tablespoon", "unit", "no unit"];
 
   // Used to perform different actions depending on whether a new
   // recipe is being created or an existing one is being edited.

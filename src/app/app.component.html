@@ -1,7 +1,7 @@
 <ion-app class="{{current_theme}}">
 
   <ion-split-pane contentId="main-content">
-    <ion-menu max-edge-start="500" *ngIf="user_logged_in == true" contentId="main-content" type="overlay">
+    <ion-menu menuId="main" swipeGesture="false" max-edge-start="500" *ngIf="user_logged_in == true" contentId="main-content" type="overlay">
       <ion-content>
 
         <ion-item>
@@ -32,4 +32,5 @@
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>
+
 </ion-app>

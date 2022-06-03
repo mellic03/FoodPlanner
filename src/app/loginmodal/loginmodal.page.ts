@@ -64,10 +64,6 @@ export class LoginmodalPage implements OnInit {
     }
   }
 
-  switchToCreateUser() {
-    this.use_create_user_screen = true;
-  }
-
   user_array:Array<Array<string>>; // An array of all users in the form [ [username, password], [username, password], ... ]
   error_message:string;
   attempt_count:number = 0;

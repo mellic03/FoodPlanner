@@ -60,6 +60,35 @@ export class DateService {
     return (temp_date_1.valueOf() === temp_date_2.valueOf());
   }
 
+  // Retrieve PlannerDates from storage.
+  public async getPlannerDates() {
+    return (this.storage.get("planner_dates"));
+  }
+
+  // Clear recipes array of every PlannerDate in an array.
+  public async clearPlannerDateRecipes(planner_dates:Array<PlannerDate>) {
+    planner_dates.forEach((planner_date) => { planner_date.recipes = []});
+    this.storage.set("planner_dates", planner_dates);
+  }
+
+  // Retrieve planner end date from storage.
+  public async getPlannerEndDate() {
+    return (this.storage.get("planner_end_date"));
+  }
+  // Store planner end date.
+  public setPlannerEndDate(end_date:string) {
+    this.storage.set("planner_end_date", end_date);
+  }
+
+  // Retrieve planner start date from storage.
+  public async getPlannerStartDate() {
+    return (await this.storage.get("planner_start_date"));
+  }
+  // Store planner start date.
+  public setPlannerStartDate(start_date:Date) {
+    this.storage.set("planner_start_date", start_date);
+  }
+
 }
 
 export class PlannerDate {

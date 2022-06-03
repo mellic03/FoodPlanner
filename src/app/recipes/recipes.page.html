@@ -18,20 +18,19 @@
 </ion-header>
 
 <ion-content>
-
-  <fade-in *ngIf="finished_loading == true;">
-    <ng-container *ngIf="all_recipes?.length > 0; else elseBlock;">
+  <bounce-in *ngIf="finished_loading == true;">
+    <ng-container *ngIf="all_recipes_observer.data?.length > 0; else elseBlock;">
       <ion-list class="shadow">
-        <ion-item-sliding class="item_{{i}}" *ngFor="let recipe of all_recipes; index as i">
+        <ion-item-sliding class="item_{{i}}" *ngFor="let recipe of all_recipes_observer.data; index as i">
           <ion-item-options side="start">
             <ion-item-option color="danger" (click)="deleteRecipe(i)">
               <ion-icon slot="icon-only" name="trash-outline"></ion-icon>
             </ion-item-option>
           </ion-item-options>
           <ion-item>
-            <ion-label>{{all_recipes?.[i]?.name}}</ion-label>
+            <ion-label>{{all_recipes_observer.data?.[i]?.name}}</ion-label>
             <ion-buttons slot="end">
-              <ion-button (click)="presentModal(all_recipes[i], true, i)">
+              <ion-button (click)="presentModal(all_recipes_observer.data[i], true, i)">
                 <ion-icon name="pencil-outline"></ion-icon>
               </ion-button>
             </ion-buttons>
@@ -39,16 +38,15 @@
         </ion-item-sliding>
       </ion-list>
     </ng-container>
-  </fade-in>
-
+  </bounce-in>
 </ion-content>
 
 <ng-template #elseBlock>
-  <fade-in [duration]="250">
-  <no-recipes>
+  <bounce-in [duration]="250">
+  <nothing-here>
     <ion-button (click)="presentModal()">Add Recipe</ion-button>
-  </no-recipes>
+  </nothing-here>
     <div class="custom component"></div>
-  </fade-in>
+  </bounce-in>
 </ng-template>
 

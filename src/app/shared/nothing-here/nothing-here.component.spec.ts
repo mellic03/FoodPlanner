@@ -1,19 +1,19 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { IonicModule } from '@ionic/angular';
 
-import { FadeInComponent } from './fade-in.component';
+import { NoRecipesComponent } from './nothing-here.component';
 
-describe('FadeInComponent', () => {
-  let component: FadeInComponent;
-  let fixture: ComponentFixture<FadeInComponent>;
+describe('NoRecipesComponent', () => {
+  let component: NoRecipesComponent;
+  let fixture: ComponentFixture<NoRecipesComponent>;
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [ FadeInComponent ],
+      declarations: [ NoRecipesComponent ],
       imports: [IonicModule.forRoot()]
     }).compileComponents();
 
-    fixture = TestBed.createComponent(FadeInComponent);
+    fixture = TestBed.createComponent(NoRecipesComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   }));

@@ -32,7 +32,7 @@ export class AppComponent implements OnInit {
     private recipeService:RecipeService,
     public router:Router,
     private modalController:ModalController,
-    private menuController:MenuController,
+    public menuController:MenuController,
     private storage:StorageService,
     public photoService:PhotoService,
     public alertController: AlertController,
@@ -130,10 +130,6 @@ export class AppComponent implements OnInit {
     await alert.present();
   }
 
-  navToPage(page_url:string) {
-    this.router.navigateByUrl(page_url);
-  }
-
   // Set theme to theme_name
   async setTheme(theme_name:string) {
     this.current_theme = theme_name;
@@ -144,12 +140,8 @@ export class AppComponent implements OnInit {
     this.menuController.swipeGesture(value);
   }
 
-
-  current_user:string; // Username of currently logged-in user.
+  public current_user:string; // Username of currently logged-in user.
   user_logged_in:boolean = false; // Boolean representing whether a user is currently logged in.
   current_theme:string; // The current theme.
-
-  selected_item:object;
-
 
 }

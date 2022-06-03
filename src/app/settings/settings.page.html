@@ -9,7 +9,7 @@
 
 <ion-content id="content" class="content" [fullscreen]="true">
 
-  <fade-in>
+  <bounce-in>
     <ion-list class="shadow">
       <ion-card-header>
         <ion-card-title>Appearance</ion-card-title>
@@ -32,9 +32,9 @@
       </ion-card-header>
       <ion-item>
         <ion-label>Profile Name</ion-label>
-        <ion-input style="text-align: end;" slot="end" placeholder="Michael"></ion-input>
+        <ion-input style="text-align: end;" type="text" slot="end" placeholder="{{current_user}}" #username (ionChange)="changeCredentials(username.value)"></ion-input>
       </ion-item>
-      
+
       <ion-item>
         <ion-label>Profile Picture</ion-label>
         <ion-buttons>
@@ -59,7 +59,7 @@
         <ion-button (click)="populateData()">Populate</ion-button>
       </ion-item>
     </ion-list>
-  </fade-in>
+  </bounce-in>
 
 
 </ion-content>

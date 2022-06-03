@@ -3,6 +3,7 @@ import { ModalController, NavParams } from '@ionic/angular';
 import { RecipeService, Recipe, m_Observer } from '../services/recipe.service';
 import { PlannerDate } from '../services/date.service';
 import { Router, RouterModule } from '@angular/router';
+import { RecipeModalPage } from '../recipe-modal/recipe-modal.page';
 
 @Component({
   selector: 'app-planner-modal',
@@ -20,6 +21,14 @@ export class PlannerModalPage implements OnInit {
 
   async ngOnInit() {
 
+    await this.sortRecipes();
+
+    this.finished_loading = true;
+  }
+
+  
+  // Sorts through the recipe array to show only recipes which are not already assigned to another PlannerDate
+  async sortRecipes() {
     // Get all_recpies from observable.
     await this.recipeService.subscribe(this.recipes_observer);
     this.all_recipes = this.recipes_observer.data;
@@ -28,7 +37,7 @@ export class PlannerModalPage implements OnInit {
     this.planner_date = this.navParams.get("planner_date");
 
     // Find which recipes are and are not alreay assigned to another PlannerDate.
-    for (let recipe of this.all_recipes) {
+    for (let recipe of this.recipes_observer.data) {
       if (recipe.date_assigned_to != undefined && recipe.date_assigned_to?.getTime() != this.planner_date.date_ISO.getTime()) {
         this.already_assigned_recipes.push(recipe);
       }
@@ -44,8 +53,9 @@ export class PlannerModalPage implements OnInit {
       }
     }
 
-    this.finished_loading = true;
+    this.recipeService.setRecipes(this.all_recipes);
   }
+
 
   // Dismiss modal without sending data through NavParams
   closeModalDontSubmit() {
@@ -76,7 +86,7 @@ export class PlannerModalPage implements OnInit {
       }
     }
 
-    console.log(this.all_recipes);
+    //console.log(this.all_recipes);
 
     // Update the recipes observable with the new data.
     this.recipeService.setRecipes(this.all_recipes);
@@ -87,6 +97,20 @@ export class PlannerModalPage implements OnInit {
   navToRecipePage() {
     this.router.navigateByUrl("recipes");
     this.closeModalDontSubmit();
+  }
+
+  // Presents the add/edit recipe modal. If editing the index i of a recipe is passed and editing is set to true.
+  async presentAddRecipeModal(recipe:Recipe = undefined, editing:boolean = false, index:number = undefined) {
+    const modal = await this.modalController.create({
+      component: RecipeModalPage,
+      // If editing, passes the recipe being edited along with a boolean called editing and the index of the recipe.
+      componentProps: {recipe: recipe, editing: editing, index: index}
+    });
+
+    modal.onDidDismiss().then(() => {
+      this.sortRecipes();
+    });
+    return (modal.present());
   }
 
   planner_date:PlannerDate;

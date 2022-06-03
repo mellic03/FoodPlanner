@@ -1,15 +1,15 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonicModule } from '@ionic/angular';
-import { FadeInComponent } from './fade-in/fade-in.component';
-import { NoRecipesComponent } from './no-recipes/no-recipes.component';
+import { BounceInComponent } from './bounce-in/bounce-in.component';
+import { NothingHereComponent } from './nothing-here/nothing-here.component';
 
 @NgModule({
-  declarations: [FadeInComponent, NoRecipesComponent],
+  declarations: [BounceInComponent, NothingHereComponent],
   imports: [
     CommonModule,
     IonicModule
   ],
-  exports: [FadeInComponent, NoRecipesComponent]
+  exports: [BounceInComponent, NothingHereComponent]
 })
 export class SharedModule { }

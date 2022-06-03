@@ -4,10 +4,6 @@ import { StorageService } from '../services/storage.service';
 import { AlertController, AnimationController } from '@ionic/angular';
 import { PhotoService, UserPhoto } from '../services/photo.service';
 import { RecipeService } from '../services/recipe.service';
-import { element } from 'protractor';
-
-
-
 
 @Component({
   selector: 'app-settings',
@@ -17,14 +13,21 @@ import { element } from 'protractor';
 
 export class SettingsPage implements OnInit {
 
-  constructor(private animationCtrl:AnimationController, private recipeService:RecipeService, public photoService:PhotoService, private appComponent:AppComponent, private storage:StorageService, public alertController: AlertController) {
-    // Get theme info from storage.
-    this.storage.get("current_theme").then( val => {
-      this.current_theme = val;
-    });
+  constructor(
+    private recipeService:RecipeService,
+    public photoService:PhotoService,
+    private appComponent:AppComponent,
+    private storage:StorageService,
+    public alertController: AlertController) {
+
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    // Get theme info from storage.
+    this.current_theme = await this.storage.get("current_theme");
+    // Get current username from storage.
+    this.current_user = await this.storage.get("current_user");
+
     this.finished_loading = true;
   }
 
@@ -128,8 +131,26 @@ export class SettingsPage implements OnInit {
     await this.recipeService.populateData();
   }
   
+  // Change the username of the currently logged in user.
+  async changeCredentials(new_username) {
+    let user_array = await this.storage.get("user_array");
+    let current_user = await this.storage.get("current_user");
+
+    for (let user of user_array) {
+      if (user[0] == current_user) {
+        user[0] = new_username;
+        current_user = new_username;
+
+        this.appComponent.current_user = new_username;
+        await this.storage.set("user_array", user_array);
+        await this.storage.set("current_user", current_user);
+      }
+    }
+
+  }
 
 
+  current_user:string;
 
   current_theme:string; // String to display on settings page for active theme.
   dark_theme_on:boolean; // Boolean used with the theme toggle.
@@ -138,5 +159,3 @@ export class SettingsPage implements OnInit {
 
   finished_loading:boolean = false;
 }
-
-let discount = (price) => { price *= 0.8; };

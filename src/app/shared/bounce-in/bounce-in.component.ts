@@ -2,12 +2,12 @@ import { Component, ElementRef, Input, OnDestroy, ViewChild } from '@angular/cor
 import { AnimationController, ViewWillEnter, ViewWillLeave } from '@ionic/angular';
 
 @Component({
-  selector: 'fade-in',
-  templateUrl: './fade-in.component.html',
-  styleUrls: ['./fade-in.component.scss'],
+  selector: 'bounce-in',
+  templateUrl: './bounce-in.component.html',
+  styleUrls: ['./bounce-in.component.scss'],
 })
 
-export class FadeInComponent {
+export class BounceInComponent {
 
   @ViewChild("fade_in_content", { read: ElementRef, static: true}) fade_in_content: ElementRef;
   @Input() duration:number = 250; // Default animation duration is 350ms.

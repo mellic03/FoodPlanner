@@ -137,7 +137,7 @@ export class RecipeService {
    */
   public setRecipes(recipes:Array<Recipe>) {
     this.recipe_observable.update(recipes);
-    this.storage.set("all_recipes", this.recipe_observable.data);
+    this.storage.set("all_recipes", recipes);
   }
 
   /** Retrieves the array of all stored recipes from storage
@@ -146,31 +146,6 @@ export class RecipeService {
    */
   public async getRecipes() {
     return (this.storage.get("all_recipes"));
-  }
-
-
-  // PLANNER-RELATED FUNCTIONS //
-  
-  public async getPlannerDates() {
-    return (this.storage.get("planner_dates"));
-  }
-  public setPlannerDates(planner_dates:Array<PlannerDate>) {
-    planner_dates.forEach((planner_date) => { planner_date.recipes = []});
-    this.storage.set("planner_dates", planner_dates);
-  }
-
-  public async getPlannerEndDate() {
-    return (this.storage.get("planner_end_date"));
-  }
-  public setPlannerEndDate(end_date:string) {
-    this.storage.set("planner_end_date", end_date);
-  }
-
-  public async getPlannerStartDate() {
-    return (await this.storage.get("planner_start_date"));
-  }
-  public setPlannerStartDate(start_date:Date) {
-    this.storage.set("planner_start_date", start_date);
   }
 
   // Populates recipes object. Exists for testing purposes.
@@ -211,7 +186,7 @@ export class RecipeService {
           {
             "name": "buns",
             "quantity": 4,
-            "unit": "unit",
+            "unit": "no unit",
             "checked": false
           },
           {
@@ -240,7 +215,7 @@ export class RecipeService {
           {
             "name": "garlic",
             "quantity": 4,
-            "unit": "unit",
+            "unit": "no unit",
             "checked": false
           },
           {
@@ -327,7 +302,7 @@ export class RecipeService {
           {
             "name": "egg",
             "quantity": 2,
-            "unit": "unit",
+            "unit": "no unit",
             "checked": false
           },
           {
@@ -344,7 +319,7 @@ export class RecipeService {
           {
             "name": "potato",
             "quantity": 4,
-            "unit": "unit",
+            "unit": "no unit",
             "checked": false
           },
           {
@@ -389,13 +364,6 @@ export class RecipeService {
   }
 
 }
-
-
-
-
-
-
-
 
 
 export class Ingredient {
@@ -459,10 +427,7 @@ export class m_Observable {
   }
 
   update(new_value:any) {
-
     this.data = new_value;
-    //console.log("Observers:", this.observers);
-
     for (let observer of this.observers) {
       observer?.update(this.data);
     }

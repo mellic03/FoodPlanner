@@ -9,26 +9,27 @@
 
 <ion-content>
 
-  <fade-in *ngIf="finished_loading == true;">
+  <bounce-in *ngIf="finished_loading == true;">
     <ng-container *ngIf="shopping_list?.length > 0; else elseBlock;">
       <ion-list class="shadow">
         <ion-item class="item_{{i}}" (ionChange)="checkAnimation(i,ingredient.checked)" *ngFor="let ingredient of shopping_list; index as i;" [ngClass]="{checkedItem: ingredient.checked == true}">
           <ion-label>{{ingredient.name}}</ion-label>
           <ion-label *ngIf="ingredient.quantity == 1;">{{ingredient.quantity}} {{ingredient.unit}}</ion-label>
-          <ion-label *ngIf="ingredient.quantity != 1;">{{ingredient.quantity}} {{ingredient.unit}}s</ion-label>
+          <ion-label *ngIf="ingredient.quantity != 1 && ingredient.unit != 'no unit';">{{ingredient.quantity}} {{ingredient.unit}}s</ion-label>
+          <ion-label *ngIf="ingredient.unit == 'no unit';">{{ingredient.quantity}}</ion-label>
           <ion-checkbox [(ngModel)]="ingredient.checked" slot=end></ion-checkbox>
         </ion-item>
       </ion-list>
     </ng-container>
-  </fade-in>
+  </bounce-in>
 
   <ng-template #elseBlock>
-    <fade-in [duration]="250">
-    <no-recipes>
+    <bounce-in [duration]="250">
+    <nothing-here>
       <ion-button (click)="presentModal()">Add Recipe</ion-button>
-    </no-recipes>
+    </nothing-here>
       <div class="custom component"></div>
-    </fade-in>
+    </bounce-in>
   </ng-template>
 
 </ion-content>

@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content>
-  <fade-in *ngIf="finished_loading == true;">
+  <bounce-in *ngIf="finished_loading == true;">
     <ng-container *ngIf="planner_end_date != null; else no_date_yet;">
       <div class="slide-container shadow">
         <div class="date-title">
@@ -46,15 +46,15 @@
         </ion-slides>
       </div>
     </ng-container>
-  </fade-in>
+  </bounce-in>
 
 </ion-content>
 
 
 <ng-template #no_date_yet>
-  <fade-in>
-    <no-recipes>
+  <bounce-in>
+    <nothing-here>
       <ion-button (click)="presentDateModal()">Set up schedule</ion-button>
-    </no-recipes>
-  </fade-in>
+    </nothing-here>
+  </bounce-in>
 </ng-template>

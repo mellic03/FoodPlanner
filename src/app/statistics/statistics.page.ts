@@ -4,20 +4,19 @@ import { PlannerDate } from '../services/date.service';
 import { DateService } from '../services/date.service';
 import { Router } from '@angular/router';
 import Chart from 'chart.js/auto';
+import { ViewWillEnter } from '@ionic/angular';
 
 @Component({
   selector: 'app-statistics',
   templateUrl: './statistics.page.html',
   styleUrls: ['./statistics.page.scss'],
 })
-export class StatisticsPage implements OnInit {
+export class StatisticsPage implements ViewWillEnter {
 
   @ViewChild('food_usage_chart', {static: true}) canvas;
   chart:any;
   
   constructor(private recipeService:RecipeService, private dateService:DateService, private router:Router) { }
-
-  // Chart needs to read dates from date array and plot the last two weeks of dates
 
   data = {
     datasets: [{
@@ -33,15 +32,11 @@ export class StatisticsPage implements OnInit {
     labels: [],
   }
 
-  async ngOnInit() {
-    
+  async ionViewWillEnter() {
     await this.recipeService.subscribe(this.recipes_observer);
     this.all_recipes = this.recipes_observer.data;
     
-    //await this.dateService.subscribe(this.stats_data_observer);
-    //this.data = this.stats_data_observer.data;
-
-    this.planner_dates = await this.recipeService.getPlannerDates();
+    this.planner_dates = await this.dateService.getPlannerDates();
 
     if (this.planner_dates?.[0] != null) {
 
@@ -144,8 +139,8 @@ export class StatisticsPage implements OnInit {
   // Calculates the time progressed as a percentage towards the planner's end date since it was set by the user.
   async calculateTimeProgress() {
 
-    let start_date = new Date(await this.recipeService.getPlannerStartDate());
-    let end_date = new Date(await this.recipeService.getPlannerEndDate());
+    let start_date = new Date(await this.dateService.getPlannerStartDate());
+    let end_date = new Date(await this.dateService.getPlannerEndDate());
     let now_date = new Date();
 
     let date_difference:number = end_date.getTime() - start_date.getTime();
@@ -158,6 +153,7 @@ export class StatisticsPage implements OnInit {
     
   }
 
+  // Navigate to the planner page.
   navToPlanner() {
     this.router.navigateByUrl("planner");
   }
