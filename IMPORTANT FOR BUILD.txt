@@ -1,0 +1,8 @@
+If building for android, make these changes in "android/variables.gradle":
+
+cordovaAndroidVersion = '10.1.2'
+minSdkVersion = 22
+
+Then run these commands:
+npm i jetifier
+npx jetifier
